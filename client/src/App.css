@@ -378,16 +378,37 @@
     @apply fill-destructive-100;
   }
 
-  @media screen {
-    .print-container {
-      display: none;
-    }
+  /* PRINT / PDF */
+
+  .print-component {
+    display: none;
   }
 
+  .print-container {
+    @apply px-[32px];
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .page {
+    @apply py-[32px] flex flex-col border-2 h-full w-full;
+  }
+
+  .page-header,
+  .page-footer {
+    @apply flex justify-between items-center;
+    @apply text-gray-700 prod-l5 font-semibold;
+  }
+
+  .page-content {
+    @apply bg-destructive-500 flex-grow;
+  }
 
   @media print {
-    .pageBreak {
-      page-break-after: always;
+    .pageBreak,
+    .custom,
+    .page-footer {
+      /* page-break-after: always; */
     }
   }
   /* @media print {

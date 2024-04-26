@@ -1,7 +1,7 @@
 {
     "name": "HealthPH",
     "short_name": "HealthPH",
-    "start_url": "",
+    "start_url": "/",
     "icons": [
         {
             "src": "icons/manifest-icon-192.maskable.png",
