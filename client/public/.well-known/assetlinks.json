@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.onrender.healthph_dev.twa",
+            "sha256_cert_fingerprints": [
+                "C4:65:38:A5:3C:B1:93:6A:38:45:18:DA:53:E1:EA:0E:A5:9B:2B:78:C0:C3:46:1B:B5:7D:82:95:C0:61:F1:73"
+            ]
+        }
+    }
+]
