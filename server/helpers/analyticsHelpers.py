@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import nltk
+nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
