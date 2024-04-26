@@ -1,0 +1,11 @@
+user (not verified)
+
+user (verified)
+
+users page
+- admin - verify
+- sadmin - verify,deleted
+
+admins
+- admin - verify
+- sadmin - verify, delete

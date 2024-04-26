@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Connected</title>
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            src: url('inter-font.ttf') format('truetype'),
+                url('OFL.txt') format('woff')
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Inter;
+        }
+
+        body {
+            background-color: #F5F5F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            padding: 16px;
+        }
+
+        .offline-wrapper {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            height: 56px;
+            width: 56px;
+            border-radius: 50%;
+            border: 8px solid #E8F3FF;
+            background-color: #B9DBFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .heading {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: -0.4px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .content {
+            color: #465360;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+        }
+
+        button {
+            margin-top: 32px;
+            color: #FFF;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            letter-spacing: 0.32px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #007AFF;
+            box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 0px 0px 1px #007AFF;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="offline-wrapper">
+        <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                    d="M23.2099 8.24002C20.1182 5.50233 16.1296 3.99373 12 4.00002C7.69995 4.00002 3.77995 5.60002 0.78995 8.24002C0.34995 8.63002 0.31995 9.30002 0.72995 9.71002L11.29 20.29C11.4799 20.48 11.74 20.58 11.99 20.58V14C11.99 12.9 12.8899 12 13.99 12H20.9799L23.27 9.71002C23.68 9.30002 23.65 8.63002 23.2099 8.24002Z"
+                    fill="#007AFF" />
+                <path
+                    d="M20.3 14.7099C20.2075 14.6172 20.0976 14.5437 19.9766 14.4935C19.8556 14.4433 19.7259 14.4175 19.595 14.4175C19.464 14.4175 19.3343 14.4433 19.2134 14.4935C19.0924 14.5437 18.9825 14.6172 18.89 14.7099L17.5 16.0899L16.11 14.7099C15.923 14.5229 15.6694 14.4179 15.405 14.4179C15.1406 14.4179 14.887 14.5229 14.7 14.7099C14.513 14.8969 14.408 15.1505 14.408 15.4149C14.408 15.6794 14.513 15.9329 14.7 16.1199L16.09 17.5099L14.7 18.8999C14.6074 18.9925 14.534 19.1024 14.4839 19.2234C14.4337 19.3443 14.408 19.474 14.408 19.6049C14.408 19.7359 14.4337 19.8655 14.4839 19.9865C14.534 20.1074 14.6074 20.2173 14.7 20.3099C14.887 20.4969 15.1406 20.6019 15.405 20.6019C15.5359 20.6019 15.6656 20.5762 15.7865 20.5261C15.9075 20.4759 16.0174 20.4025 16.11 20.3099L17.5 18.9299L18.89 20.3099C18.9826 20.4025 19.0925 20.4759 19.2134 20.5261C19.3344 20.5762 19.464 20.6019 19.595 20.6019C19.7259 20.6019 19.8556 20.5762 19.9765 20.5261C20.0975 20.4759 20.2074 20.4025 20.3 20.3099C20.3926 20.2173 20.466 20.1074 20.5161 19.9865C20.5662 19.8655 20.592 19.7359 20.592 19.6049C20.592 19.474 20.5662 19.3443 20.5161 19.2234C20.466 19.1024 20.3926 18.9925 20.3 18.8999L18.92 17.5099L20.3 16.1199C20.3927 16.0274 20.4662 15.9175 20.5164 15.7965C20.5666 15.6756 20.5924 15.5459 20.5924 15.4149C20.5924 15.284 20.5666 15.1543 20.5164 15.0333C20.4662 14.9123 20.3927 14.8024 20.3 14.7099Z"
+                    fill="#007AFF" />
+            </svg>
+        </div>
+        <p class="heading">No Internet Connected</p>
+        <p class="content">Please try refreshing the page once you have established an internet connection. </p>
+        <button id="button" onClick="refreshPage()">Refresh</button>
+    </div>
+</body>
+<script>
+    const refreshPage = () => {
+        location.reload()
+    }
+</script>
+
+</html>

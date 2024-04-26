@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .home-layout {
+    background: url("../images/home-bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 100vh;
+    width: 100vw;
+    @apply flex flex-col overflow-hidden;
+  }
+
+  .home-layout .home-nav {
+    @apply relative flex-shrink-0;
+  }
+
+  .home-layout .home-nav .logo-wrapper {
+    z-index: 3;
+  }
+
+  .home-layout .home-nav .logo-wrapper img{
+    height: 100%;
+    object-fit: contain
+  }
+
+  .home-layout .home-nav ul {
+    @apply absolute flex justify-center items-center gap-[4px];
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .home-layout .home-nav .home-nav-links ul li a .icon {
+    @apply hidden;
+  }
+
+  @media screen and (max-width: 768px) {
+    .home-layout .home-nav .home-nav-links {
+      @apply fixed top-0 left-0 max-w-[300px] w-full h-screen bg-white pt-[120px] pb-[24px] px-[16px];
+      @apply flex flex-col justify-between items-center;
+      z-index: 2;
+      display: none;
+      transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
+      overflow-y: auto;
+    }
+
+    .home-layout .home-nav .home-nav-links.show-menu {
+      display: flex;
+      animation: slideNavMenuIn 0.4s forwards;
+      -webkit-animation: slideNavMenuIn 0.4s forwards;
+    }
+
+    .home-layout .home-nav .home-nav-links.hide-menu {
+      display: flex;
+      animation: slideNavMenuOut 0.4s forwards;
+      -webkit-animation: slideNavMenuOut 0.4s forwards;
+    }
+
+    .home-layout .home-nav .home-nav-links ul {
+      @apply relative flex-col w-full gap-[16px];
+      top: auto;
+      left: auto;
+      transform: none;
+    }
+
+    .home-layout .home-nav .home-nav-links ul li {
+      @apply w-full;
+    }
+
+    .home-layout .home-nav .home-nav-links ul li a {
+      @apply flex items-center text-gray-700 bg-white hover:bg-[#E8E8E8] px-[18px] py-[10px];
+    }
+
+    .home-layout .home-nav .home-nav-links ul li a.active {
+      @apply bg-primary-100 text-primary-500;
+    }
+
+    .home-layout .home-nav .home-nav-links ul li a .icon {
+      @apply block me-[8px];
+      fill: #465360;
+    }
+    .home-layout .home-nav .home-nav-links ul li a.active .icon {
+      fill: #007aff;
+    }
+
+    .home-layout .home-nav .home-nav-links .home-cta {
+      @apply flex-col items-start justify-center w-full gap-[16px];
+      @apply pt-[24px] border-t border-gray-200;
+    }
+
+    .home-layout .home-nav .home-nav-links .home-cta a {
+      @apply flex-col items-start justify-center w-full prod-btn-base py-[10px];
+    }
+  }
+
+  .home-layout .hamburger-menu {
+    z-index: 3;
+  }
+
+  .home-layout .hamburger-menu .menu-toggler {
+    @apply flex flex-col items-center justify-center h-full cursor-pointer;
+  }
+
+  .home-layout .hamburger-menu .menu-toggler .bar {
+    @apply block bg-white w-[20px] h-[3px] rounded-[2px];
+    -webkit-transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
+    transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
+  }
+
+  .home-layout .hamburger-menu .menu-toggler.active .bar {
+    @apply bg-primary-50;
+  }
+
+  .home-layout .hamburger-menu .menu-toggler .bar:nth-child(2) {
+    @apply mx-auto my-[4px];
+  }
+
+  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(2) {
+    @apply w-0 opacity-0;
+  }
+
+  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(1) {
+    transform: translateY(7px) rotate(-135deg);
+  }
+
+  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-225deg);
+  }
+
+  .home-layout main {
+    @apply flex flex-col items-center;
+  }
+
+  .home-layout main .header {
+    @apply my-[56px] mx-[16px] flex flex-col items-center;
+  }
+
+  .home-layout main .header .heading {
+    @apply text-[56px] leading-[64px] tracking-[-1.12px] text-center font-semibold text-white max-w-[851px];
+    @apply mb-[24px];
+  }
+
+  .home-layout main .header .subheading {
+    @apply web-d-p2 text-white font-normal max-w-[665px] text-center;
+  }
+
+  .home-layout main .art {
+    @apply w-[1078px] h-[690px];
+    background: url("../images/home-art.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .home-layout footer {
+    @apply fixed bottom-0 bg-primary-800 w-full px-[20px] py-[24px];
+    @apply flex justify-between;
+  }
+
+  .home-layout footer .footer-logo img{
+    height: 100%;
+    object-fit: contain
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    .home-layout main .art {
+      @apply w-[650px] h-[540px];
+      background: url("../images/home-art-md.png");
+      background-repeat: no-repeat;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .home-layout main .header .heading {
+      @apply text-[44px] leading-[52px] tracking-[-0.88px] max-w-[576px];
+    }
+
+    .home-layout main .header .subheading {
+      @apply web-m-p1 max-w-[426px];
+    }
+
+    .home-layout main .art {
+      @apply w-[500px] h-[540px];
+      background: url("../images/home-art-sm.png");
+      background-repeat: no-repeat;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .home-layout main .header .heading {
+      @apply text-[32px] leading-[36px] tracking-[-0.64px] max-w-[360px];
+    }
+
+    .home-layout main .header .subheading {
+      @apply web-m-p2 max-w-[360px];
+    }
+
+    .home-layout main .art {
+      @apply w-[330px] h-[540px];
+      background: url("../images/home-art-xs.png");
+      background-repeat: no-repeat;
+    }
+  }
+}

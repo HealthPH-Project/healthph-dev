@@ -1,0 +1,96 @@
+{
+    "total_count" : 2158,
+    "diseases":[
+    {
+        "disease_name": "tubercolosis",
+        "total_count": 1051,
+        "data": [
+            {
+                "region": "I",
+                "count": 123
+            },
+            {
+                "region": "NCR",
+                "count": 234
+            },
+            {
+                "region": "V",
+                "count": 345
+            },
+            {
+                "region": "N/A",
+                "count": 700
+            }
+        ]
+    },
+    {
+        "disease_name": "pneumonia",
+        "total_count": 999,
+        "data": [
+            {
+                "region": "I",
+                "count": 234
+            },
+            {
+                "region": "XII",
+                "count": 12
+            },
+            {
+                "region": "IVA",
+                "count": 3
+            },
+            {
+                "region": "IVB",
+                "count": 9
+            },
+            {
+                "region": "VII",
+                "count": 333
+            },
+            {
+                "region": "XI",
+                "count": 24
+            },
+            {
+                "region": "N/A",
+                "count": 605
+            }
+        ]
+    },
+    {
+        "disease_name": "covid",
+        "total_count": 99,
+        "data": [
+            {
+                "region": "III",
+                "count": 23
+            },
+            {
+                "region": "VIII",
+                "count": 24
+            },
+            {
+                "region": "N/A",
+                "count": 50
+            }
+        ]
+    },
+    {
+        "disease_name": "auri",
+        "total_count": 9,
+        "data": [
+            {
+                "region": "VI",
+                "count": 5
+            },
+            {
+                "region": "X",
+                "count": 2
+            },
+            {
+                "region": "N/A",
+                "count": 2
+            }
+        ]
+    }
+]}

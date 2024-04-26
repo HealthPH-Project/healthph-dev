@@ -1,0 +1,483 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .analytics-section {
+    @apply pb-[32px];
+  }
+
+  .analytics-section .header {
+    @apply mb-[32px] w-full flex justify-between;
+  }
+
+  .analytics-section .header .heading {
+    @apply prod-m-h1 font-semibold text-black;
+  }
+
+  .analytics-section .analytics-cards {
+    @apply grid grid-cols-[1fr] sm:grid-cols-[repeat(2,_1fr)] md:grid-cols-[repeat(6,_1fr)] lg:grid-cols-[repeat(5,_1fr)];
+    gap: 15px;
+  }
+
+  .analytics-section .analytics-cards .item {
+    @apply col-auto sm:col-[span_1] md:col-[span_2] lg:col-[span_1];
+    @apply rounded-[8px] bg-white p-[8px] min-w-[185px];
+    border-radius: 8px;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1),
+      0px 0px 0px 1px rgba(70, 83, 96, 0.16);
+  }
+
+  .analytics-section .analytics-cards .item:nth-child(4) {
+    @apply col-auto sm:col-[span_1] md:col-[span_3] lg:col-[span_1];
+  }
+
+  .analytics-section .analytics-cards .item:nth-child(5) {
+    @apply col-auto sm:col-[span_2] md:col-[span_3] lg:col-[span_1];
+  }
+
+  .analytics-section .analytics-cards .item .wrapper {
+    @apply bg-gray-10 p-[8px] rounded-[4px] h-full;
+    border: 1px solid rgba(70, 121, 164, 0.3);
+  }
+
+  .analytics-section .analytics-cards .item .wrapper.primary {
+    @apply bg-gray-50;
+  }
+
+  .analytics-section .analytics-cards .item .label {
+    @apply prod-t3 text-gray-500;
+  }
+
+  .analytics-section .analytics-cards .item .data {
+    @apply my-[4px] prod-g-h3 text-gray-900;
+  }
+
+  .analytics-section .analytics-cards .item .subtext {
+    @apply prod-l3 text-gray-700 font-medium;
+  }
+
+  .analytics-section .analytics-cards .item .subtext span {
+    @apply font-semibold;
+  }
+
+  .analytics-section .analytics-reports {
+    @apply grid grid-cols-[1fr] md:grid-cols-[1fr_1fr] gap-[20px];
+  }
+
+  .analytics-section .analytics-reports .report-container {
+    @apply bg-white rounded-[8px] p-[20px];
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1),
+      0px 0px 0px 1px rgba(70, 83, 96, 0.16);
+  }
+
+  .analytics-section .analytics-reports .report-container .heading {
+    @apply prod-m-h2 font-semibold text-gray-900 mb-[8px];
+  }
+
+  .analytics-section .analytics-reports .report-container .caption {
+    @apply prod-p2 font-medium text-gray-700 mb-[20px];
+  }
+
+  .analytics-section .analytics-reports .report-container .report-placeholder {
+    @apply flex justify-center items-center h-[400px];
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      #dce3e8;
+    background-repeat: repeat-y;
+    background-size: 50px 500px;
+    background-position: -50px 0;
+    animation: shine 2s ease-in infinite;
+  }
+  .analytics-section .analytics-reports .report-table {
+    @apply mt-[20px];
+  }
+  .analytics-section .analytics-reports .report-table .report-table-header {
+    @apply grid prod-l3 font-medium text-gray-500 mb-[8px];
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .analytics-section
+    .analytics-reports
+    .report-table
+    .report-table-header
+    .item:not(:first-child) {
+    @apply text-right;
+  }
+
+  .analytics-section .analytics-reports .report-table .report-table-row {
+    @apply grid prod-l3 font-medium text-gray-900 mb-[8px] border-t border-gray-100 pt-[8px];
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .analytics-section
+    .analytics-reports
+    .report-table
+    .report-table-row
+    .item:not(:first-child) {
+    @apply text-right;
+  }
+  /*   
+  @media screen and (max-width: 768px) {
+    .analytics-section .analytics-cards .item {
+      grid-column: span 10
+    }
+
+    .analytics-section .analytics-cards .item:nth-child(4),
+    .analytics-section .analytics-cards .item:nth-child(5) {
+      grid-column: span 15
+    }
+  } */
+
+  .admin-layout main {
+    flex: 1;
+    /* height: 90vh; */
+    overflow-y: auto;
+  }
+
+  .admin-layout .admin-wrapper {
+    @apply max-w-[1366px] mx-auto;
+  }
+
+  .admin-layout .header {
+    @apply flex justify-between mb-[32px];
+    flex-shrink: 0;
+  }
+
+  .breadcrumbs-wrapper {
+    @apply flex items-center;
+  }
+
+  .breadcrumbs-wrapper .breadcrumb-item {
+    @apply flex items-center;
+  }
+
+  .breadcrumbs-wrapper .breadcrumb-item a {
+    @apply prod-b3 text-gray-500 hover:text-gray-900 mx-[8px] my-[4px];
+  }
+
+  .breadcrumbs-wrapper .breadcrumb-item a.active {
+    @apply text-gray-700;
+  }
+
+  .breadcrumbs-wrapper .breadcrumb-item .icon {
+    @apply ms-[8px];
+  }
+
+  .admin-layout .content {
+    @apply rounded-[8px] border-[1px] border-gray-200;
+    flex: 1;
+    overflow-y: hidden;
+    min-width: 100%;
+  }
+
+  .datatable {
+    @apply flex flex-col h-full w-full;
+    min-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .datatable .datatable-header,
+  .datatable .datatable-footer {
+    @apply flex-shrink-0 bg-[#F4F5F8] px-[20px] py-[16px] h-[64px];
+  }
+
+  .datatable .datatable-header {
+    @apply flex items-center;
+    @apply border-b border-gray-50;
+  }
+
+  .datatable .datatable-header h1 {
+    @apply prod-l2 text-gray-700 font-semibold me-[8px];
+  }
+
+  .datatable .datatable-header .count {
+    @apply prod-l3 text-gray-500 font-medium bg-gray-50 rounded-[9px] px-[6px] py-[2px];
+  }
+
+  .datatable .datatable-tabs {
+    @apply flex-shrink-0 bg-[#F4F5F8] px-[20px] h-[64px];
+    @apply flex items-stretch;
+    @apply border-b border-gray-50;
+  }
+
+  .datatable .datatable-tab-item {
+    @apply h-full flex items-center cursor-pointer select-none;
+  }
+
+  .datatable .datatable-tab-item.active {
+    @apply border-b-2 border-primary-500;
+  }
+
+  .datatable .datatable-tab-item h1 {
+    @apply prod-b2 text-gray-700 me-[8px];
+  }
+
+  .datatable .datatable-tab-item.active h1 {
+    @apply text-primary-500;
+  }
+
+  .datatable .datatable-tab-item .count {
+    @apply prod-l3 text-gray-500 font-medium bg-gray-50 rounded-[9px] px-[6px] py-[2px];
+  }
+  .datatable .datatable-tab-item.active .count {
+    @apply text-primary-500  bg-primary-50;
+  }
+
+  .datatable .datatable-tabs-wrapper {
+    @apply flex items-center;
+  }
+
+  .datatable .datatable-tab-item:not(:last-child) {
+    @apply me-[24px];
+  }
+
+  .datatable .datatable-body {
+    @apply flex flex-col bg-white;
+    flex: 1;
+    overflow-y: auto;
+    min-width: 100%;
+    overflow-x: auto;
+  }
+
+  .datatable .datatable-body .datatable-body-header {
+    @apply flex-shrink-0 border-y border-gray-50;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(200px, 1fr));
+    min-width: 100%;
+    position: sticky;
+    top: 0;
+  }
+
+  .datatable .datatable-body.datatable-body-actions .datatable-body-header {
+    grid-template-columns: repeat(calc(var(--columns) - 1), minmax(200px, 1fr)) minmax(
+        var(--actions-width),
+        min-content
+      );
+  }
+
+  .datatable .datatable-body .datatable-body-header .header-item {
+    @apply bg-gray-50 prod-l4 text-gray-500 font-medium px-[10px] py-[9px];
+  }
+  .datatable .datatable-body .datatable-body-header .column-tooltip {
+    @apply ms-[2px] relative;
+  }
+
+  .datatable .datatable-body .datatable-body-header .column-tooltip .tooltip {
+    @apply absolute bg-gray-800 px-[12px] py-[8px] rounded-[8px];
+    @apply prod-p4 font-medium text-white;
+    max-width: 150px;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .datatable
+    .datatable-body
+    .datatable-body-header
+    .column-tooltip:hover
+    .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+  .datatable
+    .datatable-body
+    .datatable-body-header
+    .column-tooltip
+    .tooltip:after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #333e4a transparent;
+  }
+
+  .datatable .datatable-body .datatable-body-content {
+    width: min-content;
+    min-width: 100%;
+    flex: 1;
+    /* overflow-y: hidden; */
+    /* overflow-x: hidden; */
+  }
+
+  .datatable .datatable-body::-webkit-scrollbar,
+  .datatable .datatable-body .datatable-body-content::-webkit-scrollbar {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Track */
+  .datatable .datatable-body::-webkit-scrollbar-track,
+  .datatable .datatable-body .datatable-body-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  .datatable .datatable-body::-webkit-scrollbar-thumb,
+  .datatable .datatable-body .datatable-body-content::-webkit-scrollbar-thumb {
+    @apply bg-gray-400;
+    background-clip: padding-box;
+    border: 5px solid white;
+    border-radius: 100px;
+  }
+
+  /* Handle on hover */
+  .datatable .datatable-body::-webkit-scrollbar-thumb:hover,
+  .datatable
+    .datatable-body
+    .datatable-body-content::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-600;
+  }
+
+  .datatable .datatable-body .datatable-body-content .content-row {
+    @apply bg-white;
+    @apply border-y border-gray-50;
+    width: 100%;
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(200px, 1fr));
+  }
+
+  .datatable
+    .datatable-body.datatable-body-actions
+    .datatable-body-content
+    .content-row {
+    grid-template-columns: repeat(calc(var(--columns) - 1), minmax(200px, 1fr)) minmax(
+        var(--actions-width),
+        min-content
+      );
+  }
+
+  .datatable .datatable-body .datatable-body-content .content-row .row-item {
+    @apply px-[10px] py-[14px] prod-p3 flex items-center;
+  }
+
+  .datatable .datatable-footer {
+    @apply flex justify-between items-center;
+    @apply border-t border-gray-50;
+  }
+
+  .datatable .datatable-footer .range {
+    @apply prod-l3 font-medium text-gray-700;
+  }
+
+  .datatable .datatable-footer .pagination {
+    @apply flex justify-center items-center;
+  }
+
+  .datatable .datatable-footer .pagination .pagination-page {
+    @apply prod-l3 text-gray-500 mx-[20px];
+  }
+
+  .datatable .datatable-footer .pagination .pagination-page .current-page {
+    @apply font-medium;
+  }
+
+  /* EMPTY STATE */
+
+  .empty-container {
+    @apply w-full h-full flex justify-center items-center flex-col p-[16px];
+  }
+
+  .empty-container .icon-wrapper {
+    @apply border-8 border-primary-50 rounded-full bg-primary-100 flex items-center justify-center p-[8px];
+  }
+
+  .empty-container .empty-wrapper {
+    @apply max-w-[360px] w-full text-center;
+  }
+
+  .empty-container .empty-wrapper .empty-heading {
+    @apply mt-[20px] mb-[8px] prod-m-h2 font-semibold text-gray-900;
+  }
+
+  .empty-container .empty-wrapper .empty-content {
+    @apply prod-p2 text-gray-700 font-medium;
+  }
+
+  /* SETTINGS */
+  .admin-layout .settings-header {
+    @apply py-[24px] border-t-2 border-[#E5E5E5];
+    @apply flex justify-between items-start flex-col sm:flex-row;
+  }
+
+  .admin-layout .settings-header div:first-child {
+    @apply mb-[24px] sm:mb-0;
+  }
+
+  .admin-layout .settings-header p {
+    @apply prod-m-h2 text-gray-900 font-semibold mb-[8px];
+  }
+
+  .admin-layout .settings-header span {
+    @apply prod-p2 text-gray-700 font-medium;
+  }
+
+  .admin-layout form .pwd-reqs li {
+    @apply flex items-center mb-[4px];
+  }
+  .admin-layout form .pwd-reqs li .icon {
+    @apply fill-[#288DD7];
+  }
+
+  .admin-layout form .pwd-reqs li.success .icon {
+    @apply fill-[#35CA3B];
+  }
+
+  .admin-layout form .pwd-reqs li.error .icon {
+    @apply fill-[#D82727];
+  }
+
+  .admin-layout form .pwd-reqs li p {
+    @apply text-[#288DD7];
+  }
+
+  .admin-layout form .pwd-reqs li.success p {
+    @apply text-[#35CA3B];
+  }
+
+  .admin-layout form .pwd-reqs li.error p {
+    @apply text-[#D82727];
+  }
+
+  .custom-tooltip {
+    @apply ms-[2px] relative;
+  }
+
+  .custom-tooltip .tooltip {
+    @apply absolute bg-gray-800 px-[12px] py-[8px] rounded-[8px];
+    @apply prod-p4 font-medium text-white;
+    max-width: 150px;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .custom-tooltip:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .custom-tooltip .tooltip:after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #333e4a transparent;
+  }
+}

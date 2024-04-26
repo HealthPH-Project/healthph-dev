@@ -1,0 +1,15 @@
+bcrypt
+certifi
+fastapi[all]
+uvicorn
+pymongo[srv]
+python-dotenv
+python-jose[cryptography]
+python-multipart
+passlib[bcrypt]
+geopandas
+pyproj
+jinja2
+pandas
+wordcloud
+nltk

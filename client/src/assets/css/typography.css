@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* WEBSITE - DESKTOP + TABLET */
+  .web-d-h1 {
+    @apply text-[74px] leading-[84px] font-bold tracking-[-1.48px];
+  }
+
+  .web-d-h2 {
+    @apply text-[56px] leading-[64px] font-bold tracking-[-1.12px];
+  }
+
+  .web-d-h3 {
+    @apply text-[42px] leading-[48px] font-semibold tracking-[-0.735px];
+  }
+
+  .web-d-h4 {
+    @apply text-[32px] leading-[36px] font-semibold tracking-[-0.512px];
+  }
+
+  .web-d-h5 {
+    @apply text-[24px] leading-[28px] font-semibold tracking-[-0.36px];
+  }
+
+  .web-d-h6 {
+    @apply text-[18px] leading-[20px] font-medium tracking-[-0.225px];
+  }
+
+  .web-d-p1 {
+    @apply text-[32px] leading-[48px];
+  }
+
+  .web-d-p2 {
+    @apply text-[24px] leading-[36px];
+  }
+
+  .web-d-p3 {
+    @apply text-[18px] leading-[26px];
+  }
+
+  .web-d-l1 {
+    @apply text-[14px] leading-[20px] font-medium tracking-[0.7px];
+  }
+
+  .web-d-b1 {
+    @apply text-[18px] leading-[28px] font-medium tracking-[0.36px];
+  }
+
+  .web-d-b2 {
+    @apply text-[14px] leading-[20px] font-medium tracking-[0.28px];
+  }
+
+  /* WEBSITE - MOBILE */
+  .web-m-h1 {
+    @apply text-[44px] leading-[52px] font-bold tracking-[-0.88px];
+  }
+
+  .web-m-h2 {
+    @apply text-[32px] leading-[36px] font-bold tracking-[-0.64px];
+  }
+
+  .web-m-h3 {
+    @apply text-[24px] leading-[28px] font-semibold tracking-[-0.42px];
+  }
+
+  .web-m-h4 {
+    @apply text-[20px] leading-[24px] font-semibold tracking-[-0.32px];
+  }
+
+  .web-m-h5 {
+    @apply text-[18px] leading-[20px] font-semibold tracking-[-0.27px];
+  }
+
+  .web-m-h6 {
+    @apply text-[14px] leading-[16px] font-medium tracking-[-0.17 5px];
+  }
+
+  .web-m-p1 {
+    @apply text-[24px] leading-[36px];
+  }
+
+  .web-m-p2 {
+    @apply text-[18px] leading-[28px];
+  }
+
+  .web-m-p3 {
+    @apply text-[14px] leading-[20px];
+  }
+
+  .web-m-p4 {
+    @apply text-[12px] leading-[16px];
+  }
+
+  .web-m-l1 {
+    @apply text-[12px] leading-[16px] font-medium tracking-[0.6px];
+  }
+
+  .web-m-b1 {
+    @apply text-[16px] leading-[24px] font-medium tracking-[0.32px];
+  }
+
+  .web-m-b2 {
+    @apply text-[12px] leading-[16px] font-medium tracking-[0.24px];
+  }
+
+  /* PRODUCT - DESKTOP + TABLET */
+  .prod-d-h1 {
+    @apply text-[28px] leading-[32px] font-semibold tracking-[-0.56px];
+  }
+
+  .prod-d-h2 {
+    @apply text-[22px] leading-[26px] font-semibold tracking-[-0.44px];
+  }
+
+  .prod-g-h3 {
+    @apply text-[18px] leading-[20px] font-medium tracking-[-0.315px];
+  }
+
+  .prod-g-h4 {
+    @apply text-[16px] leading-[20px] font-medium tracking-[-0.256px];
+  }
+
+  .prod-g-h5 {
+    @apply text-[14px] leading-[16px] font-medium tracking-[-0.21 px];
+  }
+
+  .prod-p1 {
+    @apply text-[18px] leading-[28px];
+  }
+
+  .prod-p2 {
+    @apply text-[16px] leading-[24px];
+  }
+
+  .prod-p3 {
+    @apply text-[14px] leading-[20px];
+  }
+
+  .prod-p4 {
+    @apply text-[12px] leading-[16px];
+  }
+
+  .prod-t1 {
+    @apply text-[18px] leading-[28px] font-semibold tracking-[0.9px];
+  }
+
+  .prod-t2 {
+    @apply text-[16px] leading-[24px] font-semibold tracking-[0.8px];
+  }
+
+  .prod-t3 {
+    @apply text-[14px] leading-[20px] font-semibold tracking-[0.7px];
+  }
+
+  .prod-t4 {
+    @apply text-[12px] leading-[16px] font-semibold tracking-[0.6px];
+  }
+
+  .prod-l1 {
+    @apply text-[18px] leading-[28px] tracking-[0.9px];
+  }
+
+  .prod-l2 {
+    @apply text-[16px] leading-[24px] tracking-[0.8px];
+  }
+
+  .prod-l3 {
+    @apply text-[14px] leading-[20px] tracking-[0.7px];
+  }
+
+  .prod-l4 {
+    @apply text-[12px] leading-[16px] tracking-[0.6px];
+  }
+
+  .prod-l5 {
+    @apply text-[10px] leading-[12px] tracking-[0.5px];
+  }
+
+  .prod-b1 {
+    @apply text-[18px] leading-[28px] font-medium tracking-[0.36px];
+  }
+
+  .prod-b2 {
+    @apply text-[16px] leading-[24px] font-medium tracking-[0.32px];
+  }
+
+  .prod-b3 {
+    @apply text-[14px] leading-[20px] font-medium tracking-[0.28px];
+  }
+
+  .prod-b4 {
+    @apply text-[12px] leading-[16px] font-medium tracking-[0.24px];
+  }
+
+  .prod-b5 {
+    @apply text-[10px] leading-[12px] font-medium tracking-[0.2px];
+  }
+
+  /* PRODUCT - MOBILE */
+  .prod-m-h1 {
+    @apply text-[24px] leading-[28px] font-semibold tracking-[-0.48px];
+  }
+
+  .prod-m-h2 {
+    @apply text-[20px] leading-[24px] font-semibold tracking-[-0.4px];
+  }
+}
+ 

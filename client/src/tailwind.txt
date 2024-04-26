@@ -1,0 +1,36 @@
+1. Install Tailwind CSS 
+    > yarn add tailwindcss postcss autoprefixer --dev
+    > npx tailwindcss init -p
+
+2. Configure template paths (tailwind.config.js)
+    > content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+    ],
+
+3. Add Tailwind directives to CSS file (App.css/index.css)
+    > @tailwind base;
+    > @tailwind components;
+    > @tailwind utilities;
+
+4 Customize styles and classes (tailwind.config.js)
+    theme : {
+        // Overwrite if classes exists
+        screens : {
+            sm: '480px',
+            md: '768px'
+        }
+        extend : {
+            // Add to existing classes
+            spacing: {
+                '128' : '32rem'
+            }
+        }
+    }
+
+5. Use layers in CSS file (App.css/index.css)
+    > base = reset rules or default styles applied to plain HTML elements.
+    > components = class-based styles that you want to be able to override with utilities.
+    > utilities = small, single-purpose classes, always take precedence over any other styles.
+
+6. 

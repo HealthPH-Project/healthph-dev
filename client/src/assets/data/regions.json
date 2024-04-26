@@ -1,0 +1,94 @@
+{
+    "regions": [
+        {
+            "label": "Region NCR",
+            "value": "NCR",
+            "order": 0
+        },
+        {
+            "label": "Region I",
+            "value": "I",
+            "order": 1
+        },
+        {
+            "label": "Region II",
+            "value": "II",
+            "order": 2
+        },
+        {
+            "label": "Region III",
+            "value": "III",
+            "order": 3
+        },
+        {
+            "label": "Region IV-A",
+            "value": "IVA",
+            "order": 4
+        },
+        {
+            "label": "Region IV-B",
+            "value": "IVB",
+            "order": 5
+        },
+        {
+            "label": "Region V",
+            "value": "V",
+            "order": 6
+        },
+        {
+            "label": "Region CAR",
+            "value": "CAR",
+            "order": 7
+        },
+        {
+            "label": "Region VI",
+            "value": "VI",
+            "order": 8
+        },
+        {
+            "label": "Region VII",
+            "value": "VII",
+            "order": 9
+        },
+        {
+            "label": "Region VIII",
+            "value": "VIII",
+            "order": 10
+        },
+        {
+            "label": "Region IX",
+            "value": "IX",
+            "order": 11
+        },
+        {
+            "label": "Region X",
+            "value": "X",
+            "order": 12
+        },
+        {
+            "label": "Region XI",
+            "value": "XI",
+            "order": 13
+        },
+        {
+            "label": "Region XII",
+            "value": "XII",
+            "order": 14
+        },
+        {
+            "label": "Region XIII",
+            "value": "XIII",
+            "order": 15
+        },
+        {
+            "label": "Region BARMM",
+            "value": "BARMM",
+            "order": 16
+        },
+        {
+            "label": "Not Applicable",
+            "value": "N/A",
+            "order": 17
+        }
+    ]
+}
