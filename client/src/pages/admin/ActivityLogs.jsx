@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { useEffect, useRef, useState } from "react";
-import X from "../../test.json";
 import Datatable from "../../components/admin/Datatable";
 import { useFetchActivityLogsQuery } from "../../features/api/activityLogsSlice";
 import { format } from "date-fns";
@@ -25,11 +24,17 @@ const ActivityLogs = () => {
 
   const [rows, setRows] = useState([]);
 
+  const [rowData, setRowData] = useState([]);
+
   useEffect(() => {
     if (activity_logs) {
-      setRows(activity_logs);
+      setRowData(activity_logs);
     }
-  }, [activity_logs, isLoading]);
+  }, [activity_logs]);
+
+  useEffect(() => {
+    setRows(rowData.slice(0, 10));
+  }, [rowData]);
 
   useEffect(() => {
     if (activity_logs) {
@@ -49,7 +54,7 @@ const ActivityLogs = () => {
         });
       });
 
-      setRows(search.length > 0 ? filteredRows : activity_logs);
+      setRowData(search.length > 0 ? filteredRows : activity_logs);
     }
   }, [search]);
 
@@ -112,7 +117,7 @@ const ActivityLogs = () => {
               <PrintComponent
                 ref={printRef}
                 pageName="Activity Logs"
-                data={search != "" ? rows : activity_logs}
+                data={rowData}
                 columns={["USER", "ENTRY", "MODULE", "LOGGED AT"]}
                 rowsPerPage={25}
                 dateTable={format(new Date(), "MMMM dd, yyyy")}
@@ -135,10 +140,9 @@ const ActivityLogs = () => {
                 { label: "Module" },
                 { label: "Logged At" },
               ]}
-              datatableData={activity_logs}
+              datatableData={rowData}
               setDatatableData={setRows}
               rowsPerPage={10}
-              search={search}
             >
               {activity_logs.length > 0 ? (
                 rows.length > 0 ? (

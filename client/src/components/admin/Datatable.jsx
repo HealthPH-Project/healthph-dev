@@ -12,7 +12,6 @@ const Datatable = ({
   withActions,
   actionsWidth,
   children,
-  search,
   noOfData = datatableData.length,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,22 +20,10 @@ const Datatable = ({
   const totalPages = Math.ceil(noOfData / rowsPerPage);
 
   useEffect(() => {
-    console.log(
-      "search",
-      datatableData.slice(1 * rowsPerPage - rowsPerPage, rowsPerPage * 1).length
-    );
-    setDatatableData(
-      datatableData.slice(1 * rowsPerPage - rowsPerPage, rowsPerPage * 1)
-    );
-  }, [search]);
-
-  useEffect(() => {
-    console.log("ddatas");
     setCurrentPage(1);
   }, [datatableData]);
 
   useEffect(() => {
-    console.log("current");
     setDatatableData(
       datatableData.slice(
         currentPage * rowsPerPage - rowsPerPage,

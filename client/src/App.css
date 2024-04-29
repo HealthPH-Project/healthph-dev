@@ -438,17 +438,12 @@
     .row-header .row-item {
       font-weight: 600;
     }
-    .pageBreak,
-    .custom,
+    
     .page-footer {
       page-break-after: always;
     }
+
   }
-  /* @media print {
-    .print-container {
-      display: flex !important;
-    }
-  } */
 
   /* SKELETON */
 
