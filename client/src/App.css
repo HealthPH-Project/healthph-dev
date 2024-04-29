@@ -390,54 +390,54 @@
     width: 100vw;
   }
 
-  .page {
-    @apply py-[32px] flex flex-col h-full w-full;
-  }
-
-  .page-header,
-  .page-footer {
-    @apply flex justify-between items-center flex-shrink-0;
-    @apply text-gray-700 prod-l5 font-semibold;
-  }
-
-  .page-content {
-    @apply flex-grow;
-  }
-
-  .content-header {
-    @apply flex justify-between items-center;
-    @apply px-[14px] py-[12px] bg-[#F4F5F8] border border-gray-400;
-  }
-
-  .content-header p {
-    @apply prod-l5 font-semibold;
-  }
-
-  .content-header span {
-    @apply prod-l5 font-medium px-[6px] py-[2px] bg-gray-100 text-gray-900  rounded-[99px];
-  }
-
-  .row-header,
-  .row {
-    display: grid;
-    grid-template-columns: repeat(var(--page-columns), 1fr);
-  }
-
-  .row-item {
-    @apply px-[8px] py-[10px] border border-gray-200;
-    color: #171e26;
-    font-size: 8px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 12px;
-    letter-spacing: 0.4px;
-  }
-
-  .row-header .row-item {
-    font-weight: 600;
-  }
-
   @media print {
+    .page {
+      @apply py-[32px] flex flex-col h-full w-full;
+    }
+
+    .page-header,
+    .page-footer {
+      @apply flex justify-between items-center flex-shrink-0;
+      @apply text-gray-700 prod-l5 font-semibold;
+    }
+
+    .page-content {
+      @apply flex-grow;
+    }
+
+    .content-header {
+      @apply flex justify-between items-center;
+      @apply px-[14px] py-[12px] bg-[#F4F5F8] border border-gray-400;
+    }
+
+    .content-header p {
+      @apply prod-l5 font-semibold;
+    }
+
+    .content-header span {
+      @apply prod-l5 font-medium px-[6px] py-[2px] bg-gray-100 text-gray-900  rounded-[99px];
+    }
+
+    .row-header,
+    .row {
+      display: grid;
+      grid-template-columns: repeat(var(--page-columns), 1fr);
+    }
+
+    .row-item {
+      @apply px-[8px] py-[10px] border border-gray-200;
+      max-height: 40px;
+      color: #171e26;
+      font-size: 8px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 12px;
+      letter-spacing: 0.4px;
+    }
+
+    .row-header .row-item {
+      font-weight: 600;
+    }
     .pageBreak,
     .custom,
     .page-footer {

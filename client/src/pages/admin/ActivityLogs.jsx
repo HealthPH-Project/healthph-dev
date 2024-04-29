@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import X from "../../test.json";
 import Datatable from "../../components/admin/Datatable";
 import { useFetchActivityLogsQuery } from "../../features/api/activityLogsSlice";
@@ -9,6 +9,8 @@ import { format } from "date-fns";
 import SkeletonTable from "../../components/SkeletonTable";
 import EmptyState from "../../components/admin/EmptyState";
 import Highlighter from "react-highlight-words";
+import { useReactToPrint } from "react-to-print";
+import PrintComponent from "../../components/admin/PrintComponent";
 
 const ActivityLogs = () => {
   const [search, setSearch] = useState("");
@@ -51,9 +53,14 @@ const ActivityLogs = () => {
     }
   }, [search]);
 
-  useEffect(() => {
-    console.log("rows", rows.length);
-  }, [rows]);
+  const printRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: "HealthPH - Activity Logs",
+    pageStyle:
+      "@page { size: A4;  margin: 0mm; color: 'red' } @media print { body { -webkit-print-color-adjust: exact; } }",
+  });
 
   return (
     <>
@@ -88,7 +95,10 @@ const ActivityLogs = () => {
                   search.length > 0 ? () => setSearch("") : undefined
                 }
               />
-              <button className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-[16px]">
+              <button
+                className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-[16px]"
+                onClick={handlePrint}
+              >
                 <span>Print</span>
 
                 <Icon
@@ -99,6 +109,21 @@ const ActivityLogs = () => {
                   className="ms-[8px]"
                 />
               </button>
+              <PrintComponent
+                ref={printRef}
+                pageName="Activity Logs"
+                data={search != "" ? rows : activity_logs}
+                columns={["USER", "ENTRY", "MODULE", "LOGGED AT"]}
+                rowsPerPage={25}
+                dateTable={format(new Date(), "MMMM dd, yyyy")}
+                displayFunc={(value) => {
+                  let data = [value.user_name, value.entry, value.module];
+                  data.push(
+                    format(new Date(value.created_at), "MMM-dd-yyyy KK:mm a")
+                  );
+                  return data;
+                }}
+              />
             </div>
           </div>
           <div className="content">
