@@ -218,6 +218,41 @@
     z-index: 0;
   }
 
+  .trends-wrapper .map-header {
+    @apply absolute top-0 z-10 w-full select-none;
+    @apply flex justify-between items-start p-[20px];
+  }
+
+  .trends-wrapper .attribution-controls {
+    /* @apply absolute top-0 left-0 z-10 m-[20px]; */
+    max-width: 44px;
+  }
+
+  .trends-wrapper .map-date {
+    @apply prod-l3 text-right text-gray-500;
+    @apply rounded-[4px] border border-gray-500 bg-gray-50 px-[8px] mb-[16px];
+    width: fit-content;
+  }
+
+  .trends-wrapper .map-legend-wrapper { 
+    @apply flex flex-col items-end;
+  }
+  .trends-wrapper .map-legends {
+    @apply flex justify-end items-center flex-wrap;
+  }
+
+  .trends-wrapper .map-legends .map-legend-item {
+    @apply prod-l3 text-gray-900 flex items-center mb-[16px];
+  }
+
+  .trends-wrapper .map-legends .map-legend-item .color {
+    @apply h-[16px] w-[16px] rounded-[4px] me-[10px];
+  }
+
+  .trends-wrapper .map-legends .map-legend-item:not(:last-child) {
+    @apply me-[16px];
+  }
+
   .trends-wrapper .map-controls {
     @apply absolute bottom-0 right-0 z-10 m-[20px];
     max-width: 44px;
@@ -229,6 +264,11 @@
       0px 0px 0px 1px rgba(70, 83, 96, 0.16);
     height: 36px;
     width: 44px;
+  }
+
+  .trends-wrapper .leaflet-popup-content {
+    font-family: Inter;
+    @apply text-[14px] font-medium;
   }
 
   @media screen and (max-width: 768px) {
@@ -258,7 +298,7 @@
     }
   }
 
-  @media screen and (max-width: 360px) {
+  @media screen and (max-width: 370px) {
     .trends-wrapper .map-controls {
       left: calc(100% - 36px - 16px - 8px);
     }

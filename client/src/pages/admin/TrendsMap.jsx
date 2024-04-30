@@ -13,6 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateInitialLogin } from "../../features/auth/authSlice";
 import { Link } from "react-router-dom";
 import Icon from "../../components/Icon";
+
+import Sample from "../../assets/data/sample.json";
+
 const TrendsMap = () => {
   const initialLogin = useSelector((state) => state.auth.initialLogin);
 
@@ -315,7 +318,7 @@ const TrendsMap = () => {
         onClick={handleOpenSidebar}
       ></div>
 
-      <Map filters={filters} />
+      <Map filters={filters} data={Sample} />
 
       {showDisclaimer && (
         <Modal

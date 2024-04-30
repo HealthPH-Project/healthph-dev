@@ -12,9 +12,10 @@ import {
 } from "react-leaflet";
 import Regions from "../../assets/data/regions.json";
 import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
+import { format } from "date-fns";
 
-const Map = ({ filters, sample }) => {
-  const zoomOptions = { max: 13, min: 7 };
+const Map = ({ filters, data }) => {
+  const zoomOptions = { max: 10, min: 7 };
 
   const [zoom, setZoom] = useState(zoomOptions.min);
 
@@ -46,6 +47,8 @@ const Map = ({ filters, sample }) => {
     if (map) map.setZoom(zoom);
   }, [map, zoom]);
 
+  const [showAttribution, setShowAttribution] = useState(false);
+
   const displayRegion = (id) => {
     const flag = filters.region.find((f) => f.value == id);
     if (flag !== undefined && flag !== null) return true;
@@ -53,10 +56,57 @@ const Map = ({ filters, sample }) => {
     return false;
   };
 
+  const mapLegends = [
+    { id: "TB", label: "Tuberculosis", color: "#DBB324" },
+    { id: "PN", label: "Pneumonia", color: "#007AFF" },
+    { id: "COVID", label: "COVID", color: "#D82727" },
+    { id: "AURI", label: "AURI", color: "#35CA3B" },
+  ];
+
+  const getColor = (id) => {
+    const legend = mapLegends.find((v) => v.id == id);
+    return legend.color;
+  };
+
   return (
     <>
       {/* MAP CONTAINER */}
       <div className="map-container">
+        <div className="map-header">
+          <div className="attribution-controls hidden xs:block">
+            <div
+              className="control-wrapper rounded-[6px]"
+              onClick={() => {
+                setShowAttribution(!showAttribution);
+              }}
+            >
+              <Icon
+                iconName="Information"
+                height="20px"
+                width="20px"
+                fill="#465360"
+              />
+            </div>
+          </div>
+          <div className="map-legend-wrapper">
+            <div className="map-date">
+              Updated as of {format(new Date(), "MMMM dd, yyyy")}
+            </div>
+            <div className="map-legends">
+              {mapLegends.map(({ label, color }, i) => {
+                return (
+                  <div className="map-legend-item" key={i}>
+                    <div
+                      className="color"
+                      style={{ backgroundColor: color }}
+                    ></div>
+                    <span>{label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
         {/* MAP CONTROLS */}
         <div className="map-controls">
           <div
@@ -101,23 +151,9 @@ const Map = ({ filters, sample }) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <AttributionControl position="topleft" />
-              <LayerGroup>
-                {sample &&
-                  sample.map(({ longlat, radius, color }, i) => {
-                    return (
-                      <CircleMarker
-                        key={i}
-                        center={longlat}
-                        pathOptions={{ color: color }}
-                        radius={radius}
-                        // radius={radius * 5}
-                      >
-                        <Popup>Sample Popup</Popup>
-                      </CircleMarker>
-                    );
-                  })}
-              </LayerGroup>
+
+              {showAttribution && <AttributionControl position="topleft" />}
+
               {RegionsCoordinates.map(({ id, coordinates }, i) => {
                 return (
                   displayRegion(id) &&
@@ -130,9 +166,30 @@ const Map = ({ filters, sample }) => {
                   )
                 );
               })}
+              <LayerGroup>
+                {data &&
+                  data.map(
+                    ({ latitude, longitude, region, sickness, text }, i) => {
+                      return (
+                        (displayRegion(region) ||
+                          filters.region.length == Regions.regions.length) && (
+                          <CircleMarker
+                            key={i}
+                            center={[latitude, longitude]}
+                            pathOptions={{ color: getColor(sickness) }}
+                            radius={15}
+                            // radius={radius * 5}
+                          >
+                            <Popup>{text}</Popup>
+                          </CircleMarker>
+                        )
+                      );
+                    }
+                  )}
+              </LayerGroup>
             </MapContainer>
           ),
-          [filters]
+          [filters, showAttribution, data]
         )}
       </div>
     </>
