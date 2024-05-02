@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -312,6 +312,14 @@ const AddUser = () => {
     return flag;
   };
 
+  useEffect(() => {
+    if (user) {
+      if (user.user_type == "ADMIN") {
+        handleChangeUserType("USER");
+      }
+    }
+  }, [user]);
+
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
@@ -491,6 +499,7 @@ const AddUser = () => {
                 handleChange={handleChangeRegion}
                 additionalClasses="w-full mt-[8px]"
                 state={formErrors.region != "" ? "error" : ""}
+                menuMaxHeight="max-h-[250px]"
               />
             </FieldGroup>
           )}
