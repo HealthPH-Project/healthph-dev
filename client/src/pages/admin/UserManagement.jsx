@@ -401,7 +401,7 @@ const UserManagement = () => {
                   ? [
                       { label: "Full Name" },
                       { label: "Email", tooltip: "Sample tooltip" },
-                      { label: "Department " },
+                      { label: "Regional Office " },
                       { label: "Organization ", tooltip: "Sample tooltip" },
                       { label: "Actions" },
                     ]
@@ -699,30 +699,28 @@ const UsersData = ({
   setVerifyModalActive,
   setDeleteModalActive,
 }) => {
-  const displayDepartmentLevel = (level) => {
-    let department_level = "";
+  const displayRegion = (region) => {
+    const regions = {
+      NCR: "National Capital Region",
+      I: "Region I",
+      II: "Region II",
+      III: "Region III",
+      CAR: "Cordillera Administrative Region (CAR)",
+      IVA: "Region IV-A (CALABARZON)",
+      IVB: "Region IV-B (MIMAROPA)",
+      V: "Region V",
+      VI: "Region VI",
+      VII: "Region VII",
+      VIII: "Region VIII",
+      IX: "Region IX",
+      X: "Region X",
+      XI: "Region XI",
+      XII: "Region XII",
+      XIII: "Region XIII",
+      BARMM: "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+    };
 
-    switch (level) {
-      case "national":
-        department_level = "National Level Office";
-        break;
-      case "regional":
-        department_level = "Regional Level Office";
-        break;
-      case "provincial":
-        department_level = "Provincial Level Office";
-        break;
-      case "city":
-        department_level = "City Level Office";
-        break;
-      case "municipal":
-        department_level = "City Level Office";
-        break;
-      default:
-        department_level = "N / A";
-    }
-
-    return department_level;
+    return regions[region];
   };
   return (
     <>
@@ -735,7 +733,7 @@ const UsersData = ({
                 first_name,
                 last_name,
                 email,
-                department_level,
+                region,
                 organization,
                 is_verified,
                 user_type,
@@ -761,9 +759,7 @@ const UsersData = ({
                       textToHighlight={email}
                     />
                   </div>
-                  <div className="row-item">
-                    {displayDepartmentLevel(department_level)}
-                  </div>
+                  <div className="row-item">{displayRegion(region)}</div>
                   <div className="row-item">
                     <Highlighter
                       highlightClassName="bg-warning-500 font-medium"
@@ -772,32 +768,6 @@ const UsersData = ({
                       textToHighlight={organization}
                     />
                   </div>
-                  {/*  *
-                  <div className="row-item">
-                    {user && user.user_type == "USER" ? null : (
-                      <button
-                        className={`prod-push-btn-sm prod-btn-${
-                          is_verified ? "primary" : "secondary"
-                        }  min-w-[63px]`}
-                        onClick={() => {
-                          setModalData({
-                            id: id,
-                            name: `${first_name} ${last_name}`,
-                            user_type: "USER",
-                          });
-
-                          if (is_verified) {
-                            setUnverifyModalActive(true);
-                          } else {
-                            setVerifyModalActive(true);
-                          }
-                        }}
-                      >
-                        {is_verified ? "Verified" : "Verify"}
-                      </button>
-                    )}
-                  </div>
-                  {/*  */}
                   <div className="row-item">
                     {user && user.user_type == "USER" ? null : (
                       <div className="flex items-center">

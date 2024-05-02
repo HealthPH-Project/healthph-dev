@@ -32,21 +32,6 @@ class OAuth2PasswordRequestFormJSON:
         self.client_id = client_id
         self.client_secret = client_secret
 
-
-class RegisterRequest(BaseModel):
-    department_level: str
-    organization: str
-    first_name: str
-    last_name: str
-    email: str
-    password: str
-    re_password: str
-    is_verified: bool | None = False
-    user_type: str | None = "USER"
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
-
-
 class ForgotPasswordRequest(BaseModel):
     email: str
 

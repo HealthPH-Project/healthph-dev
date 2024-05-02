@@ -16,6 +16,7 @@ from helpers.sendMail import (
 )
 from config.database import user_collection
 from models.user import (
+    CreateUserRequest,
     UpdatePersonalInfo,
     UpdateEmailRequest,
     UpdatePasswordRequest,
@@ -42,17 +43,15 @@ async def update_personal_info(data: UpdatePersonalInfo):
     if (
         not data.first_name
         or not data.last_name
-        or not data.department_level
+        or not data.region
         or not data.organization
     ):
         if not data.first_name:
             errors.append({"field": "first_name", "error": "Must provide first name"})
         if not data.last_name:
             errors.append({"field": "last_name", "error": "Must provide last name"})
-        if not data.department_level:
-            errors.append(
-                {"field": "department_level", "error": "Must choose department level"}
-            )
+        if not data.region:
+            errors.append({"field": "region", "error": "Must choose region"})
         if not data.organization:
             errors.append(
                 {"field": "organization", "error": "Must provide organization"}
@@ -79,12 +78,29 @@ async def update_personal_info(data: UpdatePersonalInfo):
 
     user = UserInDB(**user_data)
 
-    # Check if department level is valid
-    department_levels = ["national", "regional", "provincial", "city", "municipal"]
-    if not data.department_level in department_levels:
-        errors.append(
-            {"field": "department_level", "error": "Invalid department level"}
-        )
+    # Check if region is valid
+    regions = [
+        "NCR",
+        "I",
+        "II",
+        "III",
+        "CAR",
+        "IVA",
+        "IVB",
+        "V",
+        "VI",
+        "VII",
+        "VIII",
+        "IX",
+        "X",
+        "XI",
+        "XII",
+        "XIII",
+        "BARMM",
+        "ALL",
+    ]
+    if not data.region in regions:
+        errors.append({"field": "region", "error": "Invalid selected region"})
 
     if len(errors) > 0:
         raise HTTPException(
@@ -98,7 +114,7 @@ async def update_personal_info(data: UpdatePersonalInfo):
             "$set": {
                 "first_name": data.first_name,
                 "last_name": data.last_name,
-                "department_level": data.department_level,
+                "region": data.region,
                 "organization": data.organization,
                 "updated_at": datetime.now(),
             }
@@ -511,7 +527,7 @@ route     POST api/users
 
 
 async def create_user(
-    user: UserInDB,
+    user: CreateUserRequest,
     is_admin: Annotated[SuperadminResult, Depends(require_admin)],
 ):
     errors = []
@@ -526,7 +542,7 @@ async def create_user(
     # Check fields if empty
     if (
         not user.user_type
-        or not user.department_level
+        or not user.region
         or not user.organization
         or not user.first_name
         or not user.last_name
@@ -536,10 +552,8 @@ async def create_user(
         if not user.user_type:
             errors.append({"field": "user_type", "error": "Must choose user type"})
 
-        if not user.department_level:
-            errors.append(
-                {"field": "department_level", "error": "Must choose department level"}
-            )
+        if not user.region:
+            errors.append({"field": "region", "error": "Must choose region"})
 
         if not user.organization:
             errors.append({"field": "organization", "error": "Must enter organization"})
@@ -565,12 +579,29 @@ async def create_user(
     if not user.user_type in ["USER", "ADMIN", "SUPERADMIN"]:
         errors.append({"field": "user_type", "error": "Invalid user type"})
 
-    # Check if department level is valid
-    department_levels = ["national", "regional", "provincial", "city", "municipal"]
-    if not user.department_level in department_levels:
-        errors.append(
-            {"field": "department_level", "error": "Invalid department level"}
-        )
+    # Check if region is valid
+    regions = [
+        "NCR",
+        "I",
+        "II",
+        "III",
+        "CAR",
+        "IVA",
+        "IVB",
+        "V",
+        "VI",
+        "VII",
+        "VIII",
+        "IX",
+        "X",
+        "XI",
+        "XII",
+        "XIII",
+        "BARMM",
+        "ALL",
+    ]
+    if not user.region in regions:
+        errors.append({"field": "region", "error": "Invalid selected region"})
 
     # Check if email address is valid
     email_regex = r"^([a-z0-9]+[a-z0-9!#$%&'*+/=?^_`{|}~-]?(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$"
@@ -604,19 +635,31 @@ async def create_user(
         )
 
     if user.user_type == "USER":
-        levels = {
-            "national": "National Level Office",
-            "regional": "Regional Level Office",
-            "provincial": "Provincial Level Office",
-            "city": "City Level Office",
-            "municipal": "Municipal Level Office",
+        regions = {
+            "NCR": "National Capital Region",
+            "I": "Region I",
+            "II": "Region II",
+            "III": "Region III",
+            "CAR": "Cordillera Administrative Region (CAR)",
+            "IVA": "Region IV-A (CALABARZON)",
+            "IVB": "Region IV-B (MIMAROPA)",
+            "V": "Region V",
+            "VI": "Region VI",
+            "VII": "Region VII",
+            "VIII": "Region VIII",
+            "IX": "Region IX",
+            "X": "Region X",
+            "XI": "Region XI",
+            "XII": "Region XII",
+            "XIII": "Region XIII",
+            "BARMM": "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
         }
         result = mail_add_user(
             user.email,
             {
                 "first_name": user.first_name,
                 "last_name": user.last_name,
-                "department_level": levels[user.department_level],
+                "region": regions[user.region],
                 "organization": user.organization,
                 "email": user.email,
                 "password": user.password,
@@ -701,125 +744,6 @@ async def delete_users(
             "user": individual_user(deleted_user),
         },
     )
-
-
-"""
-@desc     Create an admin or superadmin
-route     POST api/users/admins/
-@access   Private | SUPERADMIN
-"""
-
-
-async def create_admin(
-    user: UserInDB,
-    is_superadmin: Annotated[SuperadminResult, Depends(require_superadmin)],
-):
-    errors = []
-    # Check if user is a superadmin
-    if not is_superadmin.result:
-        errors.append({"field": "snackbar", "error": "Not authorized to add an admin."})
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=errors,
-        )
-
-    # Check fields if empty
-    if (
-        not user.user_type
-        or not user.department_level
-        or not user.organization
-        or not user.first_name
-        or not user.last_name
-        or not user.email
-        or not user.password
-    ):
-        if not user.user_type:
-            errors.append({"field": "user_type", "error": "Must choose user type"})
-
-        if not user.department_level:
-            errors.append(
-                {"field": "department_level", "error": "Must choose department level"}
-            )
-
-        if not user.organization:
-            errors.append({"field": "organization", "error": "Must enter organization"})
-
-        if not user.first_name:
-            errors.append({"field": "first_name", "error": "Must enter first name"})
-
-        if not user.last_name:
-            errors.append({"field": "last_name", "error": "Must enter last name"})
-
-        if not user.email:
-            errors.append({"field": "email", "error": "Must enter email address"})
-
-        if not user.password:
-            errors.append({"field": "password", "error": "Must enter password"})
-
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=errors,
-        )
-
-    # Check if user type is valid
-    if not user.user_type in ["ADMIN", "SUPERADMIN"]:
-        errors.append({"field": "user_type", "error": "Invalid user type"})
-
-    # Check if department level is valid
-    department_levels = ["national", "regional", "provincial", "city", "municipal"]
-    if not user.department_level in department_levels:
-        errors.append(
-            {"field": "department_level", "error": "Invalid department level"}
-        )
-
-    # Check if email address is valid
-    email_regex = r"^([a-z0-9]+[a-z0-9!#$%&'*+/=?^_`{|}~-]?(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$"
-    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
-
-    if not re.match(email_regex, user.email):
-        errors.append({"field": "email", "error": "Must enter valid email address"})
-
-    # Check if email address is already used
-    existing_email = user_collection.count_documents({"email": user.email})
-
-    if existing_email > 0:
-        errors.append({"field": "email", "error": "Email address is already used"})
-
-    if len(errors) > 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=errors,
-        )
-
-    to_encode = dict(user).copy()
-    to_encode.update({"is_verified": True})
-    to_encode.update({"password": generate_hashed_password(to_encode["password"])})
-
-    new_user = user_collection.insert_one(dict(to_encode))
-
-    if not new_user:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error creating admin...",
-        )
-
-    if user.user_type == "ADMIN":
-        result = mail_add_admin(
-            user.email, {"email": user.email, "password": user.password}
-        )
-    elif user.user_type == "SUPERADMIN":
-        result = mail_add_superadmin(
-            user.email, {"email": user.email, "password": user.password}
-        )
-
-    if not result:
-        print("Failed. Email not sent.")
-
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={"message": "Admin created successfully"},
-    )
-
 
 """
 @desc     Delete Admins

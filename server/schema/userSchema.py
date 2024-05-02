@@ -1,7 +1,7 @@
 def individual_user(user) -> dict:
     return {
         "id": str(user["_id"]),
-        "department_level": user["department_level"],
+        "region": user["region"],
         "organization": user["organization"],
         "email": user["email"],
         "first_name": user["first_name"] or "",

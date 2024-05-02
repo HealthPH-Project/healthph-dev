@@ -225,140 +225,6 @@ def mail_forgot_password(receiver, data: dict):
     return mail_send(receiver=receiver, message=message)
 
 
-def mail_registered(receiver, data: dict):
-    message = mail_setup(receiver, "Account Registerd. Waiting for Verification")
-
-    last_name, first_name, deparment_level, organization, email = data.values()
-
-    plain_text = f"""\
-    This email contains that you have successfully created an account and is WAITING FOR VERIFICATION.
-    You will be verified once you are credible to utilize HealthPH and wait 1-2 business days.
-    For now you only have limited access to HealthPH. Please securely keep this information:
-    
-    Last Name: {last_name}
-    First Name: {first_name}
-    Department: {deparment_level}
-    Organization: {organization}
-    HealthPH Email: {email}
-    
-    As an Unverified User at HealthPH, you have full access to a number of modules such as:
-    
-    1. Settings
-    a. The user is able to edit their full name, department, organization, email address, and password.
-    b. The user is able to delete their account when not in use. 
-    
-    If you need further assistance, please visit or email the DOH Systems Office at:
-    
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
-    
-    Regards,
-    HealthPH
-    """
-
-    html = f"""\
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>HealthPH</title>
-    </head>
-    <head>
-        {get_styles()}
-    </head>
-    <body class="body">
-        <div class="header">
-          <img class="img" src="cid:Header" alt="" />
-        </div>
-        <div class="main">
-            <p class="p">
-                This email contains that you have{" "}
-                <span class="semibold">successfully created an account</span> and is
-                <span class="semibold">WAITING FOR VERIFICATION</span>.
-                You will be verified once you are credible to utilize HealthPH and wait{" "}
-                <span class="semibold">1-2 business days</span>. For now, you only have limited access
-                to HealthPH. Please securely keep this information:
-            </p>
-            <div class="spacer"></div>
-            <p class="p">
-                <span class="bold">Last Name</span>:{" "}
-                <span class="link">{last_name}</span>
-            </p>
-            <div class="spacer"></div>
-            <p class="p">
-                <span class="bold">First Name</span>:{" "}
-                <span class="link">{first_name}</span>
-            </p>
-            <div class="spacer"></div>
-            <p class="p">
-                <span class="bold">Department</span>:{" "}
-                <span class="link">{deparment_level}</span>
-            </p>
-            <div class="spacer"></div>
-            <p class="p">
-                <span class="bold">Organization</span>:{" "}
-                <span class="link">{organization}</span>
-            </p>
-            <div class="spacer"></div>
-            <p class="p">
-                <span class="bold">HealthPH Email</span>:{" "}
-                <span class="link">{email}</span>
-            </p>
-            <div class="spacer"></div>
-            <div class="p">
-                <ul class="list">
-                    <li><span class="semibold">1. Settings</span></li>
-                    <li class="list-indent">a. The user is able to edit their full name, department, organization, email
-                        address, and password.</li>
-                    <li class="list-indent">b. The user is able to delete their account when not in use.</li>
-                </ul>
-            </div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <p class="p">
-                If you need further assistance, please visit or email the DOH
-                Systems Office at:
-            </p>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <div class="indent">
-                <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
-                <div class="spacer"></div>
-                <p class="p">(632) 8651-7800 local 1427</p>
-                <div class="spacer"></div>
-                <p class="p">doh@healthph.org</p>
-            </div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <div class="spacer"></div>
-            <p class="p">Regards</p>
-            <div class="spacer"></div>
-            <p class="p">HealthPH</p>
-        </div>
-    </body>
-    </html>
-    """
-
-    part1 = MIMEText(plain_text, "plain")
-    part2 = MIMEText(html, "html")
-    message.attach(part1)
-    message.attach(part2)
-
-    fp = open("assets/images/mail-header.png", "rb")
-    header = MIMEImage(fp.read())
-    fp.close()
-
-    header.add_header("Content-ID", "<Header>")
-    message.attach(header)
-
-    return mail_send(receiver=receiver, message=message)
-
-
 def mail_verified(receiver):
     message = mail_setup(receiver, "Account Verified")
 
@@ -488,7 +354,7 @@ def mail_verified(receiver):
 def mail_add_user(receiver, data: dict):
     message = mail_setup(receiver, "User Account Created")
 
-    last_name, first_name, deparment_level, organization, email, password = (
+    last_name, first_name, region, organization, email, password = (
         data.values()
     )
 
@@ -503,7 +369,7 @@ def mail_add_user(receiver, data: dict):
     
     Last Name: {last_name}
     First Name: {first_name}
-    Department: {deparment_level}
+    Regional Office: {region}
     Organization: {organization}
     
     You will be using the same password to all these systems. The system created this during the account activation process. 
@@ -582,8 +448,8 @@ def mail_add_user(receiver, data: dict):
             </p>
             <div class="spacer"></div>
             <p class="p">
-                <span class="bold">Deparment Level</span>:{" "}
-                <span class="link">{deparment_level}</span>
+                <span class="bold">Regional Office</span>:{" "}
+                <span class="link">{region}</span>
             </p>
             <div class="spacer"></div>
             <p class="p">

@@ -1,27 +1,25 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import Icon from "../../components/Icon";
-import FieldGroup from "../../components/FieldGroup";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+import Icon from "../../components/Icon";
+import FieldGroup from "../../components/FieldGroup";
 import Input from "../../components/Input";
 import CustomSelect from "../../components/CustomSelect";
 import InputPassword from "../../components/InputPassword";
 import PasswordRequirements from "../../components/auth/PasswordRequirements";
-import {
-  useCreateAdminMutation,
-  useCreateUserMutation,
-} from "../../features/api/userSlice";
-import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
-
-import { toast } from "react-toastify";
 import Snackbar from "../../components/Snackbar";
 
-const AddAdmin = () => {
+import { useCreateUserMutation } from "../../features/api/userSlice";
+import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+
+const AddUser = () => {
   const user = useSelector((state) => state.auth.user);
 
   const [formData, setFormData] = useState({
     user_type: "",
-    department_level: "",
+    region: "",
     organization: "",
     first_name: "",
     last_name: "",
@@ -31,7 +29,7 @@ const AddAdmin = () => {
 
   const [formErrors, setFormErrors] = useState({
     user_type: "",
-    department_level: "",
+    region: "",
     organization: "",
     first_name: "",
     last_name: "",
@@ -51,8 +49,6 @@ const AddAdmin = () => {
 
   const [error, setError] = useState("");
 
-  const [createAdmin] = useCreateAdminMutation();
-
   const [createUser] = useCreateUserMutation();
 
   const [log_activity] = useCreateActivityLogMutation();
@@ -60,7 +56,34 @@ const AddAdmin = () => {
   const navigate = useNavigate();
 
   const handleChangeUserType = (value) => {
-    setFormData({ ...formData, user_type: value });
+    if (["ADMIN", "SUPERADMIN"].includes(value)) {
+      setFormData({
+        ...formData,
+        user_type: value,
+        region: "ALL",
+        organization: import.meta.env.VITE_ADMIN_ORG,
+      });
+      setFormErrors((formErrors) => ({
+        ...formErrors,
+        organization: "",
+        region: "",
+      }));
+    } else {
+      if (formData.organization == import.meta.env.VITE_ADMIN_ORG) {
+        setFormData({
+          ...formData,
+          user_type: value,
+          region: "",
+          organization: "",
+        });
+      } else {
+        setFormData({
+          ...formData,
+          region: "",
+          user_type: value,
+        });
+      }
+    }
     setFormErrors((formErrors) => ({
       ...formErrors,
       user_type: "",
@@ -68,11 +91,11 @@ const AddAdmin = () => {
     setError("");
   };
 
-  const handleChangeDepartment = (value) => {
-    setFormData({ ...formData, department_level: value });
+  const handleChangeRegion = (value) => {
+    setFormData({ ...formData, region: value });
     setFormErrors((formErrors) => ({
       ...formErrors,
-      department_level: "",
+      region: "",
     }));
     setError("");
   };
@@ -108,6 +131,7 @@ const AddAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!checkError()) {
       setIsLoading(true);
 
@@ -214,10 +238,10 @@ const AddAdmin = () => {
       flag = true;
     }
 
-    if (formData.department_level == "") {
+    if (formData.region == "") {
       setFormErrors((formErrors) => ({
         ...formErrors,
-        department_level: "Must choose department level.",
+        region: "Must choose region.",
       }));
       flag = true;
     }
@@ -331,6 +355,7 @@ const AddAdmin = () => {
             </div>
             <div className="flex items-center">
               <button
+                type="button"
                 className="prod-btn-base prod-btn-secondary me-[16px]"
                 onClick={() => {
                   navigate("/dashboard/admins", { replace: true });
@@ -349,6 +374,8 @@ const AddAdmin = () => {
             </div>
           </div>
           {error && <p className="prod-p4 text-[#D82727] mb-[8px]">{error}</p>}
+
+          {/* USER TYPE */}
           <FieldGroup
             label="User Type"
             labelFor="user-type"
@@ -375,49 +402,100 @@ const AddAdmin = () => {
               state={formErrors.user_type != "" ? "error" : ""}
             />
           </FieldGroup>
-          <FieldGroup
-            label="Department Level"
-            labelFor="department"
-            additionalClasses="w-full max-w-[360px] mb-[20px]"
-            caption={
-              formErrors.department_level != ""
-                ? formErrors.department_level
-                : ""
-            }
-            state={formErrors.department_level != "" ? "error" : ""}
-          >
-            <CustomSelect
-              options={[
-                {
-                  label: "National Level Office",
-                  value: "national",
-                },
-                {
-                  label: "Regional Level Office",
-                  value: "regional",
-                },
-                {
-                  label: "Provincial Level Office",
-                  value: "provincial",
-                },
-                {
-                  label: "City Level Office",
-                  value: "city",
-                },
-                {
-                  label: "Municipal Level Office",
-                  value: "municipal",
-                },
-              ]}
-              id="department"
-              placeholder="Select Department Level"
-              size="input-select-md"
-              value={formData.department_level}
-              handleChange={handleChangeDepartment}
-              additionalClasses="w-full mt-[8px]"
-              state={formErrors.department_level != "" ? "error" : ""}
-            />
-          </FieldGroup>
+
+          {/* REGION */}
+          {["USER"].includes(formData.user_type) && (
+            <FieldGroup
+              label="Regional Office"
+              labelFor="region"
+              additionalClasses="w-full max-w-[360px] mb-[20px]"
+              caption={formErrors.region != "" ? formErrors.region : ""}
+              state={formErrors.region != "" ? "error" : ""}
+            >
+              <CustomSelect
+                options={[
+                  {
+                    label: "National Capital Region",
+                    value: "NCR",
+                  },
+                  {
+                    label: "Region I",
+                    value: "I",
+                  },
+                  {
+                    label: "Region II",
+                    value: "II",
+                  },
+                  {
+                    label: "Region III",
+                    value: "III",
+                  },
+                  {
+                    label: "Cordillera Administrative Region (CAR)",
+                    value: "CAR",
+                  },
+                  {
+                    label: "Region IV-A (CALABARZON)",
+                    value: "IVA",
+                  },
+                  {
+                    label: "Region IV-B (MIMAROPA)",
+                    value: "IVB",
+                  },
+                  {
+                    label: "Region V",
+                    value: "V",
+                  },
+                  {
+                    label: "Region VI",
+                    value: "VI",
+                  },
+                  {
+                    label: "Region VII",
+                    value: "VII",
+                  },
+                  {
+                    label: "Region VIII",
+                    value: "VIII",
+                  },
+                  {
+                    label: "Region IX",
+                    value: "IX",
+                  },
+                  {
+                    label: "Region X",
+                    value: "X",
+                  },
+                  {
+                    label: "Region XI",
+                    value: "XI",
+                  },
+                  {
+                    label: "Region XII",
+                    value: "XII",
+                  },
+                  {
+                    label: "Region XIII",
+                    value: "XIII",
+                  },
+                  {
+                    label:
+                      "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+                    value: "BARMM",
+                  },
+                ]}
+                id="region"
+                placeholder="Select Region"
+                size="input-select-md"
+                value={formData.region}
+                handleChange={handleChangeRegion}
+                additionalClasses="w-full mt-[8px]"
+                state={formErrors.region != "" ? "error" : ""}
+              />
+            </FieldGroup>
+          )}
+
+          {/* ORGANIZATION */}
           <FieldGroup
             label="Organization"
             labelFor="organization"
@@ -443,6 +521,8 @@ const AddAdmin = () => {
               // required
             />
           </FieldGroup>
+
+          {/* FIRST NAME */}
           <FieldGroup
             label="First Name"
             labelFor="first-name"
@@ -466,6 +546,8 @@ const AddAdmin = () => {
               // required
             />
           </FieldGroup>
+
+          {/* LAST NAME */}
           <FieldGroup
             label="Last Name"
             labelFor="last-name"
@@ -489,6 +571,8 @@ const AddAdmin = () => {
               // required
             />
           </FieldGroup>
+
+          {/* EMAIL */}
           <FieldGroup
             label="Email"
             labelFor="email"
@@ -515,6 +599,8 @@ const AddAdmin = () => {
           <p className="w-full max-w-[360px] prod-p3 text-gray-700 mb-[20px]">
             This will be used to send the admin their account credentials.
           </p>
+
+          {/* PASSWORD */}
           <FieldGroup
             label="Password"
             labelFor="password"
@@ -564,4 +650,5 @@ const AddAdmin = () => {
     </>
   );
 };
-export default AddAdmin;
+
+export default AddUser;

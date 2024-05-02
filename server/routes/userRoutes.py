@@ -9,7 +9,6 @@ from controllers.userController import (
     delete_users,
     verify_user,
     fetch_admins,
-    create_admin,
     delete_admin,
 )
 
@@ -34,7 +33,5 @@ router.add_api_route("", methods=["POST"], endpoint=create_user)
 router.add_api_route("/verify/{id}", methods=["PUT"], endpoint=verify_user)
 
 router.add_api_route("/admins", methods=["GET"], endpoint=fetch_admins)
-
-router.add_api_route("/admins", methods=["POST"], endpoint=create_admin)
 
 router.add_api_route("/admins/{id}", methods=["DELETE"], endpoint=delete_admin)

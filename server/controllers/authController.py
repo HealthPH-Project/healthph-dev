@@ -14,7 +14,6 @@ from config.database import user_collection
 from models.auth import (
     TokenData,
     OAuth2PasswordRequestFormJSON,
-    RegisterRequest,
     ForgotPasswordRequest,
     ResetPasswordRequest,
     VerifyResetPasswordToken,
@@ -27,7 +26,7 @@ from helpers.authHelpers import (
     create_access_token,
     create_reset_password_token,
 )
-from helpers.sendMail import mail_forgot_password, mail_registered
+from helpers.sendMail import mail_forgot_password
 
 
 """
@@ -88,124 +87,6 @@ async def authenticate_user(
     )
 
     return response
-
-
-"""
-@desc     Create user / set token
-route     POST api/auth/register
-@access   Public
-"""
-
-
-async def register_user(user: RegisterRequest):
-    errors = []
-
-    # Check fields if empty
-    if (
-        not user.department_level
-        or not user.organization
-        or not user.first_name
-        or not user.last_name
-        or not user.email
-        or not user.password
-        or not user.re_password
-    ):
-        if not user.department_level:
-            errors.append(
-                {"field": "department_level", "error": "Must choose department level"}
-            )
-
-        if not user.organization:
-            errors.append({"field": "organization", "error": "Must enter organization"})
-
-        if not user.first_name:
-            errors.append({"field": "first_name", "error": "Must enter first name"})
-
-        if not user.last_name:
-            errors.append({"field": "last_name", "error": "Must enter last name"})
-
-        if not user.email:
-            errors.append({"field": "email", "error": "Must enter email address"})
-
-        if not user.password:
-            errors.append({"field": "password", "error": "Must enter password"})
-
-        if not user.re_password:
-            errors.append({"field": "re_password", "error": "Must confirm password"})
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=errors,
-        )
-
-    # Check if department level is valid
-    department_levels = ["national", "regional", "provincial", "city", "municipal"]
-    if not user.department_level in department_levels:
-        errors.append(
-            {"field": "department_level", "error": "Invalid department level"}
-        )
-
-    # Check if email address is valid
-    email_regex = r"^([a-z0-9]+[a-z0-9!#$%&'*+/=?^_`{|}~-]?(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$"
-    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
-
-    if not re.match(email_regex, user.email):
-        errors.append({"field": "email", "error": "Must enter valid email address"})
-
-    # Check if email address is already used
-    existing_email = user_collection.count_documents({"email": user.email})
-
-    if existing_email > 0:
-        errors.append({"field": "email", "error": "Email address is already used"})
-
-    # Check if password and confirm password matches
-    if user.password != user.re_password:
-        errors.append({"field": "re_password", "error": "Passwords do not match"})
-
-    if len(errors) > 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=errors,
-        )
-
-    to_encode = dict(user).copy()
-
-    to_encode.update({"password": generate_hashed_password(to_encode["password"])})
-    to_encode.pop("re_password")
-
-    new_user = user_collection.insert_one(dict(to_encode))
-
-    if not new_user:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error creating account...",
-        )
-
-    levels = {
-        "national": "National Level Office",
-        "regional": "Regional Level Office",
-        "provincial": "Provincial Level Office",
-        "city": "City Level Office",
-        "municipal": "Municipal Level Office",
-    }
-    # Send reset password instructions thru email
-    result = mail_registered(
-        user.email,
-        {
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "department_level": levels[user.department_level],
-            "organization": user.organization,
-            "email": user.email,
-        },
-    )
-    
-    if not result:
-        print("error")
-
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={"message": "Account created successfully"},
-    )
 
 
 """

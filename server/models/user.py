@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class User(BaseModel):
-    department_level: str
+    region: str
     organization: str
     first_name: str
     last_name: str
@@ -18,11 +18,24 @@ class UserInDB(User):
     password: str
 
 
+class CreateUserRequest(BaseModel):
+    region: str
+    organization: str
+    first_name: str
+    last_name: str
+    email: str
+    password: str
+    is_verified: bool | None = False
+    user_type: str
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
+
+
 class UpdatePersonalInfo(BaseModel):
     id: str
     first_name: str
     last_name: str
-    department_level: str
+    region: str
     organization: str
 
 
@@ -45,4 +58,4 @@ class VerifyUserRequest(BaseModel):
 
 class SuperadminResult(BaseModel):
     result: bool
-    id:str
+    id: str

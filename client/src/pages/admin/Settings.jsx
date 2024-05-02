@@ -21,7 +21,7 @@ const Settings = () => {
 
   const initialData = {
     id: user.id,
-    department_level: user.department_level,
+    region: user.region,
     organization: user.organization,
     first_name: user.first_name,
     last_name: user.last_name,
@@ -32,7 +32,7 @@ const Settings = () => {
   const [formData, setFormData] = useState(initialData);
 
   const [formErrors, setFormErrors] = useState({
-    department_level: "",
+    region: "",
     organization: "",
     first_name: "",
     last_name: "",
@@ -54,11 +54,11 @@ const Settings = () => {
 
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const handleChangeDepartment = (value) => {
-    setFormData({ ...formData, department_level: value });
+  const handleChangeRegion = (value) => {
+    setFormData({ ...formData, region: value });
     setFormErrors((formErrors) => ({
       ...formErrors,
-      department_level: "",
+      region: "",
     }));
     setError("");
   };
@@ -166,10 +166,10 @@ const Settings = () => {
       flag = true;
     }
 
-    if (formData.department_level == "") {
+    if (formData.region == "") {
       setFormErrors((formErrors) => ({
         ...formErrors,
-        department_level: "Must choose department level.",
+        region: "Must choose region.",
       }));
       flag = true;
     }
@@ -262,6 +262,7 @@ const Settings = () => {
             </div>
             {!editable ? (
               <button
+                type="button"
                 className="prod-btn-base prod-btn-primary"
                 onClick={() => setEditable(true)}
               >
@@ -295,7 +296,9 @@ const Settings = () => {
               </div>
             )}
           </div>
-          {error && <p className="prod-p4  text-[#D82727] mb-[8px]">{error}</p>}
+          {error && <p className="prod-p4 text-[#D82727] mb-[8px]">{error}</p>}
+
+          {/* FIRST NAME */}
           <FieldGroup
             label="First Name"
             labelFor="first-name"
@@ -324,6 +327,8 @@ const Settings = () => {
               readOnly={!editable}
             />
           </FieldGroup>
+
+          {/* LAST NAME */}
           <FieldGroup
             label="Last Name"
             labelFor="last-name"
@@ -352,50 +357,99 @@ const Settings = () => {
               readOnly={!editable}
             />
           </FieldGroup>
+
+          {/* REGION */}
           <FieldGroup
-            label="Department Level"
-            labelFor="department"
+            label="Regional Office"
+            labelFor="region"
             additionalClasses="w-full max-w-[360px] mb-[20px]"
-            caption={
-              formErrors.department_level != ""
-                ? formErrors.department_level
-                : ""
-            }
-            state={formErrors.department_level != "" ? "error" : ""}
+            caption={formErrors.region != "" ? formErrors.region : ""}
+            state={formErrors.region != "" ? "error" : ""}
           >
             <CustomSelect
               options={[
                 {
-                  label: "National Level Office",
-                  value: "national",
+                  label: "National Capital Region",
+                  value: "NCR",
                 },
                 {
-                  label: "Regional Level Office",
-                  value: "regional",
+                  label: "Region I",
+                  value: "I",
                 },
                 {
-                  label: "Provincial Level Office",
-                  value: "provincial",
+                  label: "Region II",
+                  value: "II",
                 },
                 {
-                  label: "City Level Office",
-                  value: "city",
+                  label: "Region III",
+                  value: "III",
                 },
                 {
-                  label: "Municipal Level Office",
-                  value: "municipal",
+                  label: "Cordillera Administrative Region (CAR)",
+                  value: "CAR",
+                },
+                {
+                  label: "Region IV-A (CALABARZON)",
+                  value: "IVA",
+                },
+                {
+                  label: "Region IV-B (MIMAROPA)",
+                  value: "IVB",
+                },
+                {
+                  label: "Region V",
+                  value: "V",
+                },
+                {
+                  label: "Region VI",
+                  value: "VI",
+                },
+                {
+                  label: "Region VII",
+                  value: "VII",
+                },
+                {
+                  label: "Region VIII",
+                  value: "VIII",
+                },
+                {
+                  label: "Region IX",
+                  value: "IX",
+                },
+                {
+                  label: "Region X",
+                  value: "X",
+                },
+                {
+                  label: "Region XI",
+                  value: "XI",
+                },
+                {
+                  label: "Region XII",
+                  value: "XII",
+                },
+                {
+                  label: "Region XIII",
+                  value: "XIII",
+                },
+                {
+                  label:
+                    "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+                  value: "BARMM",
                 },
               ]}
-              id="department"
-              placeholder="Select Department Level"
+              id="region"
+              placeholder="Select Region"
               size="input-select-md"
-              value={formData.department_level}
-              handleChange={handleChangeDepartment}
+              value={formData.region}
+              handleChange={handleChangeRegion}
               additionalClasses="w-full mt-[8px]"
-              state={formErrors.department_level != "" ? "error" : ""}
+              state={formErrors.region != "" ? "error" : ""}
               editable={editable}
             />
           </FieldGroup>
+
+          {/* ORGANIZATION */}
           <FieldGroup
             label="Organization"
             labelFor="organization"

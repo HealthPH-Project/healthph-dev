@@ -14,7 +14,6 @@ import AuthMiddleware from "./middlewares/AuthMiddleware";
 
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 
