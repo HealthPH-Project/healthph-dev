@@ -1,13 +1,101 @@
 import pandas as pd
 import re
 import nltk
-nltk.download('wordnet')
+
+nltk.download("wordnet")
 from nltk.stem import WordNetLemmatizer
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 from collections import Counter
 from io import BytesIO
 import random
+
+
+def get_stopwords():
+    # Define stopwords
+    stopwords = set(STOPWORDS)
+
+    # Load additional tagalog stopwords
+    with open("assets/data/tagalog_stop_words.txt", "r") as f:
+        additional_stopwords_tl = f.read().splitlines()
+
+    # Load additional tagalog stopwords
+    with open("assets/data/tagalog_stop_words_2.txt", "r") as f:
+        additional_stopwords_tl_2 = f.read().splitlines()
+
+    # Load additional english stopwords
+    with open("assets/data/english_stop_words.txt", "r") as f:
+        additional_stopwords_en = f.read().splitlines()
+
+    # Load additional cebuano stopwords
+    with open("assets/data/cebuano_stop_words.txt", "r") as f:
+        additional_stopwords_cb = f.read().splitlines()
+
+    stopwords.update(additional_stopwords_tl)
+    stopwords.update(additional_stopwords_tl_2)
+    stopwords.update(additional_stopwords_en)
+    stopwords.update(additional_stopwords_cb)
+
+    stopwords.update(
+        [
+            "wala",
+            "akong",
+            "ba",
+            "nung",
+            "talaga",
+            "pag",
+            "nang",
+            "de",
+            "amp",
+            "gym",
+            "coach",
+            "lang",
+            "yung",
+            "kasi",
+            "naman",
+            "mo",
+            "di",
+            "si",
+            "nya",
+            "yun",
+            "im",
+            "will",
+            "sya",
+            "nga",
+            "daw",
+            "eh",
+            "que",
+            "ug",
+            "e",
+            "man",
+            "jud",
+            "gi",
+            "oy",
+            "ba",
+            "talaga",
+            "day",
+            "one",
+            "parang",
+            "know",
+            "wala",
+            "alam",
+            "tapos",
+            "pag",
+            "tao",
+            "kayo",
+            "nung",
+            "us",
+            "now",
+            "natin",
+            "nasa",
+            "even",
+            "niyo",
+            "teaser",
+        ]
+    )
+    
+    return stopwords
+
 
 def clean_text(text):
     if pd.notna(text):
@@ -46,71 +134,8 @@ def frequent_words(data):
     post = re.sub(r"[^a-zA-Z\s]", "", post)
 
     # Define stopwords
-    stopwords = set(STOPWORDS)
-
-    # Load additional stopwords from 'tg.txt'
-    with open("assets/data/tagalog_stop_words.txt", "r") as f:
-        additional_stopwords = f.read().splitlines()
-    stopwords.update(additional_stopwords)
-
-    stopwords.update(
-        [
-            "wala",
-            "akong",
-            "ba",
-            "nung",
-            "talaga",
-            "pag",
-            "nang",
-            "de",
-            "amp",
-            "gym",
-            "coach",
-            "lang",
-            "yung",
-            "kasi",
-            "naman",
-            "mo",
-            "di",
-            "si",
-            "nya",
-            "yun",
-            "im",
-            "will",
-            "sya",
-            "nga",
-            "daw",
-            "eh",
-            "que",
-            "ug",
-            "e",
-            "man",
-            "jud",
-            "gi",
-            "oy",
-            "ba",
-            "talaga",
-            "day",
-            "one",
-            "parang",
-            "know",
-            "wala",
-            "alam",
-            "tapos",
-            "pag",
-            "tao",
-            "kayo",
-            "nung",
-            "us",
-            "now",
-            "natin",
-            "nasa",
-            "even",
-            "niyo",
-            "teaser",
-        ]
-    )
-
+    stopwords = get_stopwords()
+    
     # Split the post into words and filter out stopwords
     words = [word for word in post.split() if word not in stopwords]
 
@@ -133,73 +158,7 @@ def word_cloud(data):
     post = " ".join(review for review in data.post)
 
     # Define stopwords
-    stopwords = set(STOPWORDS)
-
-    # Load additional stopwords from 'tg.txt'
-    with open("assets/data/tagalog_stop_words.txt", "r") as f:
-        additional_stopwords = f.read().splitlines()
-    stopwords.update(additional_stopwords)
-
-    stopwords.update(
-        [
-            "wala",
-            "akong",
-            "ba",
-            "nung",
-            "talaga",
-            "pag",
-            "nang",
-            "de",
-            "amp",
-            "gym",
-            "coach",
-            "lang",
-            "yung",
-            "kasi",
-            "naman",
-            "mo",
-            "di",
-            "si",
-            "nya",
-            "yun",
-            "im",
-            "will",
-            "sya",
-            "nga",
-            "daw",
-            "eh",
-            "que",
-            "ug",
-            "e",
-            "man",
-            "jud",
-            "gi",
-            "oy",
-            "ba",
-            "talaga",
-            "day",
-            "one",
-            "parang",
-            "know",
-            "wala",
-            "alam",
-            "tapos",
-            "pag",
-            "tao",
-            "kayo",
-            "nung",
-            "us",
-            "now",
-            "natin",
-            "nasa",
-            "even",
-            "niyo",
-            "teaser",
-            "u",
-            "ma",
-            "yan",
-        ]
-    )
+    stopwords = get_stopwords()
 
     # Generate a word cloud image considering stopwords, with higher resolution
     wordcloud = WordCloud(
@@ -213,9 +172,9 @@ def word_cloud(data):
         width=800,
         height=400,
         max_font_size=50,
-        margin=50
+        margin=50,
     ).generate(post)
-    
+
     # return wordcloud
     image_buffer = BytesIO()
     wordcloud.to_image().save(image_buffer, format="PNG")
@@ -233,10 +192,9 @@ def word_cloud(data):
     return buffer.getvalue()
 
 
-def wordcloud_color_func(word, font_size, position, orientation, random_state=None,
-                    **kwargs):
-    colors =["#171E26","#007AFF", "#35CA3B", "#DBB324", "#D82727"]
-    
+def wordcloud_color_func(
+    word, font_size, position, orientation, random_state=None, **kwargs
+):
+    colors = ["#171E26", "#007AFF", "#35CA3B", "#DBB324", "#D82727"]
+
     return random.choice(colors)
-    
-    
