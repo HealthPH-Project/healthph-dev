@@ -14,12 +14,12 @@ import Regions from "../../assets/data/regions.json";
 import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
 import { format } from "date-fns";
 
-const Map = ({ filters, data }) => {
+const Map = ({ filters, data, mapCenter }) => {
   const zoomOptions = { max: 10, min: 7 };
 
   const [zoom, setZoom] = useState(zoomOptions.min);
 
-  const center = [13, 122];
+  const [center, setCenter] = useState(mapCenter);
 
   const maxBounds = [
     [22, 116],

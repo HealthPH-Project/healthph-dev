@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
-import MultiSelect from "../../components/MultiSelect";
-import useSwipe from "../../hooks/useSwipe";
-import CustomSelect from "../../components/CustomSelect";
-import Regions from "../../assets/data/regions.json";
 import { format, subDays } from "date-fns";
-import SidebarDataItem from "../../components/admin/SidebarDataItem";
-import Map from "../../components/admin/Map";
-import Dummy from "../../dummy.json";
-import Modal from "../../components/admin/Modal";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { updateInitialLogin } from "../../features/auth/authSlice";
-import { Link } from "react-router-dom";
-import Icon from "../../components/Icon";
+import useSwipe from "../../hooks/useSwipe";
 
+import Icon from "../../components/Icon";
+import MultiSelect from "../../components/MultiSelect";
+import CustomSelect from "../../components/CustomSelect";
+import SidebarDataItem from "../../components/admin/SidebarDataItem";
+import Map from "../../components/admin/Map";
+import Modal from "../../components/admin/Modal";
+
+import Dummy from "../../dummy.json";
+import Regions from "../../assets/data/regions.json";
+import RegionsCenter from "../../assets/data/regions_center.json";
 import Sample from "../../assets/data/sample.json";
 
 const TrendsMap = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const initialLogin = useSelector((state) => state.auth.initialLogin);
 
   const [sidebarActive, setSidebarActive] = useState(false);
@@ -188,6 +192,13 @@ const TrendsMap = () => {
     }
   }, [showDisclaimer]);
 
+  const getCenter = () => {
+    if (user.user_type == "USER") {
+      return RegionsCenter.find((c) => c.region == user.region).center;
+    }
+    return [13, 122];
+  };
+
   return (
     <div className="trends-wrapper">
       <div className={`sidebar ${sidebarActive ? "" : "close-sidebar"}`}>
@@ -203,6 +214,7 @@ const TrendsMap = () => {
         <div className="filter-group">
           <MultiSelect
             options={Regions.regions}
+            defaultValue={user.user_type == "USER" ? user.region : null}
             placeHolder="Select Region/s"
             onChange={(e) => handleChangeFilter("region", e)}
             selectAllLabel="All Regions"
@@ -212,6 +224,7 @@ const TrendsMap = () => {
             menuClassname={`${
               sidebarActive ? "menu-bottom" : "menu-top"
             } md:menu-bottom`}
+            editable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
           />
           {/* <CustomSelect
             options={getDateRangeOptions()}
@@ -221,19 +234,22 @@ const TrendsMap = () => {
             handleChange={(e) => handleChangeFilter("dateRange", e)}
             additionalClasses="w-full"
           /> */}
-          <Link
-            to="/dashboard/trends-map/upload-dataset"
-            className="prod-btn-base prod-btn-primary w-full flex items-center justify-center"
-          >
-            <span>Upload Dataset</span>
-            <Icon
-              iconName="Upload"
-              height="20px"
-              width="20px"
-              fill="#FFF"
-              className="ms-[8px]"
-            />
-          </Link>
+
+          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+            <Link
+              to="/dashboard/trends-map/upload-dataset"
+              className="prod-btn-base prod-btn-primary w-full flex items-center justify-center"
+            >
+              <span>Upload Dataset</span>
+              <Icon
+                iconName="Upload"
+                height="20px"
+                width="20px"
+                fill="#FFF"
+                className="ms-[8px]"
+              />
+            </Link>
+          )}
         </div>
 
         {/* TABS */}
@@ -318,7 +334,7 @@ const TrendsMap = () => {
         onClick={handleOpenSidebar}
       ></div>
 
-      <Map filters={filters} data={Sample} />
+      <Map filters={filters} data={Sample} mapCenter={getCenter} />
 
       {showDisclaimer && (
         <Modal

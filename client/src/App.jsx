@@ -118,10 +118,14 @@ function App() {
             <Route
               path="trends-map/upload-dataset"
               element={
-                <>
-                  <HelmetTitle title="HealthPH | Upload Dataset" />
-                  <UploadDataset />
-                </>
+                user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                  <>
+                    <HelmetTitle title="HealthPH | Upload Dataset" />
+                    <UploadDataset />
+                  </>
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
               }
             />
             <Route path="trends-map2" element={<TrendsMap2 />} />

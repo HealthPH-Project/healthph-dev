@@ -11,12 +11,21 @@ const MultiSelect = ({
   additionalClassname,
   menuClassname,
   menuPlacement,
+  editable = true,
 }) => {
   // State variables using React hooks
   const [showMenu, setShowMenu] = useState(false); // Controls the visibility of the dropdown menu
   const [selectedValue, setSelectedValue] = useState(selectAll ? options : []); // Stores the selected value(s)
   const inputRef = useRef(); // Reference to the custom select input element
   const menuRef = useRef(); // Reference to the custom select dropdown menu
+
+  useEffect(() => {
+    if (defaultValue) {
+      const selected = options.find((o) => o.value == defaultValue);
+      setSelectedValue([selected]);
+      onChange([selected]);
+    }
+  }, []);
 
   useEffect(() => {
     const handler = (e) => {
@@ -32,10 +41,12 @@ const MultiSelect = ({
       }
     };
 
-    window.addEventListener("click", handler);
-    return () => {
-      window.removeEventListener("click", handler);
-    };
+    if (editable) {
+      window.addEventListener("click", handler);
+      return () => {
+        window.removeEventListener("click", handler);
+      };
+    }
   });
 
   const getDisplay = () => {
@@ -86,22 +97,28 @@ const MultiSelect = ({
 
   return (
     <div
-      className={`multiselect-dropdown-container ${additionalClassname}`}
+      className={`multiselect-dropdown-container ${additionalClassname} ${
+        editable ? "" : "read-only"
+      }`}
       tabIndex={0}
       ref={inputRef}
     >
       <div className="dropdown-input">
         <div className={`dropdown-selected-value `}>{getDisplay()}</div>
-        <div className="dropdown-tools">
-          <div className={`dropdown-tool ${showMenu ? "dropdown-active" : ""}`}>
-            <Icon
-              iconName="ChevronDown"
-              fill="#465360"
-              height="20px"
-              width="20px"
-            />
+        {editable && (
+          <div className="dropdown-tools">
+            <div
+              className={`dropdown-tool ${showMenu ? "dropdown-active" : ""}`}
+            >
+              <Icon
+                iconName="ChevronDown"
+                fill="#465360"
+                height="20px"
+                width="20px"
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {showMenu && (
