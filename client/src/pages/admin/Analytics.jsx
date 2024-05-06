@@ -55,33 +55,6 @@ const Analytics = () => {
     return options;
   };
 
-  const data = [
-    {
-      name: "Jan",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Feb",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Mar",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Apr",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-  ];
-
   const [topWordsFilter, setTopWordsFilter] = useState("all");
 
   let {
@@ -127,7 +100,7 @@ const Analytics = () => {
         <section className="analytics-section">
           <div className="header flex-col md:flex-row  items-start md:items-center">
             <div className="heading mb-[20px] md:mb-0">Suspected Symptoms</div>
-            <div className="w-full sm:w-auto flex flex-col xs:flex-row justify-center items-start xs:items-center">
+            <div className="w-full sm:w-auto flex flex-col xs:flex-row justify-start lg:justify-center items-start xs:items-center">
               <button
                 className="prod-btn-base prod-btn-secondary flex justify-center items-center mb-[16px] xs:mb-0"
                 onClick={() => {
