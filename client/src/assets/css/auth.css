@@ -23,7 +23,7 @@
   }
 
   .auth-layout main .auth-container {
-    @apply flex-grow px-[140px] py-[40px] flex flex-col justify-start xs:justify-center;
+    @apply flex-grow px-[140px] py-[40px] flex flex-col justify-center;
   }
 
   .auth-layout main .auth-container .heading {
@@ -122,7 +122,7 @@
     }
 
     .auth-layout main .auth-container {
-      @apply p-[16px] pt-[84px];
+      @apply p-[16px] pt-[84px] justify-start;
     }
   }
 }
