@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from controllers.userController import (
+    set_disable_status,
     update_personal_info,
     update_email,
     update_password,
@@ -7,7 +8,6 @@ from controllers.userController import (
     fetch_users,
     create_user,
     delete_users,
-    verify_user,
     fetch_admins,
     delete_admin,
 )
@@ -30,7 +30,7 @@ router.add_api_route("", methods=["GET"], endpoint=fetch_users)
 
 router.add_api_route("", methods=["POST"], endpoint=create_user)
 
-router.add_api_route("/verify/{id}", methods=["PUT"], endpoint=verify_user)
+router.add_api_route("/disable/{id}", methods=["PUT"], endpoint=set_disable_status)
 
 router.add_api_route("/admins", methods=["GET"], endpoint=fetch_admins)
 

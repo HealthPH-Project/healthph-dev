@@ -1,3 +1,4 @@
+from gc import disable
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -8,7 +9,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     email: str
-    is_verified: bool | None = False
+    is_disabled: bool | None = False
     user_type: str | None = "USER"
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
@@ -25,7 +26,7 @@ class CreateUserRequest(BaseModel):
     last_name: str
     email: str
     password: str
-    is_verified: bool | None = False
+    is_disabled: bool | None = False
     user_type: str
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
@@ -52,8 +53,8 @@ class UpdatePasswordRequest(BaseModel):
     re_password: str
 
 
-class VerifyUserRequest(BaseModel):
-    verify_status: bool
+class DisableUserRequest(BaseModel):
+    disable_status: bool
 
 
 class SuperadminResult(BaseModel):

@@ -53,14 +53,6 @@ export const userSlice = baseAPI.injectEndpoints({
       query: () => "/users/admins",
       providesTags: ["Admins"],
     }),
-    verifyUser: builder.mutation({
-      query: ({ id, status }) => ({
-        url: `/users/verify/${id}`,
-        method: "PUT",
-        body: { verify_status: status },
-      }),
-      invalidatesTags: ["Users", "Admins"],
-    }),
     createAdmin: builder.mutation({
       query: (formData) => ({
         url: `/users/admins/`,
@@ -75,7 +67,15 @@ export const userSlice = baseAPI.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["Admins"],
-    })
+    }),
+    disableUser: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/users/disable/${id}`,
+        method: "PUT",
+        body: { disable_status: status },
+      }),
+      invalidatesTags: ["Users", "Admins"],
+    }),
   }),
 });
 
@@ -88,7 +88,7 @@ export const {
   useCreateUserMutation,
   useFetchAdminsQuery,
   useDeleteUsersMutation,
-  useVerifyUserMutation,
   useCreateAdminMutation,
-  useDeleteAdminMutation
+  useDeleteAdminMutation,
+  useDisableUserMutation
 } = userSlice;

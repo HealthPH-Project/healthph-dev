@@ -65,6 +65,13 @@ async def authenticate_user(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+        
+    if user.is_disabled:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Account has been disabled. Contact support for more information.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     access_token_expires = timedelta(
         minutes=float(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))

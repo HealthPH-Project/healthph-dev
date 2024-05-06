@@ -508,22 +508,24 @@ const Settings = () => {
             {user.email}
           </p>
           <div className="flex items-center">
-            {user.is_verified ? (
-              <div className="badge-md badge-green me-[4px]">Verified</div>
-            ) : (
-              <div className="badge-md badge-red me-[4px] text-center">
-                Not Verified
-              </div>
+            {user.is_disabled && (
+              <>
+                <div className="badge-md badge-red me-[4px] text-center">
+                  Disabled
+                </div>
+                <div className="custom-tooltip">
+                  <Icon
+                    iconName="Information"
+                    height="16px"
+                    width="16px"
+                    fill="#8693A0"
+                  />
+                  <div className="tooltip">
+                    Account has been disabled by the administrators
+                  </div>
+                </div>
+              </>
             )}
-            <div className="custom-tooltip">
-              <Icon
-                iconName="Information"
-                height="16px"
-                width="16px"
-                fill="#8693A0"
-              />
-              <div className="tooltip">Test tooltip</div>
-            </div>
           </div>
         </div>
         <div className="settings-header">

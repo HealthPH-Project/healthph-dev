@@ -8,7 +8,8 @@ from typing_extensions import Annotated
 
 from helpers.authHelpers import verify_password, generate_hashed_password
 from helpers.sendMail import (
-    mail_verified,
+    mail_disabled,
+    mail_enabled,
     mail_add_user,
     mail_add_admin,
     mail_add_superadmin,
@@ -17,11 +18,11 @@ from helpers.sendMail import (
 from config.database import user_collection
 from models.user import (
     CreateUserRequest,
+    DisableUserRequest,
     UpdatePersonalInfo,
     UpdateEmailRequest,
     UpdatePasswordRequest,
     UserInDB,
-    VerifyUserRequest,
     SuperadminResult,
 )
 from middleware.requireAuth import require_auth
@@ -221,7 +222,6 @@ async def update_email(data: UpdateEmailRequest):
         {
             "$set": {
                 "email": data.email,
-                "is_verified": False,
                 "updated_at": datetime.now(),
             }
         },
@@ -445,79 +445,6 @@ async def fetch_admins():
     return admins
 
 
-"""
-@desc     Verify users
-route     PUT api/users/verify/{id}
-@access   Private | ADMIN-SUPERADMIN
-"""
-
-
-async def verify_user(
-    id: str, data: VerifyUserRequest, is_admin: Annotated[bool, Depends(require_admin)]
-):
-    # Check if user / verifier is an admin or superadmin
-    if not is_admin:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authorized to verify user.",
-        )
-
-    # Check if there is an id
-    if not id:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Failed to verify user.",
-        )
-
-    # Check if id is a valid ObjectId
-    if not ObjectId.is_valid(id):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Failed to verify user.",
-        )
-
-    # Check if user exists with id
-    user_data = user_collection.find_one({"_id": ObjectId(id)})
-
-    if not user_data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User does not exist.",
-        )
-
-    # Update verify status of user
-    new_user = user_collection.find_one_and_update(
-        {"_id": ObjectId(id)},
-        {
-            "$set": {
-                "is_verified": data.verify_status,
-                "updated_at": datetime.now(),
-            }
-        },
-        return_document=ReturnDocument.AFTER,
-    )
-
-    # If update failed
-    if not new_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Failed to verify user.",
-        )
-
-    if data.verify_status:
-        result = mail_verified(new_user["email"])
-
-        if not result:
-            print("error mail")
-
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={
-            "message": "User verified successfully",
-            "user": individual_user(new_user),
-        },
-    )
-
 
 """
 @desc     Create a user, admin, or superadmin
@@ -623,7 +550,7 @@ async def create_user(
         )
 
     to_encode = dict(user).copy()
-    to_encode.update({"is_verified": True})
+    to_encode.update({"is_disabled": False})
     to_encode.update({"password": generate_hashed_password(to_encode["password"])})
 
     new_user = user_collection.insert_one(dict(to_encode))
@@ -745,6 +672,7 @@ async def delete_users(
         },
     )
 
+
 """
 @desc     Delete Admins
 route     DELETE api/users/admins/{id}
@@ -810,5 +738,104 @@ async def delete_admin(
         content={
             "message": "User deleted successfully",
             "user": individual_user(deleted_user),
+        },
+    )
+
+
+"""
+@desc     Set is_disabled status of a user
+route     PUT api/users/disable/{id}
+@access   Private | ADMIN-SUPERADMIN
+"""
+
+
+async def set_disable_status(
+    id: str, data: DisableUserRequest, is_admin: Annotated[bool, Depends(require_admin)]
+):
+    # Check if user is an admin or superadmin
+    if not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Failed to disable user."
+                if data.disable_status
+                else "Failed to enable user."
+            ),
+        )
+
+    # Check if there is an id
+    if not id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "Failed to disable user."
+                if data.disable_status
+                else "Failed to enable user."
+            ),
+        )
+
+    # Check if id is a valid ObjectId
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "Failed to disable user."
+                if data.disable_status
+                else "Failed to enable user."
+            ),
+        )
+
+    # Check if user exists with id
+    user_data = user_collection.find_one({"_id": ObjectId(id)})
+
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User does not exist.",
+        )
+
+    # Update verify status of user
+    new_user = user_collection.find_one_and_update(
+        {"_id": ObjectId(id)},
+        {
+            "$set": {
+                "is_disabled": data.disable_status,
+                "updated_at": datetime.now(),
+            }
+        },
+        return_document=ReturnDocument.AFTER,
+    )
+
+    # If update failed
+    if not new_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "Failed to disable user."
+                if data.disable_status
+                else "Failed to enable user."
+            ),
+        )
+
+    if data.disable_status:
+        result = mail_disabled(new_user["email"])
+
+        if not result:
+            print("error mail")
+    else:
+        result = mail_enabled(new_user["email"])
+
+        if not result:
+            print("error mail")
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": (
+                "User disabled successfully."
+                if data.disable_status
+                else "User enabled successfully."
+            ),
+            "user": individual_user(new_user),
         },
     )

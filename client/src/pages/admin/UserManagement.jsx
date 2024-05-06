@@ -5,7 +5,7 @@ import {
   useDeleteUsersMutation,
   useFetchAdminsQuery,
   useFetchUsersQuery,
-  useVerifyUserMutation,
+  useDisableUserMutation,
 } from "../../features/api/userSlice";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 import SkeletonTable from "../../components/SkeletonTable";
@@ -14,9 +14,8 @@ import Highlighter from "react-highlight-words";
 import { NavLink } from "react-router-dom";
 import Input from "../../components/Input";
 import Datatable from "../../components/admin/Datatable";
-import { format } from "date-fns";
+import { format, isDate } from "date-fns";
 import Modal from "../../components/admin/Modal";
-import { current } from "@reduxjs/toolkit";
 import EmptyState from "../../components/admin/EmptyState";
 import { toast } from "react-toastify";
 import Snackbar from "../../components/Snackbar";
@@ -49,11 +48,11 @@ const UserManagement = () => {
 
   const [deleteModalActive, setDeleteModalActive] = useState(false);
 
-  const [verificationLoading, setVerificationLoading] = useState(false);
+  const [disableLoading, setDisableLoading] = useState(false);
 
-  const [verifyModalActive, setVerifyModalActive] = useState(false);
+  const [disableModalActive, setDisableModalActive] = useState(false);
 
-  const [unverifyModalActive, setUnverifyModalActive] = useState(false);
+  const [enableModalActive, setEnableModalActive] = useState(false);
 
   const [modalData, setModalData] = useState({
     id: "",
@@ -67,7 +66,7 @@ const UserManagement = () => {
 
   const [deleteUsers] = useDeleteUsersMutation();
 
-  const [verifyUser] = useVerifyUserMutation();
+  const [disableUser] = useDisableUserMutation();
 
   const [log_activiy] = useCreateActivityLogMutation();
 
@@ -215,9 +214,9 @@ const UserManagement = () => {
     setModalData({ id: "", name: "", user_type: "" });
   };
 
-  const handleVerifyStatus = async (status) => {
-    setVerificationLoading(true);
-    const response = await verifyUser({ id: modalData.id, status });
+  const handleDisableStatus = async (status) => {
+    setDisableLoading(true);
+    const response = await disableUser({ id: modalData.id, status });
 
     if (!response) {
       toast(
@@ -225,7 +224,7 @@ const UserManagement = () => {
           iconName="Error"
           size="snackbar-sm"
           color="destructive"
-          message={status ? "Failed to verify user" : "Failed to unverify user"}
+          message={status ? "Failed to disable user" : "Failed to enable user"}
         />,
         {
           closeButton: ({ closeToast }) => (
@@ -237,8 +236,7 @@ const UserManagement = () => {
           ),
         }
       );
-      // setIsLoading(false);
-      setVerificationLoading(false);
+      setDisableLoading(false);
       return;
     }
 
@@ -272,7 +270,7 @@ const UserManagement = () => {
         iconName="CheckCircle"
         size="snackbar-sm"
         color="success"
-        message={`User ${status ? "verified" : "unverified"} successfully`}
+        message={`User ${status ? "disabled" : "enabled"} successfully`}
       />,
       {
         closeButton: ({ closeToast }) => (
@@ -287,18 +285,18 @@ const UserManagement = () => {
 
     await log_activiy({
       user_id: user.id,
-      entry: `${status ? "Verified" : "Unverified"} ${modalData.user_type} : ${
+      entry: `${status ? "Disabled" : "Enabled"} ${modalData.user_type} : ${
         modalData.name
       }`,
       module: "User Management",
     });
 
-    setVerificationLoading(false);
+    setDisableLoading(false);
     setModalData({ id: "", name: "", user_type: "" });
     if (status) {
-      setVerifyModalActive(false);
+      setDisableModalActive(false);
     } else {
-      setUnverifyModalActive(false);
+      setEnableModalActive(false);
     }
   };
 
@@ -438,8 +436,8 @@ const UserManagement = () => {
                   search={search}
                   setSearch={setSearch}
                   setModalData={setModalData}
-                  setVerifyModalActive={setVerifyModalActive}
-                  setUnverifyModalActive={setUnverifyModalActive}
+                  setDisableModalActive={setDisableModalActive}
+                  setEnableModalActive={setEnableModalActive}
                   setDeleteModalActive={setDeleteModalActive}
                 />
               ) : (
@@ -450,8 +448,8 @@ const UserManagement = () => {
                   search={search}
                   setSearch={setSearch}
                   setModalData={setModalData}
-                  setVerifyModalActive={setVerifyModalActive}
-                  setUnverifyModalActive={setUnverifyModalActive}
+                  setDisableModalActive={setDisableModalActive}
+                  setEnableModalActive={setEnableModalActive}
                   setDeleteModalActive={setDeleteModalActive}
                 />
               )}
@@ -481,39 +479,39 @@ const UserManagement = () => {
         />
       )}
 
-      {verifyModalActive && (
+      {disableModalActive && (
         <Modal
-          onLoading={verificationLoading}
-          onLoadingLabel={"Verifying"}
+          onLoading={disableLoading}
+          onLoadingLabel={"Disabling"}
           onConfirm={() => {
-            handleVerifyStatus(true);
+            handleDisableStatus(true);
           }}
-          onConfirmLabel="Verify"
+          onConfirmLabel="Disable"
           onCancel={() => {
             setModalData({ id: "", name: "", user_type: "" });
-            setVerifyModalActive(false);
+            setDisableModalActive(false);
           }}
-          heading={`Are you sure you want to verify ${modalData.name}'s account ?`}
-          content="This user will receive full access to HealthPH such as the Analytics, Trends Map, and other modules."
-          color="primary"
+          heading={`Are you sure you want to disable ${modalData.name}'s account?`}
+          content="This user will be unable to sign in to HealthPH and lose access to its modules."
+          color="destructive"
         />
       )}
 
-      {unverifyModalActive && (
+      {enableModalActive && (
         <Modal
-          onLoading={verificationLoading}
-          onLoadingLabel={"Unverifying"}
+          onLoading={disableLoading}
+          onLoadingLabel={"Enabling"}
           onConfirm={() => {
-            handleVerifyStatus(false);
+            handleDisableStatus(false);
           }}
-          onConfirmLabel="Unverify"
+          onConfirmLabel="Enable"
           onCancel={() => {
             setModalData({ id: "", name: "", user_type: "" });
-            setUnverifyModalActive(false);
+            setEnableModalActive(false);
           }}
-          heading={`Are you sure you want to unverify ${modalData.name}'s account ?`}
-          content="This user will lose full access to HealthPH and can only access the Settings module."
-          color="destructive"
+          heading={`Are you sure you want to enable ${modalData.name}'s account?`}
+          content="This user will receive full access to HealthPH such as the Analytics, Trends Map, and other modules."
+          color="primary"
         />
       )}
     </>
@@ -556,8 +554,8 @@ const AdminsData = ({
   search,
   setSearch,
   setModalData,
-  setUnverifyModalActive,
-  setVerifyModalActive,
+  setDisableModalActive,
+  setEnableModalActive,
   setDeleteModalActive,
 }) => {
   return (
@@ -573,7 +571,7 @@ const AdminsData = ({
                 email,
                 created_at,
                 user_type,
-                is_verified,
+                is_disabled,
               },
               i
             ) => {
@@ -603,26 +601,28 @@ const AdminsData = ({
                   <div className="row-item">
                     {user && user.user_type == "USER" ? null : (
                       <div className="flex items-center">
-                        <button
-                          className={`prod-push-btn-sm prod-btn-${
-                            is_verified ? "primary" : "secondary"
-                          } me-[8px]  min-w-[63px]`}
-                          onClick={() => {
-                            setModalData({
-                              id: id,
-                              name: `${first_name} ${last_name}`,
-                              user_type: user_type,
-                            });
+                        {user.id != id && (
+                          <button
+                            className={`prod-push-btn-sm prod-btn-${
+                              is_disabled ? "primary" : "secondary"
+                            } me-[8px]  min-w-[63px]`}
+                            onClick={() => {
+                              setModalData({
+                                id: id,
+                                name: `${first_name} ${last_name}`,
+                                user_type: user_type,
+                              });
 
-                            if (is_verified) {
-                              setUnverifyModalActive(true);
-                            } else {
-                              setVerifyModalActive(true);
-                            }
-                          }}
-                        >
-                          {is_verified ? "Verified" : "Verify"}
-                        </button>
+                              if (is_disabled) {
+                                setEnableModalActive(true);
+                              } else {
+                                setDisableModalActive(true);
+                              }
+                            }}
+                          >
+                            {is_disabled ? "Enable" : "Disable"}
+                          </button>
+                        )}
                         {user.id != id && user.user_type !== "ADMIN" && (
                           <button
                             className="prod-push-btn-sm prod-btn-destructive"
@@ -667,9 +667,9 @@ const AdminsData = ({
           heading="No Administrators Found"
           content="There are currently no administrators listed. Add new administrators to manage the platform effectively."
         >
-          {user.user_type == "SUPERADMIN" && (
+          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
             <NavLink
-              to="/dashboard/admins/add-admin"
+              to="/dashboard/user-management/add-user"
               className="prod-btn-base prod-btn-primary flex justify-center items-center ms-[16px]"
             >
               <span>Add Admin</span>
@@ -695,8 +695,8 @@ const UsersData = ({
   search,
   setSearch,
   setModalData,
-  setUnverifyModalActive,
-  setVerifyModalActive,
+  setDisableModalActive,
+  setEnableModalActive,
   setDeleteModalActive,
 }) => {
   const displayRegion = (region) => {
@@ -722,6 +722,7 @@ const UsersData = ({
 
     return regions[region];
   };
+
   return (
     <>
       {users.length > 0 ? (
@@ -735,7 +736,7 @@ const UsersData = ({
                 email,
                 region,
                 organization,
-                is_verified,
+                is_disabled,
                 user_type,
               },
               i
@@ -773,7 +774,7 @@ const UsersData = ({
                       <div className="flex items-center">
                         <button
                           className={`prod-push-btn-sm prod-btn-${
-                            is_verified ? "primary" : "secondary"
+                            is_disabled ? "primary" : "secondary"
                           } me-[8px]  min-w-[63px]`}
                           onClick={() => {
                             setModalData({
@@ -782,14 +783,14 @@ const UsersData = ({
                               user_type: user_type,
                             });
 
-                            if (is_verified) {
-                              setUnverifyModalActive(true);
+                            if (is_disabled) {
+                              setEnableModalActive(true);
                             } else {
-                              setVerifyModalActive(true);
+                              setDisableModalActive(true);
                             }
                           }}
                         >
-                          {is_verified ? "Verified" : "Verify"}
+                          {is_disabled ? "Enable" : "Disable"}
                         </button>
                         {user.id != id && user.user_type !== "ADMIN" && (
                           <button
@@ -833,8 +834,24 @@ const UsersData = ({
         <EmptyState
           iconName="UserThree"
           heading="No Users Found"
-          content="No users are currently registered. Invite people to join and participate."
-        />
+          content="No users are currently created. Add users to join and participate."
+        >
+          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+            <NavLink
+              to="/dashboard/user-management/add-user"
+              className="prod-btn-base prod-btn-primary flex justify-center items-center ms-[16px]"
+            >
+              <span>Add User</span>
+              <Icon
+                iconName="Plus"
+                height="20px"
+                width="20px"
+                fill="#FFF"
+                className="ms-[8px]"
+              />
+            </NavLink>
+          )}
+        </EmptyState>
       )}
     </>
   );
