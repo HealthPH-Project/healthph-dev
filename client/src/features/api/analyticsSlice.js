@@ -18,6 +18,14 @@ export const activityLogApi = baseAPI.injectEndpoints({
         };
       },
     }),
+    generatePercentage: builder.query({
+      query: (filters) => {
+        return {
+          url: "/percentage",
+          params: { filters: filters },
+        };
+      },
+    }),
     generateWordCloud: builder.query({
       queryFn: async (filters) => {
         try {
@@ -41,5 +49,6 @@ export const activityLogApi = baseAPI.injectEndpoints({
 export const {
   useUploadFileMutation,
   useGenerateFrequentWordsQuery,
+  useGeneratePercentageQuery,
   useGenerateWordCloudQuery,
 } = activityLogApi;

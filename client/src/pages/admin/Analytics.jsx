@@ -16,9 +16,12 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  PieChart,
+  Pie,
 } from "recharts";
 import {
   useGenerateFrequentWordsQuery,
+  useGeneratePercentageQuery,
   useGenerateWordCloudQuery,
 } from "../../features/api/analyticsSlice";
 import Report from "../../components/admin/Report";
@@ -86,6 +89,17 @@ const Analytics = () => {
     isLoading,
     isFetching: isTopWordsFetching,
   } = useGenerateFrequentWordsQuery(topWordsFilter);
+
+  const [percentageFilter, setPercentageFilter] = useState("all");
+
+  let {
+    data: percentage,
+    isLoading: isPercentageLoading,
+    isFetching: isPercentageFetching,
+  } = useGeneratePercentageQuery(percentageFilter);
+
+  const COLORS = ["#DBB324", "#007AFF", "#D82727", "#35CA3B"];
+  const RADIAN = Math.PI / 180;
 
   const [wordCloudFilter, setWordCloudFilter] = useState("all");
 
@@ -177,9 +191,7 @@ const Analytics = () => {
                 isLoading={isTopWordsFetching}
               >
                 <ResponsiveContainer width="100%" maxHeight={400}>
-                  {isLoading ? (
-                    <p>Loading....</p>
-                  ) : (
+                  {frequent_words && (
                     <BarChart
                       data={frequent_words["frequent_words"]}
                       margin={{
@@ -238,6 +250,7 @@ const Analytics = () => {
                         stackId="a"
                         fill="#007AFF"
                         maxBarSize={20}
+                        radius={[0, 8, 8, 0]}
                       />
                       {/* <Bar
                       dataKey="uv"
@@ -251,13 +264,14 @@ const Analytics = () => {
                 </ResponsiveContainer>
               </Report>
               <Report
-                heading="Percentage**"
+                heading="Percentage"
                 caption="Caption"
-                filter={topWordsFilter}
-                setFilter={setTopWordsFilter}
-                isLoading={isTopWordsFetching}
+                filter={percentageFilter}
+                setFilter={setPercentageFilter}
+                isLoading={isPercentageFetching}
               >
                 <ResponsiveContainer width="100%" maxHeight={400}>
+                  {/*  *
                   <BarChart
                     data={data}
                     margin={{
@@ -324,6 +338,82 @@ const Analytics = () => {
                       maxBarSize={60}
                     />
                   </BarChart>
+                  {/*  */}
+                  {percentage && (
+                    <PieChart>
+                      <Legend
+                        verticalAlign="top"
+                        align="left"
+                        iconSize={20}
+                        height={60}
+                        content={({ payload }) => {
+                          return (
+                            <div className="flex items-center flex-wrap">
+                              {payload.map((entry, index) => {
+                                const { color, value } = entry;
+                                return (
+                                  <div
+                                    className="flex items-center me-[16px]"
+                                    key={index}
+                                  >
+                                    <div
+                                      className="h-[16px] w-[16px] rounded-[4px] me-[10px]"
+                                      style={{ backgroundColor: color }}
+                                    ></div>
+                                    <span className="prod-l3 text-gray-900">
+                                      {value}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        }}
+                      />
+                      <Pie
+                        data={percentage}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({
+                          cx,
+                          cy,
+                          midAngle,
+                          innerRadius,
+                          outerRadius,
+                          percent,
+                          index,
+                        }) => {
+                          const radius =
+                            innerRadius + (outerRadius - innerRadius) * 0.5;
+                          const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                          const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+                          return (
+                            <text
+                              x={x}
+                              y={y}
+                              fill="white"
+                              textAnchor={x > cx ? "start" : "end"}
+                              dominantBaseline="central"
+                            >
+                              {`${(percent * 100).toFixed(0)}%`}
+                            </text>
+                          );
+                        }}
+                        fill="#8884d8"
+                        dataKey="count"
+                      >
+                        {percentage.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  )}
                 </ResponsiveContainer>
               </Report>
               <Report

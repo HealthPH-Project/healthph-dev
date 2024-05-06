@@ -91,6 +91,8 @@ def get_stopwords():
             "even",
             "niyo",
             "teaser",
+            "ma",
+            "yan"
         ]
     )
     
@@ -180,17 +182,6 @@ def word_cloud(data):
     wordcloud.to_image().save(image_buffer, format="PNG")
     image_buffer.seek(0)
     return image_buffer.getvalue()
-
-    # # Display the generated image:
-    buffer = BytesIO()
-    plt.figure(figsize=(8, 4), dpi=100)
-    plt.imshow(wordcloud, interpolation="bilinear", aspect="equal")
-    plt.axis("off")
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-
-    return buffer.getvalue()
-
 
 def wordcloud_color_func(
     word, font_size, position, orientation, random_state=None, **kwargs

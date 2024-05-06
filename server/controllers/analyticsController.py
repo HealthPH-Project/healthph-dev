@@ -44,6 +44,25 @@ async def generate_frequent_words(filters: str = "all"):
     )
 
 
+async def generate_percentage(filters: str = "all"):
+    if filters != "all":
+        result = [
+            {"label": "Tubercolosis", "name": "Tubercolosis", "count": 114},
+            {"label": "Pneumonia", "name": "Pneumonia", "count": 202},
+            {"label": "COVID", "name": "COVID", "count": 285},
+            {"label": "AURI", "name": "AURI", "count": 170},
+        ]
+    else:
+        result = [
+            {"label": "Tubercolosis", "name": "Tubercolosis", "count": 623},
+            {"label": "Pneumonia", "name": "Pneumonia", "count": 438},
+            {"label": "COVID", "name": "COVID", "count": 733},
+            {"label": "AURI", "name": "AURI", "count": 567},
+        ]
+
+    return JSONResponse(status_code=status.HTTP_200_OK, content=result)
+
+
 async def generate_wordcloud(filters: str = "all"):
     if filters != "all":
         raw = pd.read_csv("assets/data/cleaned_envi.csv")

@@ -249,8 +249,8 @@
     @apply h-[16px] w-[16px] rounded-[4px] me-[10px];
   }
 
-  .trends-wrapper .map-legends .map-legend-item:not(:last-child) {
-    @apply me-[16px];
+  .trends-wrapper .map-legends .map-legend-item:not(:first-child) {
+    @apply ms-[16px];
   }
 
   .trends-wrapper .map-controls {
