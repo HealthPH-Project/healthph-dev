@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
 import LogoAlt from "../assets/images/logo-alt.png";
+import WebLogo from "../assets/images/website-logo.svg";
+import WebLogoAlt from "../assets/images/website-logo-alt.svg";
 import { useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import Icon from "./Icon";
@@ -22,8 +24,8 @@ const HomeNavbar = () => {
   return (
     <nav className="home-nav h-[96px] px-[20px] flex justify-between items-center">
       {/* LOGO */}
-      <Link to="/" className="logo-wrapper h-[32px] me-[16px]">
-        <img src={isMenuActive ? LogoAlt : Logo} alt="" />
+      <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
+        <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
       </Link>
 
       <div className={"home-nav-links " + menuAnimate}>

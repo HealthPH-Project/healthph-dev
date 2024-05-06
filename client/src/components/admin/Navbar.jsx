@@ -1,5 +1,6 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/test-logo.png";
+import DashboardLogo from "../../assets/images/dashboard-logo.svg";
 import Divider from "../Divider";
 import Icon from "../Icon";
 import { useEffect, useRef, useState } from "react";
@@ -54,9 +55,9 @@ const Navbar = () => {
     <nav className="bg-white border-b-[2px] border-[#E5E5E5] h-[68px] flex-shrink-0  px-[20px] py-[16px]">
       <div className="flex justify-between items-center max-w-[1326px] mx-auto">
         {/* LOGO */}
-        <div className="logo-wrapper h-[36px] me-[16px]">
-          <img src={Logo} alt="" />
-        </div>
+        <Link to="/dashboard" className="logo-wrapper h-[36px] me-[16px]">
+          <img src={DashboardLogo} alt="" />
+        </Link>
 
         {/* NAVIGATION */}
         <div

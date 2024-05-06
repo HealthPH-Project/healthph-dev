@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
+import AuthLogo from "../assets/images/auth-logo.svg";
 import Icon from "../components/Icon";
 const AuthLayout = () => {
   return (
@@ -29,7 +30,7 @@ const AuthLayout = () => {
         </main>
         <div className="content">
           <div className="logo-wrapper">
-            <img src={Logo} alt="" />
+            <img src={AuthLogo} alt="" />
           </div>
           <p className="heading">
             Protecting Filipinos, One Disease at a time.
