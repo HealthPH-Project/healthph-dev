@@ -143,14 +143,14 @@ const Analytics = () => {
                   className="ms-[8px]"
                 />
               </button>
-              <CustomSelect
+              {/* <CustomSelect
                 options={getDateRangeOptions()}
                 placeholder="Select Date Range"
                 size="input-select-md"
                 value={filters.dateRange}
                 handleChange={(e) => handleChangeFilter("dateRange", e)}
                 additionalClasses="w-full min-w-[100px] ms-0 xs:ms-[16px]"
-              />
+              /> */}
             </div>
           </div>
           <div className="analytics-content">
