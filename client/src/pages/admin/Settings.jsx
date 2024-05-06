@@ -359,95 +359,97 @@ const Settings = () => {
           </FieldGroup>
 
           {/* REGION */}
-          <FieldGroup
-            label="Regional Office"
-            labelFor="region"
-            additionalClasses="w-full max-w-[360px] mb-[20px]"
-            caption={formErrors.region != "" ? formErrors.region : ""}
-            state={formErrors.region != "" ? "error" : ""}
-          >
-            <CustomSelect
-              options={[
-                {
-                  label: "National Capital Region",
-                  value: "NCR",
-                },
-                {
-                  label: "Region I",
-                  value: "I",
-                },
-                {
-                  label: "Region II",
-                  value: "II",
-                },
-                {
-                  label: "Region III",
-                  value: "III",
-                },
-                {
-                  label: "Cordillera Administrative Region (CAR)",
-                  value: "CAR",
-                },
-                {
-                  label: "Region IV-A (CALABARZON)",
-                  value: "IVA",
-                },
-                {
-                  label: "Region IV-B (MIMAROPA)",
-                  value: "IVB",
-                },
-                {
-                  label: "Region V",
-                  value: "V",
-                },
-                {
-                  label: "Region VI",
-                  value: "VI",
-                },
-                {
-                  label: "Region VII",
-                  value: "VII",
-                },
-                {
-                  label: "Region VIII",
-                  value: "VIII",
-                },
-                {
-                  label: "Region IX",
-                  value: "IX",
-                },
-                {
-                  label: "Region X",
-                  value: "X",
-                },
-                {
-                  label: "Region XI",
-                  value: "XI",
-                },
-                {
-                  label: "Region XII",
-                  value: "XII",
-                },
-                {
-                  label: "Region XIII",
-                  value: "XIII",
-                },
-                {
-                  label:
-                    "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
-                  value: "BARMM",
-                },
-              ]}
-              id="region"
-              placeholder="Select Region"
-              size="input-select-md"
-              value={formData.region}
-              handleChange={handleChangeRegion}
-              additionalClasses="w-full mt-[8px]"
+          {user.user_type == "USER" && (
+            <FieldGroup
+              label="Regional Office"
+              labelFor="region"
+              additionalClasses="w-full max-w-[360px] mb-[20px]"
+              caption={formErrors.region != "" ? formErrors.region : ""}
               state={formErrors.region != "" ? "error" : ""}
-              editable={editable}
-            />
-          </FieldGroup>
+            >
+              <CustomSelect
+                options={[
+                  {
+                    label: "National Capital Region",
+                    value: "NCR",
+                  },
+                  {
+                    label: "Region I",
+                    value: "I",
+                  },
+                  {
+                    label: "Region II",
+                    value: "II",
+                  },
+                  {
+                    label: "Region III",
+                    value: "III",
+                  },
+                  {
+                    label: "Cordillera Administrative Region (CAR)",
+                    value: "CAR",
+                  },
+                  {
+                    label: "Region IV-A (CALABARZON)",
+                    value: "IVA",
+                  },
+                  {
+                    label: "Region IV-B (MIMAROPA)",
+                    value: "IVB",
+                  },
+                  {
+                    label: "Region V",
+                    value: "V",
+                  },
+                  {
+                    label: "Region VI",
+                    value: "VI",
+                  },
+                  {
+                    label: "Region VII",
+                    value: "VII",
+                  },
+                  {
+                    label: "Region VIII",
+                    value: "VIII",
+                  },
+                  {
+                    label: "Region IX",
+                    value: "IX",
+                  },
+                  {
+                    label: "Region X",
+                    value: "X",
+                  },
+                  {
+                    label: "Region XI",
+                    value: "XI",
+                  },
+                  {
+                    label: "Region XII",
+                    value: "XII",
+                  },
+                  {
+                    label: "Region XIII",
+                    value: "XIII",
+                  },
+                  {
+                    label:
+                      "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+                    value: "BARMM",
+                  },
+                ]}
+                id="region"
+                placeholder="Select Region"
+                size="input-select-md"
+                value={formData.region}
+                handleChange={handleChangeRegion}
+                additionalClasses="w-full mt-[8px]"
+                state={formErrors.region != "" ? "error" : ""}
+                editable={editable}
+              />
+            </FieldGroup>
+          )}
 
           {/* ORGANIZATION */}
           <FieldGroup
@@ -467,7 +469,10 @@ const Settings = () => {
               placeholder="Enter organization"
               value={formData.organization}
               onChange={(e) => {
-                if (editable) {
+                if (
+                  editable &&
+                  !["ADMIN", "SUPERADMIN"].includes(user.user_type)
+                ) {
                   setFormData({ ...formData, organization: e.target.value });
                   setFormErrors({ ...formErrors, organization: "" });
                   setError("");
@@ -477,7 +482,11 @@ const Settings = () => {
               }}
               state={formErrors.organization != "" ? "error" : ""}
               // required
-              readOnly={!editable}
+              readOnly={
+                ["ADMIN", "SUPERADMIN"].includes(user.user_type)
+                  ? true
+                  : !editable
+              }
             />
           </FieldGroup>
         </form>
