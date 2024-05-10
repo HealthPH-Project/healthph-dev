@@ -7,6 +7,7 @@
 @import url("./assets/css/auth.css");
 @import url("./assets/css/admin.css");
 @import url("./assets/css/map.css");
+@import url("./assets/css/help.css");
 
 @tailwind base;
 @tailwind components;

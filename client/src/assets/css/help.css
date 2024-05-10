@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .help-container {
+    @apply grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+  }
+
+  .help-container .table-of-contents {
+    @apply sticky top-0 w-[250px];
+    align-self: start;
+  }
+
+  .help-container .toc-header {
+    @apply prod-g-h3 text-gray-900 pb-[20px] mb-[20px] border-b-2 border-[#E5E5E5];
+  }
+
+  .help-container .table-of-contents ul li {
+    cursor: pointer;
+  }
+
+  .help-container .table-of-contents ul li.toc-item {
+    @apply px-[12px] py-[6px] mb-[16px];
+    @apply prod-b2 text-gray-700;
+  }
+
+  .help-container .table-of-contents ul li.toc-sub-item {
+    @apply flex items-start;
+    @apply min-h-[52px];
+  }
+
+  .help-container .table-of-contents ul li.toc-sub-item .icon {
+    @apply mx-[16px];
+  }
+
+  .help-container .table-of-contents ul li.toc-sub-item span {
+    @apply px-[12px] py-[6px] my-auto;
+    @apply prod-b2 text-gray-700;
+  }
+
+  .help-container .toc-toggler {
+    display: none;
+  }
+
+  .help-container .help-content .help-content-section {
+    @apply mb-[66px];
+  }
+  .help-container .help-content .help-content-heading {
+    @apply prod-m-h1 text-gray-900 mb-[12px];
+  }
+
+  .help-container .help-content .help-content-subheading {
+    @apply prod-m-h2 text-gray-900 mt-[24px] mb-[8px];
+  }
+
+  .help-container .help-content .help-content-desc {
+    @apply prod-p2 text-gray-900 mb-[24px];
+  }
+
+  .help-container .help-content .sample-image {
+    border-radius: 8px;
+    background: #d9d9d9;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 24px;
+  }
+
+  @media screen and (max-width: 700px) {
+    .help-container {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .help-container .table-of-contents {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 72px;
+      top: 0;
+      left: 0;
+      z-index: 3;
+      display: none;
+    }
+
+    .help-container .table-of-contents.show-toc,
+    .help-container .table-of-contents.hide-toc {
+      display: block;
+    }
+
+    .help-container .table-of-contents .toc-backdrop {
+      @apply fixed top-0 left-0 h-screen w-full;
+      /* display: none; */
+    }
+
+    .help-container .table-of-contents.show-toc .toc-backdrop {
+      display: block;
+      background: rgba(52, 64, 84, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-animation-name: fadeNavMenuIn;
+      -webkit-animation-duration: 0.4s;
+      animation-name: fadeNavMenuIn;
+      animation-duration: 0.4s;
+    }
+
+    .help-container .table-of-contents.hide-toc .toc-backdrop {
+      display: block;
+      -webkit-animation-name: fadeNavMenuOut;
+      -webkit-animation-duration: 0.4s;
+      animation-name: fadeNavMenuOut;
+      animation-duration: 0.4s;
+    }
+
+    .help-container .table-of-contents .toc-backdrop .close {
+      @apply fixed top-[86px] right-[16px] cursor-pointer;
+    }
+
+    .help-container .table-of-contents .toc-wrapper {
+      background-color: white;
+      position: fixed;
+      top: 65px;
+      width: 250px;
+      height: 100vh;
+      padding: 16px 20px;
+      transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
+      overflow-y: auto;
+    }
+
+    .help-container .table-of-contents.show-toc .toc-wrapper {
+      display: block;
+      animation: slideTOCIn 0.4s forwards;
+      -webkit-animation: slideTOCIn 0.4s forwards;
+    }
+
+    .help-container .table-of-contents.hide-toc .toc-wrapper {
+      display: block;
+      animation: slideTOCOut 0.4s forwards;
+      -webkit-animation: slideTOCOut 0.4s forwards;
+    }
+
+    .help-container .toc-toggler {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      z-index: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .help-container .toc-toggler .toggler-button {
+      @apply bg-white rounded-[6px] flex justify-center items-center;
+      cursor: pointer;
+      padding: 8px 12px;
+      box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1),
+        0px 0px 0px 1px rgba(70, 83, 96, 0.16);
+    }
+
+    .help-container .help-content {
+      margin-top: -24px;
+    }
+  }
+}
+
+@-webkit-keyframes fadeTOCIn {
+  from {
+    background: rgba(52, 64, 84, 0);
+    backdrop-filter: none;
+  }
+
+  to {
+    background: rgba(52, 64, 84, 0.6);
+    backdrop-filter: blur(8px);
+  }
+}
+
+@keyframes fadeTOCIn {
+  from {
+    background: rgba(52, 64, 84, 0);
+    backdrop-filter: none;
+  }
+
+  to {
+    background: rgba(52, 64, 84, 0.6);
+    backdrop-filter: blur(8px);
+  }
+}
+
+@-webkit-keyframes fadeTOCOut {
+  from {
+    background: rgba(52, 64, 84, 0.6);
+    backdrop-filter: blur(8px);
+  }
+
+  to {
+    background: rgba(52, 64, 84, 0);
+    backdrop-filter: none;
+  }
+}
+
+@keyframes fadeTOCOut {
+  from {
+    backdrop-filter: blur(8px);
+    background: rgba(52, 64, 84, 0.6);
+  }
+
+  to {
+    background: rgba(52, 64, 84, 0);
+    backdrop-filter: none;
+  }
+}
+
+@keyframes slideTOCIn {
+  0% {
+    -webkit-transform: translateX(-100%);
+  }
+
+  100% {
+    -webkit-transform: translateX(0%);
+  }
+}
+
+@-webkit-keyframes slideTOCIn {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideTOCOut {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@-webkit-keyframes slideTOCOut {
+  0% {
+    -webkit-transform: translateX(0%);
+  }
+
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
+}
