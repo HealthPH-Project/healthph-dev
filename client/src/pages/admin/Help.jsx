@@ -2,9 +2,10 @@ import { NavLink } from "react-router-dom";
 import EmptyState from "../../components/admin/EmptyState";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollToTop from "../../components/ScrollToTop";
+import Highlighter from "react-highlight-words";
 
 const Help = () => {
   const user = useSelector((state) => state.auth.user);
@@ -267,6 +268,14 @@ const Help = () => {
       : helpSectionsUser;
   };
 
+  const [searchWords, setSearchWords] = useState([]);
+
+  // useEffect(() => {
+  //   const splitSearchWords = search.split(" ");
+  //   const sW = splitSearchWords.filter((s) => s.length > 0);
+  //   setSearchWords(sW);
+  // }, [search]);
+
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
@@ -397,7 +406,14 @@ const Help = () => {
                     {description.map(({ sectionDesc, sectionImage }, i) => {
                       return (
                         <Fragment key={i}>
-                          <p className="help-content-desc">{sectionDesc}</p>
+                          <p className="help-content-desc">
+                            <Highlighter
+                              highlightClassName="bg-[#FFE81A] text-[#000] font-medium rounded-[2px]"
+                              searchWords={[search]}
+                              autoEscape={true}
+                              textToHighlight={sectionDesc}
+                            />
+                          </p>
                           {sectionImage}
                         </Fragment>
                       );
@@ -418,7 +434,12 @@ const Help = () => {
                                   return (
                                     <Fragment key={i}>
                                       <p className="help-content-desc">
-                                        {sectionDesc}
+                                        <Highlighter
+                                          highlightClassName="bg-[#FFE81A] text-[#000] font-medium rounded-[2px]"
+                                          searchWords={[search]}
+                                          autoEscape={true}
+                                          textToHighlight={sectionDesc}
+                                        />
                                       </p>
                                       {sectionImage}
                                     </Fragment>
