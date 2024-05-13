@@ -279,17 +279,20 @@ const Navbar = () => {
       {modalActive && (
         <Modal
           onConfirm={async () => {
-            if (["SUPERADMIN", "ADMIN"].includes(user.user_type)) {
+            const logged_user = user;
+
+            dispatch(deauthenticateUser());
+            Cookies.remove("token");
+            localStorage.removeItem("auth");
+            navigate("/", { replace: true });
+
+            if (["SUPERADMIN", "ADMIN"].includes(logged_user.user_type)) {
               await log_activity({
                 user_id: user.id,
                 entry: "Logout",
                 module: "Log Out",
               });
             }
-            dispatch(deauthenticateUser());
-            Cookies.remove("token");
-            localStorage.removeItem("auth");
-            navigate("/", { replace: true });
           }}
           onConfirmLabel="Sign Out"
           onCancel={() => setModalActive(false)}

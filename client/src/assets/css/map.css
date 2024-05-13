@@ -29,7 +29,7 @@
 
   .trends-wrapper .sidebar .sidebar-tabs {
     @apply overflow-y-scroll flex-shrink-0 bg-[#FAFAFA];
-    box-shadow: inset 0 -10px 2px -9px #E5E5E5;
+    box-shadow: inset 0 -10px 2px -9px #e5e5e5;
   }
 
   .trends-wrapper .sidebar .sidebar-tabs::-webkit-scrollbar {
@@ -234,15 +234,21 @@
     width: fit-content;
   }
 
-  .trends-wrapper .map-legend-wrapper { 
+  .trends-wrapper .map-legend-wrapper {
     @apply flex flex-col items-end;
   }
+
   .trends-wrapper .map-legends {
     @apply flex justify-end items-center flex-wrap;
   }
 
   .trends-wrapper .map-legends .map-legend-item {
-    @apply prod-l3 text-gray-900 flex items-center mb-[16px];
+    @apply prod-l3 flex items-center mb-[16px] font-medium;
+  }
+
+  .trends-wrapper .map-legends .map-legend-item span {
+    color: #000;
+    mix-blend-mode: difference;
   }
 
   .trends-wrapper .map-legends .map-legend-item .color {
@@ -309,7 +315,7 @@
   .upload-modal {
     @apply bg-transparent fixed top-0 left-0 h-screen w-screen z-10 pt-[88px] pb-[20px] px-[20px];
     @apply flex items-center justify-center;
-    
+
     user-select: none;
   }
 
