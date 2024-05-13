@@ -3,13 +3,17 @@ import EmptyState from "../../components/admin/EmptyState";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
+import ScrollToTop from "../../components/ScrollToTop";
 
 const Help = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const [search, setSearch] = useState("");
 
-  const TOC = [
+  const TOCAdmin = [
     { id: "navigation", label: "Navigation", hasSubItems: false },
-    { id: "analytics", label: "Analaytics", hasSubItems: false },
+    { id: "analytics", label: "Analytics", hasSubItems: false },
     {
       id: "trends-map",
       label: "Trends Map",
@@ -24,6 +28,25 @@ const Help = () => {
     { id: "activity-logs", label: "Activity Logs", hasSubItems: false },
     { id: "settings", label: "Settings", hasSubItems: false },
   ];
+
+  const TOCUser = [
+    { id: "navigation", label: "Navigation", hasSubItems: false },
+    { id: "analytics", label: "Analytics", hasSubItems: false },
+    {
+      id: "trends-map",
+      label: "Trends Map",
+      hasSubItems: true,
+      subItems: [
+        { id: "map", label: "Map" },
+        { id: "list-view", label: "List View" },
+      ],
+    },
+    { id: "settings", label: "Settings", hasSubItems: false },
+  ];
+
+  const TOC = ["ADMIN", "SUPERADMIN"].includes(user.user_type)
+    ? TOCAdmin
+    : TOCUser;
 
   const [tocActive, setTOCActive] = useState(false);
   const [tocAnimate, setTOCAnimate] = useState("");
@@ -173,13 +196,22 @@ const Help = () => {
             {/* NAVIGATION */}
             <div className="help-content-section" id="navigation">
               <p className="help-content-heading">Navigation</p>
-              <p className="help-content-desc">
-                The application provides the admin a simple navigation to go
-                through the dashboard. The three mains modules are the
-                Analytics, Trends Map, and User Management. Moreover, the admin
-                can monitor the user activities and manage their personal
-                information in using the application.
-              </p>
+              {["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                <p className="help-content-desc">
+                  The application provides the admin a simple navigation to go
+                  through the dashboard. The three mains modules are the
+                  Analytics, Trends Map, and User Management. Moreover, the
+                  admin can monitor the user activities and manage their
+                  personal information in using the application.
+                </p>
+              ) : (
+                <p className="help-content-desc">
+                  The application provides the user a simple navigation to go
+                  through the dashboard. The two mains modules are the Analytics
+                  and Trends Map. Moreover, the user can manage their personal
+                  information in using the application.
+                </p>
+              )}
               <SampleImage />
             </div>
             {/* ANALYTICS */}
@@ -224,56 +256,75 @@ const Help = () => {
               <p className="help-content-subheading" id="list-view">
                 List View
               </p>
-              <p className="help-content-desc">
-                Other than viewing the data using the map, every user can view
-                the data in list view. The list view provides the admin to
-                filter the data by region/s, upload data sets, and view each
-                suspected symptoms in a list.
-              </p>
+              {["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                <p className="help-content-desc">
+                  Other than viewing the data using the map, every user can view
+                  the data in list view. The list view provides the admin to
+                  filter the data by region/s, upload data sets, and view each
+                  suspected symptoms in a list.
+                </p>
+              ) : (
+                <p className="help-content-desc">
+                  Other than viewing the data using the map, every user can view
+                  the data in list view. The list view provides the user to view
+                  their respected region and view each suspected symptoms in a
+                  list.
+                </p>
+              )}
               <SampleImage />
-              <p className="help-content-subheading" id="upload-data-set">
-                Upload Data Set
-              </p>
-              <p className="help-content-desc">
-                To continue using the Trends Map with new data, the admin can
-                upload a data set in CSV form and view past uploaded data set on
-                the bottom with a table provided. The admin is also provided
-                with instructions in providing the required data by using the
-                CSV Template located on the top left side.
-              </p>
-              <SampleImage />
-              <p className="help-content-desc">
-                Once the admin have provided the required data using the CSV
-                Template, the admin should proceed in clicking ‘Upload CSV’ then
-                they will be required to do a final check of the CSV data they
-                uploaded by displaying a preview of the table. Once the final
-                check is done, they can proceed again in clicking ‘Upload CSV.’
-                After that, the data set will be updated and be displayed in the
-                Trends Map
-              </p>
-              <SampleImage />
+
+              {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+                <>
+                  <p className="help-content-subheading" id="upload-data-set">
+                    Upload Data Set
+                  </p>
+                  <p className="help-content-desc">
+                    To continue using the Trends Map with new data, the admin
+                    can upload a data set in CSV form and view past uploaded
+                    data set on the bottom with a table provided. The admin is
+                    also provided with instructions in providing the required
+                    data by using the CSV Template located on the top left side.
+                  </p>
+                  <SampleImage />
+                  <p className="help-content-desc">
+                    Once the admin have provided the required data using the CSV
+                    Template, the admin should proceed in clicking 'Upload CSV'
+                    then they will be required to do a final check of the CSV
+                    data they uploaded by displaying a preview of the table.
+                    Once the final check is done, they can proceed again in
+                    clicking 'Upload CSV.' After that, the data set will be
+                    updated and be displayed in the Trends Map
+                  </p>
+                  <SampleImage />
+                </>
+              )}
             </div>
 
             {/* USER MANAGEMENT */}
-            <div className="help-content-section" id="user-management">
-              <p className="help-content-heading">User Management</p>
-              <p className="help-content-desc">
-                This module provides the admin and super admin to manage its
-                users and themselves. The super admin and admin can add users
-                and manage their status to use the application. However, only
-                the super admin has the privilege to delete users in HealthPH.
-              </p>
-              <SampleImage />
-            </div>
+            {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+              <div className="help-content-section" id="user-management">
+                <p className="help-content-heading">User Management</p>
+                <p className="help-content-desc">
+                  This module provides the admin and super admin to manage its
+                  users and themselves. The super admin and admin can add users
+                  and manage their status to use the application. However, only
+                  the super admin has the privilege to delete users in HealthPH.
+                </p>
+                <SampleImage />
+              </div>
+            )}
+
             {/* ACTIVITY LOGS */}
-            <div className="help-content-section" id="activity-logs">
-              <p className="help-content-heading">Activity Logs</p>
-              <p className="help-content-desc">
-                This module provides every admin to monitor the user activities
-                of all types of users.
-              </p>
-              <SampleImage />
-            </div>
+            {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+              <div className="help-content-section" id="activity-logs">
+                <p className="help-content-heading">Activity Logs</p>
+                <p className="help-content-desc">
+                  This module provides every admin to monitor the user
+                  activities of all types of users.
+                </p>
+                <SampleImage />
+              </div>
+            )}
 
             {/* SETTINGS */}
             <div className="help-content-section" id="settings">
@@ -293,6 +344,7 @@ const Help = () => {
           </div>
         </div>
       </div>
+      <ScrollToTop />
     </>
   );
 };

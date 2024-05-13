@@ -2,6 +2,7 @@ export { default as ActivityLog } from "./activity-log.svg?react";
 export { default as Analytics } from "./analytics.svg?react";
 export { default as ArrowLeft } from "./arrow-left.svg?react";
 export { default as ArrowRight } from "./arrow-right.svg?react";
+export { default as ArrowUp } from "./arrow-up.svg?react";
 export { default as Check } from "./check.svg?react";
 export { default as CheckCircle } from "./check-circle.svg?react";
 export { default as ChevronDown } from "./chevron-down.svg?react";
