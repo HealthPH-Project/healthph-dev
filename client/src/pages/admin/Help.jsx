@@ -272,36 +272,21 @@ const Help = () => {
 
   useEffect(() => {
     const handleTOCActive = () => {
-      const adminTOC = [
-        "navigation",
-        "analytics",
-        "trends-map",
-        "map",
-        "list-view",
-        "upload-dataset",
-        "user-management",
-        "activity-logs",
-        "settings",
-      ];
+      const sections = [];
 
-      const userTOC = [
-        "navigation",
-        "analytics",
-        "trends-map",
-        "map",
-        "list-view",
-        "settings",
-      ];
-
-      const arr = ["ADMIN", "SUPERADMIN"].includes(user.user_type)
-        ? adminTOC
-        : userTOC;
-
-      const sections = arr.map((v, i) => {
-        return {
-          id: v,
-          rect: document.getElementById(v).getBoundingClientRect(),
-        };
+      TOC.map(({ id, hasSubItems, subItems }, i) => {
+        sections.push({
+          id: id,
+          rect: document.getElementById(id).getBoundingClientRect(),
+        });
+        if (hasSubItems) {
+          subItems.map(({ id }, i) => {
+            sections.push({
+              id: id,
+              rect: document.getElementById(id).getBoundingClientRect(),
+            });
+          });
+        }
       });
 
       let flag = "";
