@@ -24,7 +24,11 @@
 
   .help-container .table-of-contents ul li.toc-item {
     @apply px-[12px] py-[6px] mb-[16px];
-    @apply prod-b2 text-gray-700;
+    @apply prod-b2 text-gray-700 hover:text-gray-900;
+  }
+
+  .help-container .table-of-contents ul li.toc-item.active {
+    @apply text-primary-500;
   }
 
   .help-container .table-of-contents ul li.toc-sub-item {
@@ -36,9 +40,17 @@
     @apply mx-[16px];
   }
 
+  .help-container .table-of-contents ul li.toc-sub-item.active .icon circle{
+    @apply fill-primary-500;
+  }
+
   .help-container .table-of-contents ul li.toc-sub-item span {
     @apply px-[12px] py-[6px] my-auto;
-    @apply prod-b2 text-gray-700;
+    @apply prod-b2 text-gray-700 hover:text-gray-900;
+  }
+
+  .help-container .table-of-contents ul li.toc-sub-item.active span {
+    @apply text-primary-500;
   }
 
   .help-container .toc-toggler {

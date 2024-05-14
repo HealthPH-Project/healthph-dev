@@ -268,13 +268,61 @@ const Help = () => {
       : helpSectionsUser;
   };
 
-  const [searchWords, setSearchWords] = useState([]);
+  const [currentTOCActive, setCurrentTOCActive] = useState("navigation");
 
-  // useEffect(() => {
-  //   const splitSearchWords = search.split(" ");
-  //   const sW = splitSearchWords.filter((s) => s.length > 0);
-  //   setSearchWords(sW);
-  // }, [search]);
+  useEffect(() => {
+    const handleTOCActive = () => {
+      const adminTOC = [
+        "navigation",
+        "analytics",
+        "trends-map",
+        "map",
+        "list-view",
+        "upload-dataset",
+        "user-management",
+        "activity-logs",
+        "settings",
+      ];
+
+      const userTOC = [
+        "navigation",
+        "analytics",
+        "trends-map",
+        "map",
+        "list-view",
+        "settings",
+      ];
+
+      const arr = ["ADMIN", "SUPERADMIN"].includes(user.user_type)
+        ? adminTOC
+        : userTOC;
+
+      const sections = arr.map((v, i) => {
+        return {
+          id: v,
+          rect: document.getElementById(v).getBoundingClientRect(),
+        };
+      });
+
+      let flag = "";
+
+      sections.map(({ id, rect }, i) => {
+        if (rect.y < 280) {
+          flag = id;
+        }
+      });
+
+      if (currentTOCActive !== flag || flag == "navigation") {
+        setCurrentTOCActive(flag);
+      }
+    };
+
+    const el = document.getElementsByTagName("main")[0];
+
+    el.addEventListener("scroll", handleTOCActive);
+
+    return () => el.removeEventListener("scroll", handleTOCActive);
+  }, []);
 
   return (
     <>
@@ -343,7 +391,9 @@ const Help = () => {
                 {TOC.map(({ id, label, hasSubItems, subItems }, i) => {
                   return !hasSubItems ? (
                     <li
-                      className="toc-item"
+                      className={`toc-item ${
+                        id == currentTOCActive ? "active" : ""
+                      }`}
                       key={i}
                       onClick={() => handleSelectSection(id)}
                     >
@@ -352,7 +402,9 @@ const Help = () => {
                   ) : (
                     <Fragment key={i}>
                       <li
-                        className="toc-item"
+                        className={`toc-item ${
+                          id == currentTOCActive ? "active" : ""
+                        }`}
                         onClick={() => handleSelectSection(id)}
                       >
                         {label}
@@ -363,7 +415,7 @@ const Help = () => {
                           <li
                             className={`toc-sub-item ${
                               isLast ? "mb-[16px]" : ""
-                            }`}
+                            } ${id == currentTOCActive ? "active" : ""}`}
                             key={i}
                             onClick={() => handleSelectSection(id)}
                           >
@@ -397,7 +449,7 @@ const Help = () => {
             </div>
           </div>
           {/* HELP CONTENT */}
-          <div className="help-content">
+          <div className="help-content" id="help-content">
             {getContent().map(
               ({ sectionName, sectionId, description, subSections }, i) => {
                 return (
