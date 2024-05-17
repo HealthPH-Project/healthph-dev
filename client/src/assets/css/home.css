@@ -149,8 +149,8 @@
   }
 
   .home-layout main .art {
-    @apply w-[1078px] h-[690px];
-    background: url("../images/home-art.png");
+    @apply w-[1366px] h-[825px];
+    background: url("../images/dashboard-laptop.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -167,11 +167,23 @@
   }
 
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1200px) {
     .home-layout main .art {
-      @apply w-[650px] h-[540px];
-      background: url("../images/home-art-md.png");
+      @apply w-[852px] h-[587px];
+      background: url("../images/dashboard-tablet-landscape.png");
       background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .home-layout main .art {
+      @apply w-[698px] h-[481px];
+      background: url("../images/dashboard-tablet-landscape.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
   }
 
@@ -185,9 +197,11 @@
     }
 
     .home-layout main .art {
-      @apply w-[500px] h-[540px];
-      background: url("../images/home-art-sm.png");
+      @apply w-[544px] h-[1097px];
+      background: url("../images/dashboard-mobile.png");
       background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
   }
 
@@ -201,9 +215,22 @@
     }
 
     .home-layout main .art {
-      @apply w-[330px] h-[540px];
-      background: url("../images/home-art-xs.png");
+      @apply w-[328px] h-[662.5px];
+      background: url("../images/dashboard-mobile.png");
       background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+
+  @media screen and (max-width: 350px) {
+    .home-layout main .art {
+      @apply w-full h-[662.5px];
+      background: url("../images/dashboard-mobile.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
   }
 }
