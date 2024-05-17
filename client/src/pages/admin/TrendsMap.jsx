@@ -17,6 +17,7 @@ import Dummy from "../../dummy.json";
 import Regions from "../../assets/data/regions.json";
 import RegionsCenter from "../../assets/data/regions_center.json";
 import Sample from "../../assets/data/sample.json";
+import DummyData from "../../assets/data/dummy_data_v3.json";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
@@ -334,7 +335,7 @@ const TrendsMap = () => {
         onClick={handleOpenSidebar}
       ></div>
 
-      <Map filters={filters} data={Sample} mapCenter={getCenter} />
+      <Map filters={filters} data={DummyData} mapCenter={getCenter} />
 
       {showDisclaimer && (
         <Modal

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import Icon from "../Icon";
 import {
   AttributionControl,
@@ -9,7 +9,9 @@ import {
   Circle,
   Popup,
   LayerGroup,
+  SVGOverlay,
 } from "react-leaflet";
+import { SemiCircle, SemiCircleMarker } from "react-leaflet-semicircle";
 import Regions from "../../assets/data/regions.json";
 import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
 import { format } from "date-fns";
@@ -173,15 +175,23 @@ const Map = ({ filters, data, mapCenter }) => {
                       return (
                         (displayRegion(region) ||
                           filters.region.length == Regions.regions.length) && (
-                          <CircleMarker
-                            key={i}
-                            center={[latitude, longitude]}
-                            pathOptions={{ color: getColor(sickness) }}
-                            radius={15}
-                            // radius={radius * 5}
-                          >
-                            <Popup>{text}</Popup>
-                          </CircleMarker>
+                          <Fragment key={i}>
+                            {sickness.map((v, i) => {
+                              const interval = 360 / sickness.length;
+                              return (
+                                <SemiCircleMarker
+                                  key={i}
+                                  position={[latitude, longitude]}
+                                  color={getColor(v)}
+                                  radius={15}
+                                  startAngle={interval * (i + 1) - interval}
+                                  stopAngle={interval * (i + 1)}
+                                >
+                                  <Popup>{text}</Popup>
+                                </SemiCircleMarker>
+                              );
+                            })}
+                          </Fragment>
                         )
                       );
                     }

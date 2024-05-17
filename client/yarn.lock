@@ -2171,6 +2171,11 @@ keyv@^4.5.3:
   dependencies:
     json-buffer "3.0.1"
 
+leaflet-semicircle@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/leaflet-semicircle/-/leaflet-semicircle-2.0.4.tgz#2c6e7d40cb59bb331d25edd4dd355c64afa2428e"
+  integrity sha512-7FV9kGBMSQ1CNZYPxoPCEVpDpiIoh/owZV91BWUKYFik5WuaYij0zGEWOE0elTUlRyTHFJHW4rNfQJ2fqreqnA==
+
 leaflet@^1.9.4:
   version "1.9.4"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.9.4.tgz#23fae724e282fa25745aff82ca4d394748db7d8d"
@@ -2618,6 +2623,13 @@ react-is@^16.10.2, react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-leaflet-semicircle@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-leaflet-semicircle/-/react-leaflet-semicircle-3.0.3.tgz#0c9b0ef6a03d26ff6a9a570635be7b472f1b6343"
+  integrity sha512-4oQOplJfZayyzDOSGdeaLxBwrPeslZ8smpJrHtc8LeVS1yZcNCl5JGpNb8nzFHSIy891Bp6plx4VdI73SbQLlw==
+  dependencies:
+    leaflet-semicircle "^2.0.4"
 
 react-leaflet@^4.2.1:
   version "4.2.1"

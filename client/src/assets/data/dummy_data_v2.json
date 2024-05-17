@@ -1,0 +1,793 @@
+[
+  {
+    "latitude": 17.34,
+    "longitude": 121.61,
+    "region": "II",
+    "sickness": [
+      "TB",
+      "COVID",
+      "PN",
+      "AURI"
+    ],
+    "text": "weakness"
+  },
+  {
+    "latitude": 18.15,
+    "longitude": 120.62,
+    "region": "I",
+    "sickness": [
+      "PN",
+      "AURI",
+      "TB",
+      "COVID"
+    ],
+    "text": "night sweat"
+  },
+  {
+    "latitude": 14.67,
+    "longitude": 121.79,
+    "region": "IVA",
+    "sickness": [
+      "COVID",
+      "PN",
+      "TB",
+      "AURI"
+    ],
+    "text": "hirap sa paghinga"
+  },
+  {
+    "latitude": 16.02,
+    "longitude": 120.01,
+    "region": "I",
+    "sickness": [
+      "COVID"
+    ],
+    "text": "blood in phlegm"
+  },
+  {
+    "latitude": 19.47,
+    "longitude": 121.93,
+    "region": "II",
+    "sickness": [
+      "AURI"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 13.78,
+    "longitude": 121.09,
+    "region": "IVA",
+    "sickness": [
+      "COVID"
+    ],
+    "text": "anorexia"
+  },
+  {
+    "latitude": 12.35,
+    "longitude": 121.82,
+    "region": "IVB",
+    "sickness": [
+      "TB",
+      "COVID",
+      "PN",
+      "AURI"
+    ],
+    "text": "nanghihina"
+  },
+  {
+    "latitude": 14.83,
+    "longitude": 121.98,
+    "region": "IVA",
+    "sickness": [
+      "TB",
+      "PN",
+      "COVID"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 16.92,
+    "longitude": 121.54,
+    "region": "CAR",
+    "sickness": [
+      "TB",
+      "PN"
+    ],
+    "text": "cough with blood"
+  },
+  {
+    "latitude": 15.17,
+    "longitude": 120.58,
+    "region": "III",
+    "sickness": [
+      "PN"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 18.59,
+    "longitude": 122.21,
+    "region": "II",
+    "sickness": [
+      "TB"
+    ],
+    "text": "weakness"
+  },
+  {
+    "latitude": 14.38,
+    "longitude": 122.06,
+    "region": "IVA",
+    "sickness": [
+      "PN"
+    ],
+    "text": "ubong may plema"
+  },
+  {
+    "latitude": 19.14,
+    "longitude": 121.49,
+    "region": "II",
+    "sickness": [
+      "PN",
+      "AURI"
+    ],
+    "text": "cachexia"
+  },
+  {
+    "latitude": 13.42,
+    "longitude": 120.35,
+    "region": "IVB",
+    "sickness": [
+      "AURI",
+      "COVID"
+    ],
+    "text": "plemang kulay berde"
+  },
+  {
+    "latitude": 16.35,
+    "longitude": 120.92,
+    "region": "II",
+    "sickness": [
+      "PN",
+      "AURI",
+      "COVID",
+      "TB"
+    ],
+    "text": "cachexia"
+  },
+  {
+    "latitude": 17.08,
+    "longitude": 122.09,
+    "region": "II",
+    "sickness": [
+      "COVID"
+    ],
+    "text": "night sweat"
+  },
+  {
+    "latitude": 15.79,
+    "longitude": 121.31,
+    "region": "III",
+    "sickness": [
+      "AURI",
+      "PN",
+      "TB"
+    ],
+    "text": "dyspnea"
+  },
+  {
+    "latitude": 12.64,
+    "longitude": 120.87,
+    "region": "IVB",
+    "sickness": [
+      "COVID"
+    ],
+    "text": "tiredness"
+  },
+  {
+    "latitude": 14.03,
+    "longitude": 121.63,
+    "region": "IVA",
+    "sickness": [
+      "PN",
+      "TB"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 16.68,
+    "longitude": 122.37,
+    "region": "II",
+    "sickness": [
+      "COVID",
+      "PN",
+      "TB"
+    ],
+    "text": "loss of appetite"
+  },
+  {
+    "latitude": 15.41,
+    "longitude": 120.84,
+    "region": "III",
+    "sickness": [
+      "TB"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 18.27,
+    "longitude": 121.85,
+    "region": "II",
+    "sickness": [
+      "COVID",
+      "TB",
+      "AURI"
+    ],
+    "text": "loss of appetite"
+  },
+  {
+    "latitude": 13.16,
+    "longitude": 121.56,
+    "region": "IVB",
+    "sickness": [
+      "AURI"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 10.71,
+    "longitude": 125.59,
+    "region": "VIII",
+    "sickness": [
+      "PN",
+      "COVID",
+      "TB"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 11.17,
+    "longitude": 123.88,
+    "region": "VII",
+    "sickness": [
+      "TB",
+      "AURI",
+      "PN",
+      "COVID"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 12.23,
+    "longitude": 124.14,
+    "region": "VIII",
+    "sickness": [
+      "TB",
+      "AURI"
+    ],
+    "text": "anorexia"
+  },
+  {
+    "latitude": 10.29,
+    "longitude": 123.31,
+    "region": "VII",
+    "sickness": [
+      "PN"
+    ],
+    "text": "difficulty of breathing"
+  },
+  {
+    "latitude": 11.23,
+    "longitude": 124.35,
+    "region": "VIII",
+    "sickness": [
+      "PN",
+      "COVID"
+    ],
+    "text": "pagkapagod"
+  },
+  {
+    "latitude": 9.9,
+    "longitude": 125.78,
+    "region": "XIII",
+    "sickness": [
+      "TB",
+      "COVID",
+      "AURI",
+      "PN"
+    ],
+    "text": "cough"
+  },
+  {
+    "latitude": 10.14,
+    "longitude": 123.92,
+    "region": "VII",
+    "sickness": [
+      "AURI",
+      "TB",
+      "PN",
+      "COVID"
+    ],
+    "text": "cough with blood"
+  },
+  {
+    "latitude": 11.78,
+    "longitude": 125.44,
+    "region": "VIII",
+    "sickness": [
+      "TB"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 12.37,
+    "longitude": 123.99,
+    "region": "VIII",
+    "sickness": [
+      "COVID",
+      "AURI"
+    ],
+    "text": "blood in phlegm"
+  },
+  {
+    "latitude": 10.34,
+    "longitude": 124.02,
+    "region": "VII",
+    "sickness": [
+      "COVID",
+      "AURI"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 10.01,
+    "longitude": 123.9,
+    "region": "VII",
+    "sickness": [
+      "COVID",
+      "TB"
+    ],
+    "text": "dyspnea"
+  },
+  {
+    "latitude": 11.59,
+    "longitude": 122.55,
+    "region": "VI",
+    "sickness": [
+      "TB",
+      "PN",
+      "AURI"
+    ],
+    "text": "weakness"
+  },
+  {
+    "latitude": 10.42,
+    "longitude": 122.94,
+    "region": "VI",
+    "sickness": [
+      "TB"
+    ],
+    "text": "cough"
+  },
+  {
+    "latitude": 11.0,
+    "longitude": 124.04,
+    "region": "VII",
+    "sickness": [
+      "COVID",
+      "PN",
+      "AURI"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 12.01,
+    "longitude": 124.82,
+    "region": "VIII",
+    "sickness": [
+      "COVID",
+      "PN",
+      "AURI"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 9.18,
+    "longitude": 123.33,
+    "region": "VII",
+    "sickness": [
+      "TB",
+      "PN"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 10.92,
+    "longitude": 123.54,
+    "region": "VI",
+    "sickness": [
+      "AURI",
+      "PN",
+      "TB",
+      "COVID"
+    ],
+    "text": "night sweat"
+  },
+  {
+    "latitude": 10.63,
+    "longitude": 122.99,
+    "region": "VI",
+    "sickness": [
+      "TB",
+      "AURI",
+      "COVID"
+    ],
+    "text": "lagnat"
+  },
+  {
+    "latitude": 11.9,
+    "longitude": 125.1,
+    "region": "VIII",
+    "sickness": [
+      "PN",
+      "TB",
+      "AURI"
+    ],
+    "text": "fatigue"
+  },
+  {
+    "latitude": 11.52,
+    "longitude": 124.1,
+    "region": "VII",
+    "sickness": [
+      "PN",
+      "COVID",
+      "TB"
+    ],
+    "text": "plemang kulay berde"
+  },
+  {
+    "latitude": 12.54,
+    "longitude": 124.22,
+    "region": "VIII",
+    "sickness": [
+      "PN",
+      "TB"
+    ],
+    "text": "nanghihina"
+  },
+  {
+    "latitude": 10.57,
+    "longitude": 123.8,
+    "region": "VII",
+    "sickness": [
+      "PN",
+      "AURI",
+      "TB",
+      "COVID"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 11.35,
+    "longitude": 123.72,
+    "region": "VII",
+    "sickness": [
+      "TB"
+    ],
+    "text": "ubong may plema"
+  },
+  {
+    "latitude": 11.84,
+    "longitude": 123.21,
+    "region": "V",
+    "sickness": [
+      "TB",
+      "COVID"
+    ],
+    "text": "night sweat"
+  },
+  {
+    "latitude": 10.26,
+    "longitude": 122.63,
+    "region": "VI",
+    "sickness": [
+      "AURI",
+      "PN",
+      "TB"
+    ],
+    "text": "cough"
+  },
+  {
+    "latitude": 12.15,
+    "longitude": 123.67,
+    "region": "V",
+    "sickness": [
+      "COVID"
+    ],
+    "text": "dyspnea"
+  },
+  {
+    "latitude": 9.85,
+    "longitude": 123.19,
+    "region": "VII",
+    "sickness": [
+      "AURI",
+      "PN",
+      "TB"
+    ],
+    "text": "difficulty of breathing"
+  },
+  {
+    "latitude": 10.87,
+    "longitude": 124.24,
+    "region": "VIII",
+    "sickness": [
+      "TB",
+      "PN",
+      "COVID"
+    ],
+    "text": "cough with blood"
+  },
+  {
+    "latitude": 11.65,
+    "longitude": 124.77,
+    "region": "VIII",
+    "sickness": [
+      "AURI",
+      "PN",
+      "COVID",
+      "TB"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 12.41,
+    "longitude": 123.85,
+    "region": "V",
+    "sickness": [
+      "PN",
+      "COVID",
+      "AURI",
+      "TB"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 7.73,
+    "longitude": 124.24,
+    "region": "BARMM",
+    "sickness": [
+      "COVID",
+      "PN",
+      "TB"
+    ],
+    "text": "loss of appetite"
+  },
+  {
+    "latitude": 8.49,
+    "longitude": 126.0,
+    "region": "XIII",
+    "sickness": [
+      "PN"
+    ],
+    "text": "hirap sa paghinga"
+  },
+  {
+    "latitude": 6.89,
+    "longitude": 125.33,
+    "region": "XI",
+    "sickness": [
+      "PN",
+      "TB"
+    ],
+    "text": "giniginaw"
+  },
+  {
+    "latitude": 7.14,
+    "longitude": 124.77,
+    "region": "XII",
+    "sickness": [
+      "PN",
+      "TB"
+    ],
+    "text": "hemoptysis"
+  },
+  {
+    "latitude": 8.12,
+    "longitude": 124.32,
+    "region": "X",
+    "sickness": [
+      "COVID",
+      "AURI",
+      "PN",
+      "TB"
+    ],
+    "text": "cough"
+  },
+  {
+    "latitude": 7.5,
+    "longitude": 125.57,
+    "region": "XI",
+    "sickness": [
+      "TB"
+    ],
+    "text": "plemang kulay berde"
+  },
+  {
+    "latitude": 8.65,
+    "longitude": 125.59,
+    "region": "XIII",
+    "sickness": [
+      "TB",
+      "AURI",
+      "COVID",
+      "PN"
+    ],
+    "text": "ubong may plema"
+  },
+  {
+    "latitude": 7.86,
+    "longitude": 124.82,
+    "region": "X",
+    "sickness": [
+      "TB"
+    ],
+    "text": "cough with blood"
+  },
+  {
+    "latitude": 8.29,
+    "longitude": 123.77,
+    "region": "X",
+    "sickness": [
+      "PN"
+    ],
+    "text": "cough"
+  },
+  {
+    "latitude": 7.01,
+    "longitude": 125.17,
+    "region": "XII",
+    "sickness": [
+      "AURI",
+      "TB"
+    ],
+    "text": "tiredness"
+  },
+  {
+    "latitude": 8.0,
+    "longitude": 125.14,
+    "region": "X",
+    "sickness": [
+      "PN"
+    ],
+    "text": "fever"
+  },
+  {
+    "latitude": 8.42,
+    "longitude": 126.32,
+    "region": "XIII",
+    "sickness": [
+      "PN"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 6.55,
+    "longitude": 125.46,
+    "region": "XI",
+    "sickness": [
+      "AURI",
+      "TB",
+      "PN"
+    ],
+    "text": "shortness of breath"
+  },
+  {
+    "latitude": 6.94,
+    "longitude": 124.42,
+    "region": "BARMM",
+    "sickness": [
+      "AURI",
+      "PN",
+      "COVID",
+      "TB"
+    ],
+    "text": "tiredness"
+  },
+  {
+    "latitude": 7.41,
+    "longitude": 125.93,
+    "region": "XI",
+    "sickness": [
+      "AURI",
+      "TB"
+    ],
+    "text": "blood in phlegm"
+  },
+  {
+    "latitude": 7.66,
+    "longitude": 124.0,
+    "region": "BARMM",
+    "sickness": [
+      "AURI"
+    ],
+    "text": "weight loss"
+  },
+  {
+    "latitude": 8.78,
+    "longitude": 126.17,
+    "region": "XIII",
+    "sickness": [
+      "PN",
+      "TB"
+    ],
+    "text": "shortness of breath"
+  },
+  {
+    "latitude": 8.35,
+    "longitude": 123.94,
+    "region": "X",
+    "sickness": [
+      "AURI",
+      "PN",
+      "COVID",
+      "TB"
+    ],
+    "text": "dyspnea"
+  },
+  {
+    "latitude": 6.75,
+    "longitude": 124.71,
+    "region": "BARMM",
+    "sickness": [
+      "TB",
+      "AURI",
+      "PN",
+      "COVID"
+    ],
+    "text": "pagkapagod"
+  },
+  {
+    "latitude": 7.17,
+    "longitude": 124.94,
+    "region": "XII",
+    "sickness": [
+      "COVID",
+      "AURI",
+      "PN",
+      "TB"
+    ],
+    "text": "shortness of breath"
+  },
+  {
+    "latitude": 7.93,
+    "longitude": 125.3,
+    "region": "X",
+    "sickness": [
+      "COVID",
+      "TB",
+      "AURI",
+      "PN"
+    ],
+    "text": "anorexia"
+  },
+  {
+    "latitude": 8.56,
+    "longitude": 126.5,
+    "region": "XIII",
+    "sickness": [
+      "AURI",
+      "COVID"
+    ],
+    "text": "ubong may plema"
+  },
+  {
+    "latitude": 6.21,
+    "longitude": 124.89,
+    "region": "XII",
+    "sickness": [
+      "TB"
+    ],
+    "text": "pagkahingal"
+  }
+]
