@@ -23,15 +23,16 @@ const HomeNavbar = () => {
   };
   return (
     <nav className="home-nav h-[96px] px-[20px] flex justify-between items-center">
-      {/* LOGO */}
-      <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
-        <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
-      </Link>
+      <div className="flex justify-between items-center w-full max-w-[1326px] mx-auto">
+        {/* LOGO */}
+        <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
+          <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
+        </Link>
 
-      <div className={"home-nav-links " + menuAnimate}>
-        {/* NAV LINKS */}
-        <ul>
-          {/* <li>
+        <div className={"home-nav-links " + menuAnimate}>
+          {/* NAV LINKS */}
+          <ul>
+            {/* <li>
             <NavLink to="/" className="prod-btn-lg prod-btn-white">
               <Icon
                 iconName="Home"
@@ -53,21 +54,27 @@ const HomeNavbar = () => {
               <span>About Us</span>
             </NavLink>
           </li> */}
-        </ul>
+          </ul>
 
-        {/* CTA*/}
-        <div className="home-cta flex justify-center items-center">
-          <Link to="/login" className="prod-btn-lg prod-btn-primary me-[16px]">
-            Sign In
-          </Link>
-          {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
+          {/* CTA*/}
+          <div className="home-cta flex justify-center items-center">
+            <Link
+              to="/login"
+              className="prod-btn-lg prod-btn-primary me-[16px]"
+            >
+              Sign In
+            </Link>
+            {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
             Join HealthPH
           </Link> */}
+          </div>
         </div>
+
+        <HamburgerMenu
+          isMenuActive={isMenuActive}
+          handleClick={handleOpenMenu}
+        />
       </div>
-
-      <HamburgerMenu isMenuActive={isMenuActive} handleClick={handleOpenMenu} />
-
       <div
         className={`nav-backdrop md:!hidden  ${
           isMenuActive ? "active" : ""

@@ -202,7 +202,11 @@ const TrendsMap = () => {
 
   return (
     <div className="trends-wrapper">
-      <div className={`sidebar ${sidebarActive ? "" : "close-sidebar"}`}>
+      <div
+        className={`sidebar ${sidebarActive ? "" : "close-sidebar"} ${
+          ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? "" : "sidebar-sm"
+        }`}
+      >
         <div
           className="sidebar-toggler"
           onClick={handleOpenSidebar}

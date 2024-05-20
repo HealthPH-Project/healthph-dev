@@ -17,6 +17,7 @@ export const activityLogApi = baseAPI.injectEndpoints({
           params: { filters: filters },
         };
       },
+      providesTags: ["AnalyticsFrequent"],
     }),
     generatePercentage: builder.query({
       query: (filters) => {
@@ -25,6 +26,7 @@ export const activityLogApi = baseAPI.injectEndpoints({
           params: { filters: filters },
         };
       },
+      providesTags: ["AnalyticsPercentage"]
     }),
     generateWordCloud: builder.query({
       queryFn: async (filters) => {
@@ -42,6 +44,7 @@ export const activityLogApi = baseAPI.injectEndpoints({
           return { error };
         }
       },
+      providesTags: ["AnalyticsWordcloud"]
     }),
   }),
 });

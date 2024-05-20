@@ -6,7 +6,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export const baseAPI = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl:  import.meta.env.VITE_API_URL,
+    baseUrl:  apiUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = Cookies.get("token");
 
@@ -27,6 +27,9 @@ export const baseAPI = createApi({
     "Admin",
     "ActivityLogs",
     "ActivityLog",
+    "AnalyticsFrequent",
+    "AnalyticsPercentage",
+    "AnalyticsWordcloud"
   ],
   endpoints: () => ({}),
 });

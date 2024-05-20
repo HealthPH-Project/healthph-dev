@@ -294,6 +294,10 @@
     .trends-wrapper .sidebar.close-sidebar {
       transform: translate(-50%, calc(100% - 150px));
     }
+
+    .trends-wrapper .sidebar.sidebar-sm.close-sidebar {
+      transform: translate(-50%, calc(100% - 90px));
+    }
   }
 
   @media screen and (max-width: 540px) {
