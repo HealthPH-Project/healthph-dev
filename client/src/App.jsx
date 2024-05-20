@@ -62,10 +62,14 @@ function App() {
           <Route
             index
             element={
-              <>
-                <HelmetTitle title="HealthPH" />
-                {isPWA ? <Login /> : <Home />}
-              </>
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH" />
+                  <Home />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           ></Route>
           <Route element={<AuthLayout />}>
