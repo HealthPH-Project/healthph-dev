@@ -42,6 +42,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log(window.matchMedia("(display-mode: standalone)"));
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth) {
       dispatch(authenticateUser(auth));
