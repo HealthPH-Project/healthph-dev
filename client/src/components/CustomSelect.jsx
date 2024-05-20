@@ -26,10 +26,17 @@ const CustomSelect = ({
     const handler = (e) => {
       if (editable) {
         if (inputRef.current && inputRef.current.contains(e.target)) {
+          if (menuRef.current && menuRef.current.contains(e.target)) return;
           setShowMenu(!showMenu);
-        } else if (menuRef.current && !menuRef.current.contains(e.target)) {
+        } else if (
+          menuRef.current &&
+          !menuRef.current.contains(e.target) &&
+          !e.target.className.split(" ").includes("dropdown-item")
+        ) {
           setShowMenu(false);
         }
+      } else {
+        setShowMenu(false);
       }
     };
 
