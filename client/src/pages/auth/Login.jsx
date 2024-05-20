@@ -14,8 +14,11 @@ import FieldGroup from "../../components/FieldGroup";
 import Input from "../../components/Input";
 import InputPassword from "../../components/InputPassword";
 import Checkbox from "../../components/Checkbox";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
 
 const Login = () => {
+  const { isPWA } = useDeviceDetect();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -187,14 +190,16 @@ const Login = () => {
         >
           {isLoading ? "Signing in...." : "Sign In"}
         </button>
-        <Link
-          to="/"
-          role="button"
-          className="block prod-btn-base prod-btn-secondary w-full"
-          disabled={isLoading}
-        >
-          Back to Home
-        </Link>
+        {!isPWA && (
+          <Link
+            to="/"
+            role="button"
+            className="block prod-btn-base prod-btn-secondary w-full"
+            disabled={isLoading}
+          >
+            Back to Home
+          </Link>
+        )}
       </form>
     </>
   );
