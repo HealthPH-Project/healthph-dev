@@ -10,9 +10,12 @@ import Cookies from "js-cookie";
 import { deauthenticateUser } from "../../features/auth/authSlice";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 import Modal from "./Modal";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const { isPWA } = useDeviceDetect();
 
   const [isMenuActive, setIsMenuActive] = useState(false);
 
@@ -104,26 +107,28 @@ const Navbar = () => {
                 <span>Trends Map</span>
               </NavLink>
             </li>
-            {user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
-              <li>
-                <NavLink
-                  to="/dashboard/user-management"
-                  onClick={() => {
-                    if (isMenuActive) {
-                      handleOpenMenu();
-                    }
-                  }}
-                >
-                  <Icon
-                    iconName="UserThree"
-                    height="20px"
-                    width="20px"
-                    className="icon"
-                  />
-                  <span>User Management</span>
-                </NavLink>
-              </li>
-            )}
+            {!isPWA &&
+              user &&
+              ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+                <li>
+                  <NavLink
+                    to="/dashboard/user-management"
+                    onClick={() => {
+                      if (isMenuActive) {
+                        handleOpenMenu();
+                      }
+                    }}
+                  >
+                    <Icon
+                      iconName="UserThree"
+                      height="20px"
+                      width="20px"
+                      className="icon"
+                    />
+                    <span>User Management</span>
+                  </NavLink>
+                </li>
+              )}
           </ul>
 
           {/* SETTINGS */}
@@ -155,29 +160,31 @@ const Navbar = () => {
                   <span>Help</span>
                 </NavLink>
               </li>
-              {user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
-                <li>
-                  <NavLink
-                    to="/dashboard/activity-logs"
-                    onClick={() => {
-                      if (acctDropdownActive) {
-                        setAcctDropdownActive(false);
-                      }
-                      if (isMenuActive) {
-                        handleOpenMenu();
-                      }
-                    }}
-                  >
-                    <Icon
-                      iconName="ActivityLog"
-                      height="20px"
-                      width="20px"
-                      className="icon"
-                    />
-                    <span>Activity Logs</span>
-                  </NavLink>
-                </li>
-              )}
+              {!isPWA &&
+                user &&
+                ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+                  <li>
+                    <NavLink
+                      to="/dashboard/activity-logs"
+                      onClick={() => {
+                        if (acctDropdownActive) {
+                          setAcctDropdownActive(false);
+                        }
+                        if (isMenuActive) {
+                          handleOpenMenu();
+                        }
+                      }}
+                    >
+                      <Icon
+                        iconName="ActivityLog"
+                        height="20px"
+                        width="20px"
+                        className="icon"
+                      />
+                      <span>Activity Logs</span>
+                    </NavLink>
+                  </li>
+                )}
               <li>
                 <NavLink
                   to="/dashboard/settings"

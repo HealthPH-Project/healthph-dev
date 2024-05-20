@@ -18,9 +18,12 @@ import Regions from "../../assets/data/regions.json";
 import RegionsCenter from "../../assets/data/regions_center.json";
 import Sample from "../../assets/data/sample.json";
 import DummyData from "../../assets/data/dummy_data_v3.json";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const { isPWA } = useDeviceDetect();
 
   const initialLogin = useSelector((state) => state.auth.initialLogin);
 
@@ -240,7 +243,7 @@ const TrendsMap = () => {
             additionalClasses="w-full"
           /> */}
 
-          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+          {!isPWA && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
             <Link
               to="/dashboard/trends-map/upload-dataset"
               className="prod-btn-base prod-btn-primary w-full flex items-center justify-center"

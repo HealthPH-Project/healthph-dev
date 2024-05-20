@@ -33,6 +33,7 @@ import EditPassword from "./pages/admin/EditPassword";
 import PageNotFound from "./pages/error/PageNotFound";
 import Test from "./Test";
 import HelmetTitle from "./components/HelmetTitle";
+import useDeviceDetect from "./hooks/useDeviceDetect";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -41,8 +42,9 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const { isPWA } = useDeviceDetect();
+
   useEffect(() => {
-    console.log(window.matchMedia("(display-mode: standalone)"));
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth) {
       dispatch(authenticateUser(auth));
@@ -62,7 +64,7 @@ function App() {
             element={
               <>
                 <HelmetTitle title="HealthPH" />
-                <Home />
+                {isPWA ? <Login /> : <Home />}
               </>
             }
           ></Route>
@@ -131,32 +133,36 @@ function App() {
             />
             <Route path="trends-map2" element={<TrendsMap2 />} />
             <Route path="trends-map3" element={<TrendsMap3 />} />
-            <Route
-              path="user-management"
-              element={
-                user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
-                  <>
-                    <HelmetTitle title="HealthPH | User Management" />
-                    <UserManagement />
-                  </>
-                ) : (
-                  <Navigate to="/dashboard" />
-                )
-              }
-            />
-            <Route
-              path="user-management/add-user"
-              element={
-                user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
-                  <>
-                    <HelmetTitle title="HealthPH | Add User" />
-                    <AddUser />
-                  </>
-                ) : (
-                  <Navigate to="/dashboard" />
-                )
-              }
-            />
+            {!isPWA && (
+              <Route
+                path="user-management"
+                element={
+                  user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                    <>
+                      <HelmetTitle title="HealthPH | User Management" />
+                      <UserManagement />
+                    </>
+                  ) : (
+                    <Navigate to="/dashboard" />
+                  )
+                }
+              />
+            )}
+            {!isPWA && (
+              <Route
+                path="user-management/add-user"
+                element={
+                  user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                    <>
+                      <HelmetTitle title="HealthPH | Add User" />
+                      <AddUser />
+                    </>
+                  ) : (
+                    <Navigate to="/dashboard" />
+                  )
+                }
+              />
+            )}
             <Route
               path="help"
               element={
@@ -166,19 +172,21 @@ function App() {
                 </>
               }
             />
-            <Route
-              path="activity-logs"
-              element={
-                user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
-                  <>
-                    <HelmetTitle title="HealthPH | Activity Logs" />
-                    <ActivityLogs />
-                  </>
-                ) : (
-                  <Navigate to="/dashboard" />
-                )
-              }
-            />
+            {!isPWA && (
+              <Route
+                path="activity-logs"
+                element={
+                  user && ["ADMIN", "SUPERADMIN"].includes(user.user_type) ? (
+                    <>
+                      <HelmetTitle title="HealthPH | Activity Logs" />
+                      <ActivityLogs />
+                    </>
+                  ) : (
+                    <Navigate to="/dashboard" />
+                  )
+                }
+              />
+            )}
             <Route
               path="settings"
               element={

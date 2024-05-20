@@ -25,7 +25,7 @@ const HomeNavbar = () => {
     <nav className="home-nav h-[96px] px-[20px] flex justify-between items-center">
       <div className="flex justify-between items-center w-full max-w-[1326px] mx-auto">
         {/* LOGO */}
-        <Link to="/test" className="logo-wrapper h-[44px] me-[16px]">
+        <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
           <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
         </Link>
 
