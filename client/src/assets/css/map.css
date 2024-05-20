@@ -301,16 +301,23 @@
   }
 
   @media screen and (max-width: 540px) {
-    .trends-wrapper .map-controls {
+    .trends-wrapper .sidebar ~ .map-container .map-controls {
       @apply mx-0 mb-0;
       left: calc(50% + 180px - 36px - 16px + 8px);
       bottom: calc(150px + 16px);
     }
+
+    .trends-wrapper .sidebar.sidebar-sm ~ .map-container .map-controls {
+      @apply mx-0 mb-0;
+      left: calc(50% + 180px - 36px - 16px + 8px);
+      bottom: calc(90px + 16px);
+    }
   }
 
   @media screen and (max-width: 370px) {
-    .trends-wrapper .map-controls {
-      left: calc(100% - 36px - 16px - 8px);
+    .trends-wrapper .sidebar ~ .map-container .map-controls,
+    .trends-wrapper .sidebar.sidebar.sm ~ .map-container .map-controls {
+      left: calc(100% - 36px - 16px - 8px) !important;
     }
   }
 
