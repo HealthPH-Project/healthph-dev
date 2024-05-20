@@ -207,7 +207,7 @@ const TrendsMap = () => {
     <div className="trends-wrapper">
       <div
         className={`sidebar ${sidebarActive ? "" : "close-sidebar"} ${
-          ["ADMIN", "SUPERADMIN"].includes(user.user_type) || isPWA
+          ["ADMIN", "SUPERADMIN"].includes(user.user_type) && !isPWA
             ? ""
             : "sidebar-sm"
         }`}
