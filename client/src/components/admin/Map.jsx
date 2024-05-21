@@ -156,18 +156,21 @@ const Map = ({ filters, data, mapCenter }) => {
 
               {showAttribution && <AttributionControl position="topleft" />}
 
-              {RegionsCoordinates.map(({ id, coordinates }, i) => {
-                return (
-                  displayRegion(id) &&
-                  filters.region.length !== Regions.regions.length && (
-                    <Polygon
-                      key={id}
-                      pathOptions={{ color: "#88F" }}
-                      positions={coordinates}
-                    />
-                  )
-                );
-              })}
+              <LayerGroup>
+                {RegionsCoordinates.map(({ id, coordinates }, i) => {
+                  return (
+                    displayRegion(id) &&
+                    filters.region.length !== Regions.regions.length && (
+                      <Polygon
+                        key={id}
+                        pathOptions={{ color: "#88F" }}
+                        positions={coordinates}
+                      />
+                    )
+                  );
+                })}
+              </LayerGroup>
+
               <LayerGroup>
                 {data &&
                   data.map(
@@ -180,6 +183,7 @@ const Map = ({ filters, data, mapCenter }) => {
                               const interval = 360 / sickness.length;
                               return (
                                 <SemiCircleMarker
+                                  className="z-10"
                                   key={i}
                                   position={[latitude, longitude]}
                                   color={getColor(v)}
