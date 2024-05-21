@@ -6,9 +6,12 @@ import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollToTop from "../../components/ScrollToTop";
 import Highlighter from "react-highlight-words";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
 
 const Help = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const { isPWA } = useDeviceDetect();
 
   const [search, setSearch] = useState("");
 
@@ -275,12 +278,18 @@ const Help = () => {
       const sections = [];
 
       TOC.map(({ id, hasSubItems, subItems }, i) => {
+        if (["user-management", "activity-logs"].includes(id) && isPWA) {
+          return;
+        }
         sections.push({
           id: id,
           rect: document.getElementById(id).getBoundingClientRect(),
         });
         if (hasSubItems) {
           subItems.map(({ id }, i) => {
+            if (["upload-dataset"].includes(id) && isPWA) {
+              return;
+            }
             sections.push({
               id: id,
               rect: document.getElementById(id).getBoundingClientRect(),
@@ -374,6 +383,12 @@ const Help = () => {
               <div className="toc-header">Modules</div>
               <ul>
                 {TOC.map(({ id, label, hasSubItems, subItems }, i) => {
+                  if (
+                    ["user-management", "activity-logs"].includes(id) &&
+                    isPWA
+                  ) {
+                    return null;
+                  }
                   return !hasSubItems ? (
                     <li
                       className={`toc-item ${
@@ -395,7 +410,15 @@ const Help = () => {
                         {label}
                       </li>
                       {subItems.map(({ id, label }, i) => {
-                        const isLast = i == subItems.length - 1;
+                        const arr = !isPWA
+                          ? subItems
+                          : subItems.filter(
+                              (s) => !["upload-dataset"].includes(s.id)
+                            );
+                        const isLast = i == arr.length - 1;
+                        if (["upload-dataset"].includes(id) && isPWA) {
+                          return null;
+                        }
                         return (
                           <li
                             className={`toc-sub-item ${
@@ -437,6 +460,12 @@ const Help = () => {
           <div className="help-content" id="help-content">
             {getContent().map(
               ({ sectionName, sectionId, description, subSections }, i) => {
+                if (
+                  ["user-management", "activity-logs"].includes(sectionId) &&
+                  isPWA
+                ) {
+                  return null;
+                }
                 return (
                   <div key={i} className="help-content-section" id={sectionId}>
                     <p className="help-content-heading">{sectionName}</p>
@@ -458,6 +487,9 @@ const Help = () => {
                     {subSections &&
                       subSections.map(
                         ({ sectionId, sectionName, description }, i) => {
+                          if (["upload-dataset"].includes(sectionId) && isPWA) {
+                            return null;
+                          }
                           return (
                             <Fragment key={i}>
                               <p

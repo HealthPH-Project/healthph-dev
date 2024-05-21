@@ -18,6 +18,16 @@
     @apply prod-g-h3 text-gray-900 pb-[20px] mb-[20px] border-b-2 border-[#E5E5E5];
   }
 
+  .help-container .table-of-contents .toc-backdrop {
+    display: none;
+  }
+
+  .help-container .table-of-contents .toc-wrapper {
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 100px;
+  }
+
   .help-container .table-of-contents ul li {
     cursor: pointer;
   }
@@ -104,7 +114,7 @@
 
     .help-container .table-of-contents .toc-backdrop {
       @apply fixed top-0 left-0 h-screen w-full;
-      /* display: none; */
+      display: none;
     }
 
     .help-container .table-of-contents.show-toc .toc-backdrop {

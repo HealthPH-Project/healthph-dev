@@ -31,9 +31,9 @@ const Modal = ({
             </button>
           )}
           <button
-            className={`prod-btn-base prod-btn-${
-              color ?? "primary"
-            } mb-[16px] sm:mb-0`}
+            className={`prod-btn-base prod-btn-${color ?? "primary"} ${
+              onCancel ? "mb-[16px]" : ""
+            } sm:mb-0`}
             onClick={onConfirm}
             disabled={onLoading}
           >
