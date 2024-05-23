@@ -14,18 +14,10 @@ export const activityLogApi = baseAPI.injectEndpoints({
       }),
       invalidatesTags: ["ActivityLogs"],
     }),
-    uploadFile: builder.mutation({
-      query: (data) => ({
-        url: "/upload",
-        method: "POST",
-        body: data,
-      }),
-    }),
   }),
 });
 
 export const {
   useFetchActivityLogsQuery,
-  useCreateActivityLogMutation,
-  useUploadFileMutation,
+  useCreateActivityLogMutation
 } = activityLogApi;

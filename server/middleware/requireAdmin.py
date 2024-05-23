@@ -1,5 +1,7 @@
 from dotenv import dotenv_values
 
+from models.user import AdminResult
+
 config_dotenv = dotenv_values()
 
 from fastapi import Depends, HTTPException, status
@@ -10,6 +12,7 @@ from models.auth import TokenData
 from config.database import user_collection
 from bson import ObjectId
 import os
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/authenticate")
 
 
@@ -37,9 +40,9 @@ async def require_admin(token: Annotated[str, Depends(oauth2_scheme)]):
         user_data = user_collection.find_one({"_id": ObjectId(token_data.id)})
 
         if user_data["user_type"] not in ["ADMIN", "SUPERADMIN"]:
-            return False
+            return AdminResult(result=False, id=token_data.id)
 
-        return True
+        return AdminResult(result=True, id=token_data.id)
 
     except JWTError:
         raise credential_exception

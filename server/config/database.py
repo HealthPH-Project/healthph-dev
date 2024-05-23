@@ -27,3 +27,4 @@ db = client[os.getenv("DB_NAME")]
 # Tables / Collections
 user_collection = db['users']
 activity_logs_collection = db['activity_logs']
+dataset_collection = db["datasets"]

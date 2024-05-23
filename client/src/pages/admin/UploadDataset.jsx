@@ -1,13 +1,28 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Datatable from "../../components/admin/Datatable";
-import { useFetchActivityLogsQuery } from "../../features/api/activityLogsSlice";
+import {
+  useCreateActivityLogMutation,
+  useFetchActivityLogsQuery,
+} from "../../features/api/activityLogsSlice";
 import EmptyState from "../../components/admin/EmptyState";
 import { format } from "date-fns";
 import CSVReader from "react-csv-reader";
+import SkeletonBody from "../../components/SkeletonBody";
+import {
+  useDeleteDatasetMutation,
+  useFetchDatasetsQuery,
+  useUploadFileMutation,
+} from "../../features/api/datasetsSlice";
+import Modal from "../../components/admin/Modal";
+import { toast } from "react-toastify";
+import Snackbar from "../../components/Snackbar";
+import { useSelector } from "react-redux";
 
 const UploadDataset = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const inputFile = useRef(null);
 
   const navigate = useNavigate();
@@ -16,6 +31,8 @@ const UploadDataset = () => {
 
   const [uploadModalActive, setUploadModalActive] = useState(false);
 
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
+
   const [previewData, setPreviewData] = useState({
     filename: "",
     rows: 0,
@@ -23,26 +40,232 @@ const UploadDataset = () => {
     data: [],
   });
 
-  const onFileSelect = (data, fileInfo) => {
-    console.log(data.slice(0, 3), fileInfo);
+  const [file, setFile] = useState(null);
+
+  const onFileSelect = (data, fileInfo, originalFile) => {
+    setFile(originalFile);
+
     setPreviewData({
       filename: fileInfo.name,
       rows: data.length,
       headers: Object.keys(data[0]),
       data: data.slice(0, 3),
     });
+
     setUploadModalActive(true);
   };
 
+  const [uploadDataset] = useUploadFileMutation();
+
+  const handleUploadDataset = async () => {
+    setIsUploadLoading(true);
+
+    const payload = new FormData();
+
+    payload.append("file", file);
+
+    const response = await uploadDataset(payload);
+
+    if (!response) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={`Failed to upload dataset`}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      setIsUploadLoading(false);
+      return;
+    }
+
+    if ("error" in response) {
+      const { detail } = response["error"]["data"];
+
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={detail}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+
+      setIsUploadLoading(false);
+      return;
+    }
+
+    toast(
+      <Snackbar
+        iconName="CheckCircle"
+        size="snackbar-sm"
+        color="success"
+        message={`Dataset uploaded successfully`}
+      />,
+      {
+        closeButton: ({ closeToast }) => (
+          <Icon
+            iconName="Close"
+            className="close-icon close-icon-sm close-success"
+            onClick={closeToast}
+          />
+        ),
+      }
+    );
+
+    await log_activiy({
+      user_id: user.id,
+      entry: `Uploaded dataset: ${previewData.filename}`,
+      module: "Trends Map",
+    });
+
+    setIsUploadLoading(false);
+
+    setPreviewData({
+      filename: "",
+      rows: 0,
+      headers: [],
+      data: [],
+    });
+
+    setFile(null);
+
+    document.getElementById("react-csv-reader-input").value = "";
+  };
+
   const {
-    data: activity_logs,
-    error,
-    isSuccess,
-    isError,
-    isLoading: isDataLoading,
-  } = useFetchActivityLogsQuery();
+    data: datasets,
+    isLoading: isDatasetsLoading,
+    isFetching,
+  } = useFetchDatasetsQuery();
+
+  const [deleteDataset] = useDeleteDatasetMutation();
+
+  const [log_activiy] = useCreateActivityLogMutation();
 
   const [rows, setRows] = useState([]);
+
+  const [deleteModalActive, setDeleteModalActive] = useState(false);
+
+  const [modalData, setModalData] = useState({
+    id: "",
+    filename: "",
+  });
+
+  const [isModalLoading, setIsModalLoading] = useState(false);
+
+  const displayFileSize = (size) => {
+    if (size < 1024) {
+      return `${size} B`;
+    } else {
+      const new_size = size / 1024;
+      if (new_size >= 1024) {
+        return `${(new_size / 1024).toFixed(2).replace(/\.?0+$/, "")} MB`;
+      }
+      return `${new_size.toFixed(2).replace(/\.?0+$/, "")} KB`;
+    }
+  };
+
+  const handleDeleteDataset = async () => {
+    setIsModalLoading(true);
+
+    const response = await deleteDataset(modalData.id);
+
+    if (!response) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={`Failed to delete dataset`}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      setIsModalLoading(false);
+      return;
+    }
+
+    if ("error" in response) {
+      const { detail } = response["error"]["data"];
+
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={detail}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+
+      setIsModalLoading(false);
+      return;
+    }
+
+    toast(
+      <Snackbar
+        iconName="CheckCircle"
+        size="snackbar-sm"
+        color="success"
+        message={`Dataset deleted successfully`}
+      />,
+      {
+        closeButton: ({ closeToast }) => (
+          <Icon
+            iconName="Close"
+            className="close-icon close-icon-sm close-success"
+            onClick={closeToast}
+          />
+        ),
+      }
+    );
+
+    await log_activiy({
+      user_id: user.id,
+      entry: `Deleted dataset: ${modalData.filename}`,
+      module: "Trends Map",
+    });
+
+    setIsModalLoading(false);
+
+    setModalData({ id: "", filename: "" });
+
+    setFile(null);
+  };
 
   return (
     <>
@@ -117,58 +340,91 @@ const UploadDataset = () => {
               </div>
             </div>
           </form>
-          {isDataLoading ? (
-            <p>Loading...</p>
+          {isFetching ? (
+            <div className="overflow-y-hidden min-w-full h-[642px]">
+              <SkeletonBody columns={9} />
+            </div>
           ) : (
             <div className="content h-[642px]">
               <Datatable
                 datatableHeader="Datasets"
                 datatableColumns={[
                   { label: "File Name" },
-                  { label: "File Size", tooltip: "Sample tooltip" },
-                  { label: "Date Uploaded" },
+                  { label: "File Size" },
                   { label: "Uploaded By" },
+                  { label: "Date Uploaded" },
                   { label: "Actions" },
                 ]}
-                datatableData={[]}
+                datatableData={datasets}
                 setDatatableData={setRows}
                 rowsPerPage={10}
                 withActions={true}
                 actionsWidth="190px"
               >
-                {[].length > 0 ? (
-                  rows.map(({ user_name, entry, module, created_at }, i) => {
-                    return (
-                      <div className="content-row" key={i}>
-                        <div className="row-item">{user_name}</div>
-                        <div className="row-item">{entry}</div>
-                        <div className="row-item">{module}</div>
-                        <div className="row-item">
-                          {format(new Date(created_at), "MMM-dd-yyyy KK:mm a")}
-                        </div>
-                        <div className="row-item">
-                          <div className="flex items-center">
-                            <Link
-                              to="#"
-                              className="prod-push-btn-sm prod-btn-secondary me-[8px] min-w-[70px]"
-                            >
-                              Download
-                            </Link>
-                            <button className="prod-push-btn-sm prod-btn-destructive min-w-[70px]">
-                              Delete
-                            </button>
+                {datasets.length > 0 ? (
+                  rows.map(
+                    (
+                      {
+                        id,
+                        user_name,
+                        filename,
+                        original_filename,
+                        file_size,
+                        created_at,
+                      },
+                      i
+                    ) => {
+                      const download_link =
+                        import.meta.env.VITE_API_URL +
+                        "/datasets/download/" +
+                        filename;
+                      return (
+                        <div className="content-row" key={i}>
+                          <div className="row-item">{original_filename}</div>
+                          <div className="row-item">
+                            {displayFileSize(file_size)}
+                          </div>
+                          <div className="row-item">{user_name}</div>
+                          <div className="row-item">
+                            {format(
+                              new Date(created_at),
+                              "MMM-dd-yyyy HH:mm a"
+                            )}
+                          </div>
+                          <div className="row-item">
+                            <div className="flex items-center">
+                              <a
+                                href={download_link}
+                                target="_blank"
+                                className="prod-push-btn-sm prod-btn-secondary me-[8px] min-w-[70px]"
+                              >
+                                Download
+                              </a>
+                              <button
+                                className="prod-push-btn-sm prod-btn-destructive min-w-[70px]"
+                                onClick={() => {
+                                  setModalData({ id: id, filename: filename });
+                                  setDeleteModalActive(true);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
+                      );
+                    }
+                  )
                 ) : (
                   <EmptyState
                     iconName="Document"
                     heading="No Datasets Uploaded"
                     content="There are no datasets uploaded. Upload a dataset to be displayed in Trends Map"
                   >
-                    <button className="prod-btn-base prod-btn-primary">
+                    <button
+                      className="prod-btn-base prod-btn-primary"
+                      onClick={() => inputFile.current.click()}
+                    >
                       Upload Dataset
                     </button>
                   </EmptyState>
@@ -256,21 +512,43 @@ const UploadDataset = () => {
                       data: [],
                     });
                   }}
-                  //   disabled={onLoading}
+                  disabled={isUploadLoading}
                 >
                   Cancel
                 </button>
               )}
               <button
                 className={`prod-btn-base prod-btn-primary mb-[16px] sm:mb-0`}
-                //   onClick={onConfirm}
-                //   disabled={onLoading}
+                onClick={async () => {
+                  await handleUploadDataset();
+                  setUploadModalActive(false);
+                }}
+                disabled={isUploadLoading}
               >
-                Upload
+                {isUploadLoading ? "Uploading..." : "Upload"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {deleteModalActive && (
+        <Modal
+          onConfirm={async () => {
+            await handleDeleteDataset();
+            setDeleteModalActive(false);
+          }}
+          onConfirmLabel="Delete"
+          onCancel={() => {
+            setModalData({ id: "", filename: "" });
+            setDeleteModalActive(false);
+          }}
+          onLoadingLabel="Deleting..."
+          onLoading={isModalLoading}
+          heading={`Are you sure you want to delete the following dataset: [${modalData.filename}]?`}
+          content="This will remove the file from the system and this action can't be undone."
+          color="destructive"
+        />
       )}
     </>
   );

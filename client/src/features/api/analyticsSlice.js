@@ -1,15 +1,7 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import { baseAPI } from "./_baseAPI";
 
 export const activityLogApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
-    uploadFile: builder.mutation({
-      query: (data) => ({
-        url: "/upload",
-        method: "POST",
-        body: data,
-      }),
-    }),
     generateFrequentWords: builder.query({
       query: (filters) => {
         return {
@@ -26,7 +18,7 @@ export const activityLogApi = baseAPI.injectEndpoints({
           params: { filters: filters },
         };
       },
-      providesTags: ["AnalyticsPercentage"]
+      providesTags: ["AnalyticsPercentage"],
     }),
     generateWordCloud: builder.query({
       queryFn: async (filters) => {
@@ -44,13 +36,12 @@ export const activityLogApi = baseAPI.injectEndpoints({
           return { error };
         }
       },
-      providesTags: ["AnalyticsWordcloud"]
+      providesTags: ["AnalyticsWordcloud"],
     }),
   }),
 });
 
 export const {
-  useUploadFileMutation,
   useGenerateFrequentWordsQuery,
   useGeneratePercentageQuery,
   useGenerateWordCloudQuery,

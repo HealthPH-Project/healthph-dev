@@ -17,6 +17,7 @@ from helpers.sendMail import (
 )
 from config.database import user_collection
 from models.user import (
+    AdminResult,
     CreateUserRequest,
     DisableUserRequest,
     UpdatePersonalInfo,
@@ -455,11 +456,11 @@ route     POST api/users
 
 async def create_user(
     user: CreateUserRequest,
-    is_admin: Annotated[SuperadminResult, Depends(require_admin)],
+    is_admin: Annotated[AdminResult, Depends(require_admin)],
 ):
     errors = []
     # Check if user is an admin or superadmin
-    if not is_admin:
+    if not is_admin.result:
         errors.append({"field": "snackbar", "error": "Not authorized to add a user."})
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -618,10 +619,10 @@ route     DELETE api/users/admins/{id}
 
 
 async def delete_users(
-    id: str, is_admin: Annotated[SuperadminResult, Depends(require_admin)]
+    id: str, is_admin: Annotated[AdminResult, Depends(require_admin)]
 ):
     # Check if user / verifier is an admin or superadmin
-    if not is_admin:
+    if not is_admin.result:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authorized to delete user.",
@@ -750,10 +751,10 @@ route     PUT api/users/disable/{id}
 
 
 async def set_disable_status(
-    id: str, data: DisableUserRequest, is_admin: Annotated[bool, Depends(require_admin)]
+    id: str, data: DisableUserRequest, is_admin: Annotated[AdminResult, Depends(require_admin)]
 ):
     # Check if user is an admin or superadmin
-    if not is_admin:
+    if not is_admin.result:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=(
