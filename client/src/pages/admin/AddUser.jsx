@@ -357,8 +357,8 @@ const AddUser = () => {
             <div className="max-w-[360px]">
               <p>Add User</p>
               <span>
-                Create an admin by providing their account information to manage
-                HealthPH and its users.
+                Create an admin or user by providing their account information
+                to manage HealthPH.
               </span>
             </div>
             <div className="flex items-center">

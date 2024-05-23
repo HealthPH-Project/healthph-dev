@@ -163,7 +163,7 @@ const Map = ({ filters, data, mapCenter }) => {
                     filters.region.length !== Regions.regions.length && (
                       <Polygon
                         key={id}
-                        pathOptions={{ color: "#88F" }}
+                        pathOptions={{ color: "#88F", fill: false, weight: 5 }}
                         positions={coordinates}
                       />
                     )
