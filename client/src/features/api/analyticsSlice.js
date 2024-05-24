@@ -21,22 +21,13 @@ export const activityLogApi = baseAPI.injectEndpoints({
       providesTags: ["AnalyticsPercentage"],
     }),
     generateWordCloud: builder.query({
-      queryFn: async (filters) => {
-        try {
-          const response = await fetch(
-            import.meta.env.VITE_API_URL + "/wordcloud?filters=" + filters
-          );
-
-          const blob = await response.blob();
-
-          const objectURL = URL.createObjectURL(blob);
-
-          return { data: objectURL };
-        } catch (error) {
-          return { error };
-        }
+      query: (filters) => {
+        return {
+          url: "/wordcloud",
+          params: { filters: filters },
+        };
       },
-      providesTags: ["AnalyticsWordcloud"],
+      providesTags: ["AnalyticsPercentage"],
     }),
   }),
 });

@@ -79,9 +79,6 @@ const Analytics = () => {
   const { data: wordcloud, isFetching: isWordCloudFetching } =
     useGenerateWordCloudQuery(wordCloudFilter);
 
-  useEffect(() => {
-    console.log(wordcloud);
-  }, [isWordCloudFetching]);
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
@@ -398,7 +395,7 @@ const Analytics = () => {
                 filter={wordCloudFilter}
                 setFilter={setWordCloudFilter}
                 isLoading={isWordCloudFetching}
-                additionalClasses="col-span-1 md:col-span-2 min-h-[518px]"
+                additionalClasses="col-span-1 md:col-span-2"
               >
                 <div>
                   {/* {!isWordcloudLoading && (
@@ -406,13 +403,7 @@ const Analytics = () => {
                   )} */}
                   {!isWordCloudFetching && (
                     <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
-                      <img
-                        src={
-                          import.meta.env.VITE_API_URL +
-                          wordcloud["wordcloud_url"]
-                        }
-                        alt="wordcloud"
-                      />
+                      <img src={wordcloud} alt="wordcloud" />
                     </div>
                   )}
                 </div>

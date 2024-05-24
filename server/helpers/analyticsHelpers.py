@@ -155,7 +155,7 @@ def frequent_words(data):
     return df_frequent_words
 
 
-def word_cloud(data):
+def word_cloud(data, full_path: str):
     # Combine all posts into a single string
     post = " ".join(review for review in data.post)
 
@@ -176,6 +176,10 @@ def word_cloud(data):
         max_font_size=50,
         margin=50,
     ).generate(post)
+    
+    wordcloud.to_file(full_path)
+    
+    return wordcloud
 
     # return wordcloud
     image_buffer = BytesIO()
