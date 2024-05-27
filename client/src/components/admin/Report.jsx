@@ -34,9 +34,9 @@ const Report = ({
   return (
     <div className={"report-container " + additionalClasses}>
       <div className="flex justify-between flex-col md:flex-row mb-[16px] md:mb-0">
-        <div>
+        <div className="mb-[20px]">
           <p className="heading">{heading}</p>
-          <p className="caption">{caption}</p>
+          {caption && <p className="caption">{caption}</p>}
         </div>
         <div className="w-full max-w-[200px]">
           <CustomSelect

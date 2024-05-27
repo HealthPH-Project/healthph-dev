@@ -161,7 +161,6 @@ const Analytics = () => {
             <div className="analytics-reports">
               <Report
                 heading="Top Words"
-                caption="Caption"
                 filter={topWordsFilter}
                 setFilter={setTopWordsFilter}
                 isLoading={isTopWordsFetching}
@@ -241,7 +240,6 @@ const Analytics = () => {
               </Report>
               <Report
                 heading="Percentage"
-                caption="Caption"
                 filter={percentageFilter}
                 setFilter={setPercentageFilter}
                 isLoading={isPercentageFetching}
@@ -394,28 +392,26 @@ const Analytics = () => {
               </Report>
               <Report
                 heading="Word Cloud"
-                caption="Caption"
                 filter={wordCloudFilter}
                 setFilter={setWordCloudFilter}
                 isLoading={isWordCloudFetching}
                 additionalClasses="col-span-1 md:col-span-2 min-h-[518px]"
               >
-                <div>
-                  {/* {!isWordcloudLoading && (
+                {/* {!isWordcloudLoading && (
                     <img src={wordcloudImage} alt="wordcloud" />
                   )} */}
-                  {!isWordCloudFetching && (
-                    <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
-                      <img
-                        src={
-                          import.meta.env.VITE_API_URL +
-                          wordcloud["wordcloud_url"]
-                        }
-                        alt="wordcloud"
-                      />
-                    </div>
-                  )}
-                </div>
+                {!isWordCloudFetching && (
+                  <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
+                    <img
+                      src={
+                        import.meta.env.VITE_API_URL +
+                        wordcloud["wordcloud_url"]
+                      }
+                      alt="wordcloud"
+                    />
+                    {/* <p>asdas</p> */}
+                  </div>
+                )}
               </Report>
             </div>
           </div>

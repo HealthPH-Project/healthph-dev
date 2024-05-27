@@ -76,7 +76,7 @@
   }
 
   .analytics-section .analytics-reports .report-container .caption {
-    @apply prod-p2 font-medium text-gray-700 mb-[20px];
+    @apply prod-p2 font-medium text-gray-700;
   }
 
   .analytics-section .analytics-reports .report-container .report-placeholder {
