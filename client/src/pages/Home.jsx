@@ -18,7 +18,8 @@ const Home = () => {
             administrative regions.
           </p>
           <Link
-            to="https://www.google.com"
+            to="assets/healthph-pre-alpha.apk"
+            target="_blank"
             className="prod-btn-lg prod-btn-secondary rounded-[8px] px-[18px] md:px-[28px] py-[10px] md:py-[16px] mt-[24px] flex justify-center items-center"
           >
             <span> Download HealthPH App</span>
