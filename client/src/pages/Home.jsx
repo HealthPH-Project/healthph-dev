@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
 import HomeNavbar from "../components/HomeNavbar.jsx";
+import Icon from "../components/Icon.jsx";
 
 const Home = () => {
   return (
@@ -16,6 +17,19 @@ const Home = () => {
             Completely free, intelligent risk monitoring, for all 17
             administrative regions.
           </p>
+          <Link
+            to="https://www.google.com"
+            className="prod-btn-lg prod-btn-secondary rounded-[8px] px-[18px] md:px-[28px] py-[10px] md:py-[16px] mt-[24px] flex justify-center items-center"
+          >
+            <span> Download HealthPH App</span>
+            <Icon
+              iconName="Download"
+              height="24"
+              width="24"
+              fill="#8693A0"
+              className="icon ms-[8px]"
+            />
+          </Link>
         </div>
 
         <div className="art"></div>
