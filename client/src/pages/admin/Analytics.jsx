@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Icon from "../../components/Icon";
 import CustomSelect from "../../components/CustomSelect";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format, subDays } from "date-fns";
 
 import {
@@ -25,6 +25,8 @@ import {
   useGenerateWordCloudQuery,
 } from "../../features/api/analyticsSlice";
 import Report from "../../components/admin/Report";
+import { useReactToPrint } from "react-to-print";
+import PrintAnalytics from "../../components/admin/PrintAnalytics";
 
 const Analytics = () => {
   const [filters, setFilters] = useState({
@@ -79,9 +81,15 @@ const Analytics = () => {
   const { data: wordcloud, isFetching: isWordCloudFetching } =
     useGenerateWordCloudQuery(wordCloudFilter);
 
-  useEffect(() => {
-    console.log(wordcloud);
-  }, [isWordCloudFetching]);
+  const printRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: "HealthPH - Analytics",
+    pageStyle:
+      "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+  });
+
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
@@ -99,16 +107,14 @@ const Analytics = () => {
             </div>
           </div>
         </div>
-
+        <div ref={printRef}></div>
         <section className="analytics-section">
           <div className="header flex-col md:flex-row  items-start md:items-center">
             <div className="heading mb-[20px] md:mb-0">Suspected Symptoms</div>
             <div className="w-full sm:w-auto flex flex-col xs:flex-row justify-start lg:justify-center items-start xs:items-center">
               <button
                 className="prod-btn-base prod-btn-secondary flex justify-center items-center mb-[16px] xs:mb-0"
-                onClick={() => {
-                  print("asas");
-                }}
+                onClick={handlePrint}
               >
                 <span>Print</span>
                 <Icon
@@ -119,6 +125,20 @@ const Analytics = () => {
                   className="ms-[8px]"
                 />
               </button>
+              <PrintAnalytics
+                ref={printRef}
+                data={{
+                  frequent_words: frequent_words,
+                  frequent_words_filter: topWordsFilter,
+                  percentage: percentage,
+                  percentage_filter: percentageFilter,
+                  wordcloud: isWordCloudFetching
+                    ? ""
+                    : import.meta.env.VITE_API_URL + wordcloud["wordcloud_url"],
+                  wordcloud_filter: wordCloudFilter,
+                }}
+                dateTable={format(new Date(), "MMMM dd, yyyy")}
+              />
               {/* <CustomSelect
                 options={getDateRangeOptions()}
                 placeholder="Select Date Range"
@@ -144,7 +164,7 @@ const Analytics = () => {
           <div className="header">
             <div className="heading">Reports</div>
             <div className="flex flex-row justify-center items-center">
-              <button className="prod-btn-base prod-btn-secondary flex justify-center items-center ">
+              {/* <button className="prod-btn-base prod-btn-secondary flex justify-center items-center ">
                 <span>Print</span>
                 <Icon
                   iconName="Printer"
@@ -153,12 +173,13 @@ const Analytics = () => {
                   fill="#8693A0"
                   className="ms-[8px]"
                 />
-              </button>
+              </button> */}
             </div>
           </div>
 
           <div className="analytics-content">
             <div className="analytics-reports">
+              {/* REPORT - TOP WORDS */}
               <Report
                 heading="Top Words"
                 filter={topWordsFilter}
@@ -227,17 +248,12 @@ const Analytics = () => {
                         maxBarSize={20}
                         radius={[0, 8, 8, 0]}
                       />
-                      {/* <Bar
-                      dataKey="uv"
-                      stackId="a"
-                      fill="#B9DBFF"
-                      radius={[8, 8, 0, 0]}
-                      maxBarSize={60}
-                    /> */}
                     </BarChart>
                   )}
                 </ResponsiveContainer>
               </Report>
+
+              {/* REPORT - PERCENTAGE */}
               <Report
                 heading="Percentage"
                 filter={percentageFilter}
@@ -245,74 +261,6 @@ const Analytics = () => {
                 isLoading={isPercentageFetching}
               >
                 <ResponsiveContainer width="100%" maxHeight={400}>
-                  {/*  *
-                  <BarChart
-                    data={data}
-                    margin={{
-                      top: 0,
-                      right: 0,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="name"
-                      padding={{ left: 20, right: 20 }}
-                      tickLine={false}
-                      tick={{ fontSize: "14px" }}
-                    />
-                    <YAxis
-                      tickCount={6}
-                      tickLine={false}
-                      tick={{ fontSize: "14px" }}
-                      axisLine={false}
-                    />
-                    <Tooltip />
-                    <Legend
-                      verticalAlign="top"
-                      align="left"
-                      iconSize={20}
-                      height={60}
-                      content={({ payload }) => {
-                        return (
-                          <div className="flex items-center">
-                            {payload.map((entry, index) => {
-                              const { color, value } = entry;
-                              return (
-                                <div
-                                  className="flex items-center me-[16px]"
-                                  key={index}
-                                >
-                                  <div
-                                    className="h-[16px] w-[16px] rounded-[4px] me-[10px]"
-                                    style={{ backgroundColor: color }}
-                                  ></div>
-                                  <span className="prod-l3 text-gray-900">
-                                    {value}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        );
-                      }}
-                    />
-                    <Bar
-                      dataKey="pv"
-                      stackId="a"
-                      fill="#007AFF"
-                      maxBarSize={60}
-                    />
-                    <Bar
-                      dataKey="uv"
-                      stackId="a"
-                      fill="#B9DBFF"
-                      radius={[8, 8, 0, 0]}
-                      maxBarSize={60}
-                    />
-                  </BarChart>
-                  {/*  */}
                   {percentage && (
                     <PieChart>
                       <Legend
@@ -390,6 +338,8 @@ const Analytics = () => {
                   )}
                 </ResponsiveContainer>
               </Report>
+
+              {/* REPORT - WORDCLOUD */}
               <Report
                 heading="Word Cloud"
                 filter={wordCloudFilter}

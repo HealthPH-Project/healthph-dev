@@ -277,14 +277,14 @@ const TrendsMap = () => {
             </div>
             <div
               className={`tab-item ${
-                filters.disease == "tubercolosis" ? "active" : ""
+                filters.disease == "tuberculosis" ? "active" : ""
               }`}
-              id="disease-tubercolosis"
+              id="disease-tuberculosis"
               onClick={handleChangeDisease}
             >
-              <span className="label">Tubercolosis</span>
+              <span className="label">Tuberculosis</span>
               <span className="count">
-                {formatDataLength(getTotalCount("tubercolosis"), 3)}
+                {formatDataLength(getTotalCount("tuberculosis"), 3)}
               </span>
             </div>
             <div

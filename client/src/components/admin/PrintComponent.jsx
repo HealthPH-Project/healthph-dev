@@ -1,7 +1,10 @@
 import { forwardRef, useEffect, useState } from "react";
 
 const PrintComponent = forwardRef(
-  ({ pageName, data, columns, rowsPerPage, dateTable, displayFunc }, ref) => {
+  (
+    { pageName, tableName, data, columns, rowsPerPage, dateTable, displayFunc },
+    ref
+  ) => {
     const [pageData, setPageData] = useState([]);
     useEffect(() => {
       let splitArray = [];
@@ -39,7 +42,7 @@ const PrintComponent = forwardRef(
       return `Row ${startIndex} - ${endIndex} of ${data.length}`;
     };
 
-    return (
+    return pageData.length > 0 ? (
       <div className="print-component">
         <div className="print-container" ref={ref}>
           {pageData.map((v, i) => {
@@ -55,7 +58,7 @@ const PrintComponent = forwardRef(
                 >
                   <div className="content-header">
                     <div className="flex items-center">
-                      <p>{pageName}</p>
+                      <p>{tableName}</p>
                       <span className="ms-[8px]">
                         {formatDataLength(data.length, 3)}
                       </span>
@@ -93,6 +96,44 @@ const PrintComponent = forwardRef(
               </div>
             );
           })}
+        </div>
+      </div>
+    ) : (
+      <div className="print-component">
+        <div className="print-container" ref={ref}>
+          <div className="page">
+            <div className="page-header mb-[36px]">
+              <p>{pageName}</p>
+              <p>HealthPH</p>
+            </div>
+            <div
+              className="page-content"
+              style={{ "--page-columns": columns.length }}
+            >
+              <div className="content-header">
+                <div className="flex items-center">
+                  <p>{tableName}</p>
+                  <span className="ms-[8px]">
+                    {formatDataLength(data.length, 3)}
+                  </span>
+                </div>
+                <p>As of {dateTable}</p>
+              </div>
+              <div className="row-header">
+                {columns.map((c, i) => {
+                  return (
+                    <div key={i} className="row-item">
+                      {c}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="page-footer mt-[36px]">
+              <p>{displayRowRange(0 + 1)}</p>
+              <p>Page {formatDataLength(0 + 1, 2)} </p>
+            </div>
+          </div>
         </div>
       </div>
     );

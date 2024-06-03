@@ -170,7 +170,7 @@ const Login = () => {
           />
         </FieldGroup>
         <div className="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center my-[24px]">
-          <Checkbox
+          {/* <Checkbox
             name="remember"
             id="remember"
             label="Remember Me"
@@ -178,8 +178,8 @@ const Login = () => {
             handleChange={setRemember}
             size="input-checkbox-md"
             additionalClasses="items-center"
-          />
-          <NavLink to="/forgot-password" className="mb-[16px] sm:mb-0">
+          /> */}
+          <NavLink to="/forgot-password" className="mb-0 sm:mb-0">
             Forgot Password
           </NavLink>
         </div>

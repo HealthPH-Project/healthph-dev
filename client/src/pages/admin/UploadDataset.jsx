@@ -309,7 +309,11 @@ const UploadDataset = () => {
                   proceed to upload it.
                 </span>
                 <div className="mt-[16px]">
-                  <Link to="#" className="prod-btn-base prod-btn-secondary">
+                  <Link
+                    to="/assets/dataset-template.csv"
+                    target="_blank"
+                    className="prod-btn-base prod-btn-secondary"
+                  >
                     Download CSV Template
                   </Link>
                 </div>

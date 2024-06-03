@@ -117,6 +117,7 @@ const ActivityLogs = () => {
               <PrintComponent
                 ref={printRef}
                 pageName="Activity Logs"
+                tableName="Activity Logs"
                 data={rowData}
                 columns={["USER", "ENTRY", "MODULE", "LOGGED AT"]}
                 rowsPerPage={25}

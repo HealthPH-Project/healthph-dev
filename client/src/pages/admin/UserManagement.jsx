@@ -14,11 +14,14 @@ import Highlighter from "react-highlight-words";
 import { NavLink } from "react-router-dom";
 import Input from "../../components/Input";
 import Datatable from "../../components/admin/Datatable";
-import { format, isDate } from "date-fns";
+import { format } from "date-fns";
 import Modal from "../../components/admin/Modal";
 import EmptyState from "../../components/admin/EmptyState";
 import { toast } from "react-toastify";
 import Snackbar from "../../components/Snackbar";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import PrintComponent from "../../components/admin/PrintComponent";
 
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.user);
@@ -300,6 +303,15 @@ const UserManagement = () => {
     }
   };
 
+  const printRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: "HealthPH - User Management",
+    pageStyle:
+      "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+  });
+
   return (
     <>
       {isAdminsLoading || isUsersLoading ? (
@@ -336,7 +348,10 @@ const UserManagement = () => {
                 }
               />
               <div className="flex flex-shrink-0 mt-[20px] sm:mt-0">
-                <button className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-0 sm:ms-[16px]">
+                <button
+                  className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-0 sm:ms-[16px]"
+                  onClick={handlePrint}
+                >
                   <span>Print</span>
 
                   <Icon
@@ -347,6 +362,68 @@ const UserManagement = () => {
                     className="ms-[8px]"
                   />
                 </button>
+                <PrintComponent
+                  ref={printRef}
+                  pageName="User Management"
+                  tableName={tableTab}
+                  data={
+                    tableTab == "Admins"
+                      ? search != ""
+                        ? searchAdminRows
+                        : admins
+                      : search != ""
+                      ? searchUserRows
+                      : users
+                  }
+                  columns={
+                    tableTab == "Admins"
+                      ? ["FULL NAME", "EMAIL", "USER TYPE", "DATE CREATED"]
+                      : [
+                          "FULL NAME",
+                          "EMAIL",
+                          "REGIONAL OFFICE",
+                          "ORGANIZATION",
+                          "DATE CREATED",
+                        ]
+                  }
+                  rowsPerPage={25}
+                  dateTable={format(new Date(), "MMMM dd, yyyy")}
+                  displayFunc={(value) => {
+                    let full_name = `${value.first_name} ${value.last_name}`;
+
+                    let data = [full_name, value.email];
+                    if (tableTab == "Admins") {
+                      data.push(value.user_type);
+                    } else {
+                      const regions = {
+                        NCR: "National Capital Region",
+                        I: "Region I",
+                        II: "Region II",
+                        III: "Region III",
+                        CAR: "Cordillera Administrative Region (CAR)",
+                        IVA: "Region IV-A (CALABARZON)",
+                        IVB: "Region IV-B (MIMAROPA)",
+                        V: "Region V",
+                        VI: "Region VI",
+                        VII: "Region VII",
+                        VIII: "Region VIII",
+                        IX: "Region IX",
+                        X: "Region X",
+                        XI: "Region XI",
+                        XII: "Region XII",
+                        XIII: "Region XIII",
+                        BARMM:
+                          "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+                      };
+                      data.push(regions[value.region]);
+                      data.push(value.organization);
+                    }
+                    data.push(
+                      format(new Date(value.created_at), "MMM-dd-yyyy HH:mm a")
+                    );
+                    return data;
+                  }}
+                />
                 {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
                   <NavLink
                     to="/dashboard/user-management/add-user"
@@ -856,4 +933,5 @@ const UsersData = ({
     </>
   );
 };
+
 export default UserManagement;

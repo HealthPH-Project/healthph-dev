@@ -439,11 +439,68 @@
     .row-header .row-item {
       font-weight: 600;
     }
-    
+
     .page-footer {
       page-break-after: always;
     }
 
+    .print-container .suspected-symptoms-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .print-container .suspected-symptoms-container .suspected-symptom-item {
+      border: 1px solid #bcc5ce;
+      padding: 10px 8px;
+      font-size: 8px;
+      line-height: 12px;
+    }
+
+    .print-container
+      .suspected-symptoms-container
+      .suspected-symptom-item
+      .label {
+      color: #687582;
+      font-weight: 600;
+    }
+
+    .print-container
+      .suspected-symptoms-container
+      .suspected-symptom-item
+      .value {
+      color: #171e26;
+      font-weight: 500;
+      margin: 5px auto;
+    }
+
+    .print-container
+      .suspected-symptoms-container
+      .suspected-symptom-item
+      .region {
+      color: #465360;
+      font-weight: 500;
+    }
+
+    .print-container
+      .suspected-symptoms-container
+      .suspected-symptom-item
+      .region
+      span {
+      font-weight: 600;
+    }
+
+    .print-container .report-wrapper {
+      border: 1px solid #bcc5ce;
+    }
+
+    .print-container .wordcloud-wrapper {
+      border: 1px solid #bcc5ce;
+      padding: 12px 14px;
+    }
+
+    .print-container .wordcloud-wrapper  img{
+      border-radius: 8px;
+    }
   }
 
   /* SKELETON */
