@@ -17,7 +17,7 @@ const Home = () => {
             Completely free, intelligent risk monitoring, for all 17
             administrative regions.
           </p>
-          <Link
+          {/* <Link
             to="assets/healthph-pre-alpha.apk"
             target="_blank"
             className="prod-btn-lg prod-btn-secondary rounded-[8px] px-[18px] md:px-[28px] py-[10px] md:py-[16px] mt-[24px] flex justify-center items-center"
@@ -30,7 +30,7 @@ const Home = () => {
               fill="#8693A0"
               className="icon ms-[8px]"
             />
-          </Link>
+          </Link> */}
         </div>
 
         <div className="art"></div>

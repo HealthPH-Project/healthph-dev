@@ -59,17 +59,32 @@ const HomeNavbar = () => {
           </ul>
 
           {/* CTA*/}
-          {/* <div className="home-cta flex justify-center items-center"> */}
-          {/* <Link
+          <div className="home-cta flex justify-center items-center">
+            {/* <Link
               to="/login"
               className="prod-btn-lg prod-btn-primary me-[16px]"
             >
               Sign In
             </Link> */}
-          {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
+            <Link
+              to="assets/healthph-pre-alpha.apk"
+              target="_blank"
+              className="prod-btn-lg prod-btn-secondary flex justify-center items-center"
+            >
+              <span>Download HealthPH</span>
+              <Icon
+                iconName="Download"
+                height="24"
+                width="24"
+                fill="#8693A0"
+                className="icon ms-[8px]"
+              />
+            </Link>
+
+            {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
             Join HealthPH
           </Link> */}
-          {/* </div> */}
+          </div>
         </div>
 
         <HamburgerMenu
