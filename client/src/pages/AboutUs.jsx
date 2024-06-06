@@ -169,7 +169,10 @@ const AboutUs = () => {
                         nesciunt veritatis possimus iste. Voluptatibus dolor
                         pariatur eveniet quia culpa?
                       </p>
-                      <Link to="/" className="prod-btn-lg prod-btn-secondary">
+                      <Link
+                        to="/articles/qwerty"
+                        className="prod-btn-lg prod-btn-secondary"
+                      >
                         <span>Read More</span>
                         <Icon
                           iconName="ArrowUpRight"

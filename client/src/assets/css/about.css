@@ -18,7 +18,7 @@
   }
 
   .about-layout .hero .heading {
-    @apply web-m-h2 xs:web-m-h1 sm:web-d-h2 text-white font-semibold max-w-[851px] mb-[24px];
+    @apply web-m-h2 xs:web-m-h1 sm:web-d-h2 text-white !font-semibold max-w-[851px] mb-[24px];
   }
 
   .about-layout .hero .subheading {
