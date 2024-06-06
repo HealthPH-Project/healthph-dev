@@ -34,6 +34,9 @@ import PageNotFound from "./pages/error/PageNotFound";
 import Test from "./Test";
 import HelmetTitle from "./components/HelmetTitle";
 import useDeviceDetect from "./hooks/useDeviceDetect";
+import AboutUs from "./pages/AboutUs";
+import Articles from "./pages/Articles";
+import ArticlePage from "./pages/ArticlePage";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -66,6 +69,45 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH" />
                   <Home />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="about-us"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | About Us" />
+                  <AboutUs />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="articles"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | Articles" />
+                  <Articles />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="articles/:slug"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | Article Page" />
+                  <ArticlePage />
                 </>
               ) : (
                 <Navigate to="/login" />

@@ -22,52 +22,54 @@ const HomeNavbar = () => {
     }
   };
   return (
-    <nav className="home-nav h-[96px] px-[20px] flex justify-between items-center">
+    <nav className="home-nav h-[96px] mx-[20px] flex justify-between items-center">
       <div className="flex justify-between items-center w-full max-w-[1326px] mx-auto">
         {/* LOGO */}
-        <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
-          <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
-        </Link>
+        <div className="flex">
+          <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
+            <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
+          </Link>
+        </div>
 
         <div className={"home-nav-links " + menuAnimate}>
           {/* NAV LINKS */}
           <ul>
-            {/* <li>
-            <NavLink to="/" className="prod-btn-lg prod-btn-white">
-              <Icon
-                iconName="Home"
-                height="20px"
-                width="20px"
-                className="icon"
-              />
-              <span>Home</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/about-us" className="prod-btn-lg prod-btn-white">
-              <Icon
-                iconName="Information"
-                height="20px"
-                width="20px"
-                className="icon"
-              />
-              <span>About Us</span>
-            </NavLink>
-          </li> */}
+            <li>
+              <NavLink to="/" className="prod-btn-lg prod-btn-white">
+                <Icon
+                  iconName="Home"
+                  height="20px"
+                  width="20px"
+                  className="icon"
+                />
+                <span>Home</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/about-us" className="prod-btn-lg prod-btn-white">
+                <Icon
+                  iconName="Information"
+                  height="20px"
+                  width="20px"
+                  className="icon"
+                />
+                <span>About Us</span>
+              </NavLink>
+            </li>
           </ul>
 
           {/* CTA*/}
-          <div className="home-cta flex justify-center items-center">
-            <Link
+          {/* <div className="home-cta flex justify-center items-center"> */}
+          {/* <Link
               to="/login"
               className="prod-btn-lg prod-btn-primary me-[16px]"
             >
               Sign In
-            </Link>
-            {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
+            </Link> */}
+          {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
             Join HealthPH
           </Link> */}
-          </div>
+          {/* </div> */}
         </div>
 
         <HamburgerMenu

@@ -13,32 +13,37 @@
     @apply flex flex-col overflow-hidden;
   }
 
-  .home-layout .home-nav {
+  .home-nav {
     @apply relative flex-shrink-0;
   }
 
-  .home-layout .home-nav .logo-wrapper {
+  .home-nav .logo-wrapper {
     z-index: 3;
   }
 
-  .home-layout .home-nav .logo-wrapper img{
+  .home-nav .logo-wrapper img{
     height: 100%;
     object-fit: contain
   }
 
-  .home-layout .home-nav ul {
+  .home-nav ul {
     @apply absolute flex justify-center items-center gap-[4px];
-    left: 50%;
+    left: calc(100% - 73px);
     top: 50%;
     transform: translate(-50%, -50%);
   }
-
-  .home-layout .home-nav .home-nav-links ul li a .icon {
+  .home-nav .home-nav-links {
+    position: relative;
+  }
+  .home-nav .home-nav-links ul li  {
+    @apply flex-shrink-0;
+  }
+  .home-nav .home-nav-links ul li a .icon {
     @apply hidden;
   }
 
   @media screen and (max-width: 768px) {
-    .home-layout .home-nav .home-nav-links {
+    .home-nav .home-nav-links {
       @apply fixed top-0 left-0 max-w-[300px] w-full h-screen bg-white pt-[120px] pb-[24px] px-[16px];
       @apply flex flex-col justify-between items-center;
       z-index: 2;
@@ -48,86 +53,86 @@
       overflow-y: auto;
     }
 
-    .home-layout .home-nav .home-nav-links.show-menu {
+    .home-nav .home-nav-links.show-menu {
       display: flex;
       animation: slideNavMenuIn 0.4s forwards;
       -webkit-animation: slideNavMenuIn 0.4s forwards;
     }
 
-    .home-layout .home-nav .home-nav-links.hide-menu {
+    .home-nav .home-nav-links.hide-menu {
       display: flex;
       animation: slideNavMenuOut 0.4s forwards;
       -webkit-animation: slideNavMenuOut 0.4s forwards;
     }
 
-    .home-layout .home-nav .home-nav-links ul {
+    .home-nav .home-nav-links ul {
       @apply relative flex-col w-full gap-[16px];
       top: auto;
       left: auto;
       transform: none;
     }
 
-    .home-layout .home-nav .home-nav-links ul li {
+    .home-nav .home-nav-links ul li {
       @apply w-full;
     }
 
-    .home-layout .home-nav .home-nav-links ul li a {
+    .home-nav .home-nav-links ul li a {
       @apply flex items-center text-gray-700 bg-white hover:bg-[#E8E8E8] px-[18px] py-[10px];
     }
 
-    .home-layout .home-nav .home-nav-links ul li a.active {
+    .home-nav .home-nav-links ul li a.active {
       @apply bg-primary-100 text-primary-500;
     }
 
-    .home-layout .home-nav .home-nav-links ul li a .icon {
+    .home-nav .home-nav-links ul li a .icon {
       @apply block me-[8px];
       fill: #465360;
     }
-    .home-layout .home-nav .home-nav-links ul li a.active .icon {
+    .home-nav .home-nav-links ul li a.active .icon {
       fill: #007aff;
     }
 
-    .home-layout .home-nav .home-nav-links .home-cta {
+    .home-nav .home-nav-links .home-cta {
       @apply flex-col items-start justify-center w-full gap-[16px];
       @apply pt-[24px] border-t border-gray-200;
     }
 
-    .home-layout .home-nav .home-nav-links .home-cta a {
+    .home-nav .home-nav-links .home-cta a {
       @apply flex-col items-start justify-center w-full prod-btn-base py-[10px];
     }
   }
 
-  .home-layout .hamburger-menu {
+  .home-nav .hamburger-menu {
     z-index: 3;
   }
 
-  .home-layout .hamburger-menu .menu-toggler {
+  .home-nav .hamburger-menu .menu-toggler {
     @apply flex flex-col items-center justify-center h-full cursor-pointer;
   }
 
-  .home-layout .hamburger-menu .menu-toggler .bar {
+  .home-nav .hamburger-menu .menu-toggler .bar {
     @apply block bg-white w-[20px] h-[3px] rounded-[2px];
     -webkit-transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
     transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
   }
 
-  .home-layout .hamburger-menu .menu-toggler.active .bar {
+  .home-nav .hamburger-menu .menu-toggler.active .bar {
     @apply bg-primary-50;
   }
 
-  .home-layout .hamburger-menu .menu-toggler .bar:nth-child(2) {
+  .home-nav .hamburger-menu .menu-toggler .bar:nth-child(2) {
     @apply mx-auto my-[4px];
   }
 
-  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(2) {
+  .home-nav .hamburger-menu .menu-toggler.active .bar:nth-child(2) {
     @apply w-0 opacity-0;
   }
 
-  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(1) {
+  .home-nav .hamburger-menu .menu-toggler.active .bar:nth-child(1) {
     transform: translateY(7px) rotate(-135deg);
   }
 
-  .home-layout .hamburger-menu .menu-toggler.active .bar:nth-child(3) {
+  .home-nav .hamburger-menu .menu-toggler.active .bar:nth-child(3) {
     transform: translateY(-7px) rotate(-225deg);
   }
 
