@@ -81,7 +81,10 @@ const ArticlePage = () => {
             </div>
             <div className="article-preview">
               <div className="article-image-wrapper">
-                <img src={previewImage} alt={articleImageCaption} />
+                <img
+                  src={"/assets/articles/preview/" + articleImage}
+                  alt={articleImageCaption}
+                />
               </div>
               <p className="article-caption">{articleImageCaption}</p>
             </div>
@@ -107,7 +110,7 @@ const ArticlePage = () => {
             <div className="article-gallery">
               {galleryImages.map(({ filename, caption }, i) => {
                 const imagePath =
-                  "/src/assets/images/articles/gallery/" + galleryFolder + "/";
+                  "/assets/articles/gallery/" + galleryFolder + "/";
                 return (
                   <div className="gallery-item" key={i}>
                     <div

@@ -33,7 +33,10 @@ const ArticleItem = ({ article }) => {
   return (
     <div className="article-item">
       <div className="article-image">
-        <img src={previewImage} alt={articleImageCaption} />
+        <img
+          src={"/assets/articles/preview/" + articleImage}
+          alt={articleImageCaption}
+        />
       </div>
       <div className="article-body">
         <p className="date">
