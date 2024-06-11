@@ -1,12 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
 import LogoAlt from "../assets/images/logo-alt.png";
 import WebLogo from "../assets/images/website-logo.svg";
 import WebLogoAlt from "../assets/images/website-logo-alt.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import Icon from "./Icon";
-const HomeNavbar = () => {
+const HomeNavbar = ({ background = "transparent" }) => {
+  const location = useLocation();
+
   const [isMenuActive, setIsMenuActive] = useState(false);
 
   const [menuAnimate, setMenuAnimate] = useState("");
@@ -22,12 +24,20 @@ const HomeNavbar = () => {
     }
   };
   return (
-    <nav className="home-nav h-[96px] mx-[20px] flex justify-between items-center">
+    <nav
+      className={
+        "home-nav h-[96px] mx-[20px] flex justify-between items-center background-" +
+        background
+      }
+    >
       <div className="flex justify-between items-center w-full max-w-[1326px] mx-auto">
         {/* LOGO */}
         <div className="flex">
           <Link to="/" className="logo-wrapper h-[44px] me-[16px]">
-            <img src={isMenuActive ? WebLogo : WebLogoAlt} alt="" />
+            <img
+              src={isMenuActive || background == "solid" ? WebLogo : WebLogoAlt}
+              alt=""
+            />
           </Link>
         </div>
 
@@ -35,7 +45,12 @@ const HomeNavbar = () => {
           {/* NAV LINKS */}
           <ul>
             <li>
-              <NavLink to="/" className="prod-btn-lg prod-btn-white">
+              <NavLink
+                to="/"
+                className={`prod-btn-lg ${
+                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
+                }`}
+              >
                 <Icon
                   iconName="Home"
                   height="20px"
@@ -46,7 +61,12 @@ const HomeNavbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/about-us" className="prod-btn-lg prod-btn-white">
+              <NavLink
+                to="/about-us"
+                className={`prod-btn-lg ${
+                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
+                }`}
+              >
                 <Icon
                   iconName="Information"
                   height="20px"
@@ -54,6 +74,22 @@ const HomeNavbar = () => {
                   className="icon"
                 />
                 <span>About Us</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/about-us2"
+                className={`prod-btn-lg ${
+                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
+                }`}
+              >
+                <Icon
+                  iconName="Information"
+                  height="20px"
+                  width="20px"
+                  className="icon"
+                />
+                <span>About Us2</span>
               </NavLink>
             </li>
           </ul>

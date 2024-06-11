@@ -37,6 +37,7 @@ import useDeviceDetect from "./hooks/useDeviceDetect";
 import AboutUs from "./pages/AboutUs";
 import Articles from "./pages/Articles";
 import ArticlePage from "./pages/ArticlePage";
+import AboutUs2 from "./pages/AboutUs2";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -82,6 +83,19 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | About Us" />
                   <AboutUs />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="about-us2"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | About Us" />
+                  <AboutUs2 />
                 </>
               ) : (
                 <Navigate to="/login" />

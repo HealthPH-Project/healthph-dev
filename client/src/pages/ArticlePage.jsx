@@ -1,19 +1,59 @@
 import { Link, useParams } from "react-router-dom";
-import HomeNavbar from "../components/HomeNavbar";
-import { useEffect } from "react";
-import HomeFooter from "../components/HomeFooter";
-import IMG from "../assets/images/about-bg.png";
+import { Fragment, useEffect, useState } from "react";
+import { format } from "date-fns";
+
 import Icon from "../components/Icon";
+import HomeNavbar from "../components/HomeNavbar";
+import HomeFooter from "../components/HomeFooter";
+
+import ArticlesList from "../assets/data/articles.json";
+
 const ArticlePage = () => {
   const { slug } = useParams();
+
+  const article = ArticlesList.find((a) => a.articleSlug == slug);
+
+  const {
+    articleTitle,
+    readDuration,
+    datePublished,
+    articlePreview,
+    articleImage,
+    articleImageCaption,
+    galleryFolder,
+    galleryImages,
+    articleBody,
+  } = article;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [previewImage, setPreviewImage] = useState(null);
+
+  useEffect(() => {
+    const fetchImagePreview = async () => {
+      try {
+        const response = await import(
+          /* @vite-ignore */
+          "../assets/images/articles/preview/" + articleImage
+        );
+        setPreviewImage(response.default.replace("/@fs", ""));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (articleImage) fetchImagePreview();
+  }, [articleImage]);
+
+  const [imageModalActive, setImageModalActive] = useState(false);
+
+  const [modalData, setModalData] = useState({ src: "", caption: "" });
+
   return (
     <div className="article-layout">
-      <HomeNavbar />
+      <HomeNavbar background="solid" />
       <section className="mt-[56px]">
         <div className="article-container">
           <div className="article-wrapper">
@@ -32,92 +72,57 @@ const ArticlePage = () => {
               </Link>
             </div>
             <div className="article-header">
-              <p className="article-title">
-                Your Window into Public Health Trends in the Philippines
-              </p>
+              <p className="article-title">{articleTitle}</p>
               <p className="article-content my-[24px]">
-                3 minutes • January 1, 2024
+                {readDuration} •{" "}
+                {format(new Date(datePublished), "MMMM dd, yyyy")}
               </p>
-              <p className="article-content">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Veniam, quia labore nisi a non facilis in magnam maiores
-                corrupti voluptatibus ullam? Eius velit beatae enim error id
-                aperiam eaque cum?
-              </p>
+              <p className="article-content">{articlePreview}</p>
             </div>
             <div className="article-preview">
               <div className="article-image-wrapper">
-                <img src={IMG} alt="" />
+                <img src={previewImage} alt={articleImageCaption} />
               </div>
-              <p className="article-caption">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptate, omnis?
-              </p>
+              <p className="article-caption">{articleImageCaption}</p>
             </div>
 
             <div className="article-body">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-                adipisci odit sapiente molestias voluptatum maiores
-                necessitatibus optio? Maxime quis voluptates iusto saepe animi
-                sed eum adipisci nisi pariatur, dolorem facilis dicta sunt
-                aliquam commodi quas incidunt, rem blanditiis debitis in natus
-                aspernatur dolorum ducimus. Velit iure, repellendus repudiandae
-                nulla nesciunt quia quasi exercitationem enim sit distinctio
-                architecto est porro id?
-                <br /> <br />
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque
-                distinctio sapiente voluptatum, ex fugit corporis aperiam
-                commodi. Omnis dolorem nisi ab explicabo, quae at soluta?
-                <br /> <br />
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Quibusdam nihil nostrum minus sapiente necessitatibus impedit
-                corrupti odit, quia maiores dolore veniam itaque eaque nemo
-                beatae ea, molestiae officiis. Repellendus nulla similique
-                ducimus ratione quaerat veritatis debitis, animi consequuntur,
-                ea ullam fugit omnis enim libero, deserunt mollitia! Sit beatae
-                id quam modi ratione, laborum qui esse ipsum nam perspiciatis
-                dolore iusto? Consequuntur, soluta laudantium. Voluptates
-                possimus dolores, dolor numquam similique odio aspernatur
-                delectus, ipsam excepturi iure blanditiis dicta praesentium
-                porro tempore quibusdam! Rerum est cumque blanditiis. Unde
-                asperiores assumenda ad expedita amet eum, veniam saepe
-                repudiandae. Saepe rem voluptate odio architecto? Pariatur dolor
-                magnam accusantium tenetur, reiciendis corrupti quia animi
-                laudantium quae natus culpa architecto porro autem. Eum
-                aspernatur eaque omnis similique reprehenderit quaerat ducimus
-                neque, odit, reiciendis impedit rerum nobis fugiat explicabo est
-                deserunt! Itaque cupiditate consequatur ex sunt odit? Distinctio
-                nisi ab deserunt cupiditate iusto? Dolorum veniam magni
-                perspiciatis adipisci tempora laborum, praesentium perferendis
-                omnis ad deserunt iusto quos reiciendis! Cupiditate voluptates
-                molestias excepturi, inventore veniam voluptatum quibusdam
-                praesentium sapiente odio ducimus omnis eius soluta libero
-                deserunt reiciendis laborum reprehenderit hic adipisci officia
-                sit. Accusamus nemo atque sunt vel maiores quae voluptate quo
-                temporibus? Temporibus debitis dolorum nisi corporis?
-                <br /> <br />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestias, ratione atque itaque mollitia placeat expedita
-                explicabo distinctio, sed suscipit tenetur, aspernatur vel
-                accusantium quas sapiente omnis ex modi. Suscipit ducimus nam ea
-                itaque nulla laudantium reprehenderit dolores a odio corrupti.
-                <br /> <br />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
-                quae deleniti quam repudiandae eos eveniet?
+                {articleBody.split("\n").map((v, i) => {
+                  const isLast = i == articleBody.split("\n") - 1;
+                  return (
+                    <Fragment key={i}>
+                      <span>{v}</span>
+                      {!isLast && (
+                        <>
+                          <br /> <br />
+                        </>
+                      )}
+                    </Fragment>
+                  );
+                })}
               </p>
             </div>
 
             <div className="article-gallery">
-              {Array.from({ length: 8 }).map((v, i) => {
+              {galleryImages.map(({ filename, caption }, i) => {
+                const imagePath =
+                  "/src/assets/images/articles/gallery/" + galleryFolder + "/";
                 return (
                   <div className="gallery-item" key={i}>
-                    <div className="image-wrapper">
-                      <img src={IMG} alt="" />
+                    <div
+                      className="image-wrapper"
+                      onClick={() => {
+                        setModalData({
+                          src: imagePath + filename,
+                          caption: caption,
+                        });
+                        setImageModalActive(true);
+                      }}
+                    >
+                      <img src={imagePath + filename} alt={caption} />
                     </div>
-                    <p className="article-caption">
-                      Lorem ipsum dolor sit amet.
-                    </p>
+                    <p className="article-caption">{caption}</p>
                   </div>
                 );
               })}
@@ -127,6 +132,38 @@ const ArticlePage = () => {
       </section>
 
       <HomeFooter />
+
+      {imageModalActive && (
+        <div className="image-modal">
+          <div
+            className="image-modal-backdrop"
+            onClick={() => {
+              setImageModalActive(false);
+              setModalData({ src: "", caption: "" });
+            }}
+          ></div>
+          <div className="image-modal-container">
+            <div className="image-wrapper">
+              <img src={modalData.src} alt={modalData.caption} />
+            </div>
+            <p className="image-caption">{modalData.caption}</p>
+            <div
+              className="close-icon"
+              onClick={() => {
+                setImageModalActive(false);
+                setModalData({ src: "", caption: "" });
+              }}
+            >
+              <Icon
+                iconName="Close"
+                height="24px"
+                width="24px"
+                className="icon"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

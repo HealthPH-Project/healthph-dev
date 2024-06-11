@@ -17,13 +17,18 @@
     @apply relative flex-shrink-0;
   }
 
+  .home-nav.background-solid {
+    @apply bg-white border-b-[2px] border-[#E5E5E5] px-[20px] m-0;
+    z-index: 11;
+  }
+
   .home-nav .logo-wrapper {
     z-index: 3;
   }
 
-  .home-nav .logo-wrapper img{
+  .home-nav .logo-wrapper img {
     height: 100%;
-    object-fit: contain
+    object-fit: contain;
   }
 
   .home-nav ul {
@@ -36,7 +41,7 @@
   .home-nav .home-nav-links {
     /* position: relative; */
   }
-  .home-nav .home-nav-links ul li  {
+  .home-nav .home-nav-links ul li {
     @apply flex-shrink-0;
   }
   .home-nav .home-nav-links ul li a .icon {
@@ -167,11 +172,10 @@
     @apply flex justify-between;
   }
 
-  .home-layout footer .footer-logo img{
+  .home-layout footer .footer-logo img {
     height: 100%;
-    object-fit: contain
+    object-fit: contain;
   }
-
 
   @media screen and (max-width: 1200px) {
     .home-layout main .art {
@@ -228,7 +232,6 @@
       background-position: center;
     }
   }
-
 
   @media screen and (max-width: 350px) {
     .home-layout main .art {

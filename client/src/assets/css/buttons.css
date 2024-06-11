@@ -127,16 +127,20 @@
   }
 
   .prod-btn-white.active {
-    @apply text-white
+    @apply text-white;
   }
 
   /* GHOST */
   .prod-btn-ghost {
-    @apply bg-transparent text-gray-700 hover:text-gray-900 active:text-gray-700 disabled:text-gray-400;
+    @apply bg-transparent text-gray-500 hover:text-gray-700 disabled:text-gray-400;
   }
 
   .prod-btn-ghost:active {
     box-shadow: 0px 0px 0px 4px rgba(0, 122, 255, 0.4),
       0px 0px 0px 1px rgba(70, 83, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .prod-btn-ghost.active {
+    @apply text-gray-900;
   }
 }
