@@ -82,14 +82,14 @@ function App() {
               !isPWA ? (
                 <>
                   <HelmetTitle title="HealthPH | About Us" />
-                  <AboutUs />
+                  <AboutUs2 />
                 </>
               ) : (
                 <Navigate to="/login" />
               )
             }
           ></Route>
-          <Route
+          {/* <Route
             path="about-us2"
             element={
               !isPWA ? (
@@ -101,7 +101,7 @@ function App() {
                 <Navigate to="/login" />
               )
             }
-          ></Route>
+          ></Route> */}
           <Route
             path="articles"
             element={

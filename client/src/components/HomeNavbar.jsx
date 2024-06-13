@@ -76,7 +76,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
                 <span>About Us</span>
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink
                 to="/about-us2"
                 className={`prod-btn-lg ${
@@ -91,7 +91,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
                 />
                 <span>About Us2</span>
               </NavLink>
-            </li>
+            </li> */}
           </ul>
 
           {/* CTA*/}
