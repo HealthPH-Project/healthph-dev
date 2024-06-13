@@ -7,6 +7,7 @@ import Logo from "../assets/images/logo.png";
 
 import ArticlesList from "../assets/data/articles.json";
 import ArticleItem from "../components/about-us/ArticleItem";
+import Testimonials from "../components/about-us/Testimonials";
 
 const AboutUs2 = () => {
   const features = [
@@ -187,61 +188,7 @@ const AboutUs2 = () => {
         <div className="about-container">
           <div className="w-full max-w-[1144px]">
             <p className="section-title">Research Team</p>
-            <div className="testimonials">
-              {getTestimonials().map(({ name, position, text }, i) => {
-                return (
-                  <div className="testimonial-item" key={i}>
-                    <div className="testimonial-header">
-                      <div className="details">
-                        <p className="testimonial-name">{name}</p>
-                        <p className="testimonial-position">{position}</p>
-                      </div>
-                      <div className="testimonial-image">
-                        <img src={IMG} alt="" />
-                      </div>
-                    </div>
-                    <p className="testimonial-text">{text}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="w-full flex justify-end">
-              <button
-                className="prod-btn-lg prod-btn-secondary flex items-center justify-center me-[20px] h-[48px]"
-                disabled={!(testimonialPage > 1)}
-                onClick={() => {
-                  if (testimonialPage > 1) {
-                    setTestimonialPage(
-                      (testimonialPage) => testimonialPage - 1
-                    );
-                  }
-                }}
-              >
-                <Icon
-                  iconName="ArrowLeft"
-                  height="24px"
-                  width="24px"
-                  fill="#8693A0"
-                />
-              </button>
-              <button
-                className="prod-btn-lg prod-btn-secondary flex items-center justify-center h-[48px]"
-                disabled={!(testimonialPage < testimonials.length / 2)}
-                onClick={() => {
-                  if (testimonialPage < testimonials.length / 2)
-                    setTestimonialPage(
-                      (testimonialPage) => testimonialPage + 1
-                    );
-                }}
-              >
-                <Icon
-                  iconName="ArrowRight"
-                  height="24px"
-                  width="24px"
-                  fill="#8693A0"
-                />
-              </button>
-            </div>
+            <Testimonials />
           </div>
         </div>
       </section>

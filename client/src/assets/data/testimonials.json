@@ -1,0 +1,45 @@
+[
+    {
+        "name": "Dr. Mideth Abisado",
+        "position": "Project Lead",
+        "testimonial": "Our mission with HealthPH is to weave advanced technology into the fabric of our public health system, ensuring the well-being of every Filipino and preserving the legacy of our diverse languages.",
+        "image": "mideth-abisado.png"
+    },
+    {
+        "name": "Joseph Marvin Imperial",
+        "position": "Project Staff II",
+        "testimonial": "I envision HealthPH to be one of the first initiatives for open research where artifacts, findings, code, data, and resources are openly available to the public and adjacent research communities for consumption, dissemination, and advancement of scientific progress in Health x AI.",
+        "image": "joseph-marvin-imperial.png"
+    },
+    {
+        "name": "Bernie Fabito",
+        "position": "Project Staff II",
+        "testimonial": "HealthPH in the near future will leverage the way we listen and pinpoint emerging diseases through social media.",
+        "image": "bernie-fabito.jpg"
+    },
+    {
+        "name": "Mico Magtira",
+        "position": "Project Technical Specialist I",
+        "testimonial": "HealthPH is a game-changer for suspected symptoms surveillance, providing real-time analysis and multilingual support that helps us respond swiftly to potential health threats.",
+        "image": "mico-magtira.png"
+    },
+    {
+        "name": "Aiken Joaquin Gunay",
+        "position": "Project Technical Specialist I",
+        "testimonial": "There is not a single surveillance system that can monitor more than 2 symptoms unlike HealthPH that monitors 4 suspected symptoms in all 17 administrative regions and provides analytical data on each of them. LGU members will deeply benefit utlizing the system to protect Filipinos.",
+        "image": "aiken-joaquin-gunay.png"
+    },
+    {
+        "name": "John Carlo Jimenez",
+        "position": "Project Technical Assistant VI",
+        "testimonial": "HealthPH combines technology and public health surveillance into a useful tool that will aid health professionals across the country to make informed decisions regarding possible and arising respiratory diseases.",
+        "image": "john-carlo-jimenez.png"
+    },
+    {
+        "name": "Jean Malolos",
+        "position": "Project Technical Assistant VI",
+        "testimonial": "The HealthPH website offers a compelling visual representation of social media surveillance efforts in the Philippines.",
+        "image": "jean-malolos.jpg"
+    }
+
+]
