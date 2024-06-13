@@ -267,6 +267,15 @@ const UploadDataset = () => {
     setFile(null);
   };
 
+  const [previewModalActive, setPreviewModalActive] = useState(false);
+
+  const [previewModalData, setPreviewModalData] = useState({
+    filename: "",
+    num_of_rows: 0,
+    preview_headers: [],
+    preview_data: [],
+  });
+
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
@@ -363,7 +372,7 @@ const UploadDataset = () => {
                 setDatatableData={setRows}
                 rowsPerPage={10}
                 withActions={true}
-                actionsWidth="190px"
+                actionsWidth="260px"
               >
                 {datasets.length > 0 ? (
                   rows.map(
@@ -374,6 +383,9 @@ const UploadDataset = () => {
                         filename,
                         original_filename,
                         file_size,
+                        num_of_rows,
+                        preview_data,
+                        preview_headers,
                         created_at,
                       },
                       i
@@ -397,6 +409,20 @@ const UploadDataset = () => {
                           </div>
                           <div className="row-item">
                             <div className="flex items-center">
+                              <button
+                                className="prod-push-btn-sm prod-btn-primary me-[8px] min-w-[70px]"
+                                onClick={() => {
+                                  setPreviewModalData({
+                                    filename: original_filename,
+                                    num_of_rows: num_of_rows,
+                                    preview_headers: preview_headers,
+                                    preview_data: JSON.parse(preview_data),
+                                  });
+                                  setPreviewModalActive(true);
+                                }}
+                              >
+                                Preview
+                              </button>
                               <a
                                 href={download_link}
                                 target="_blank"
@@ -530,6 +556,87 @@ const UploadDataset = () => {
                 disabled={isUploadLoading}
               >
                 {isUploadLoading ? "Uploading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {previewModalActive && (
+        <div className="upload-modal">
+          <div className="modal-backdrop"></div>
+          <div className="modal-container">
+            <div className="modal-body">
+              <div className="modal-heading">Dataset Preview</div>
+            </div>
+            <div className="modal-data">
+              <p className="mb-[8px]">
+                Filename: <span>{previewModalData.filename}</span>
+              </p>
+              <p>
+                Number of Rows: <span>{previewModalData.num_of_rows}</span>
+              </p>
+              <div
+                className="preview-wrapper"
+                style={{
+                  "--preview-cols":
+                    previewModalData.preview_headers.length > 3
+                      ? 3
+                      : previewModalData.preview_headers.length,
+                }}
+              >
+                <div className="preview-row row-header">
+                  {previewModalData.preview_headers
+                    .slice(
+                      0,
+                      previewModalData.preview_headers.length > 3
+                        ? 3
+                        : previewModalData.preview_headers.length
+                    )
+                    .map((v, i) => {
+                      return (
+                        <div className="row-item" key={i}>
+                          {v}
+                        </div>
+                      );
+                    })}
+                </div>
+                {previewModalData.preview_data.map((v, i) => {
+                  return (
+                    <div className="preview-row pt-[8px]" key={i}>
+                      {Object.keys(v)
+                        .slice(
+                          0,
+                          previewModalData.preview_headers.length > 3
+                            ? 3
+                            : previewModalData.preview_headers.length
+                        )
+                        .map((x, j) => {
+                          return (
+                            <div className="row-item" key={j}>
+                              {v[x]}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="modal-actions">
+              <button
+                className="prod-btn-base prod-btn-secondary me-0 sm:me-[16px]"
+                onClick={() => {
+                  setPreviewModalActive(false);
+                  setPreviewModalData({
+                    filename: "",
+                    num_of_rows: 0,
+                    preview_headers: [],
+                    preview_data: [],
+                  });
+                }}
+              >
+                Close
               </button>
             </div>
           </div>

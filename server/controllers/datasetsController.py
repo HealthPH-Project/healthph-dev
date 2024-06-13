@@ -1,8 +1,12 @@
 from datetime import datetime
+import json
 import os
 from pathlib import Path
+import shutil
+from numpy import full
 import pymongo
 from typing_extensions import Annotated
+import pandas as pd
 
 from bson import ObjectId
 from fastapi import Depends, HTTPException, UploadFile, status
@@ -76,9 +80,17 @@ async def upload_dataset(
     full_path = datasets_folder / filename
 
     contents = await file.read()
-
+    
     with open(full_path, "wb") as f:
         f.write(contents)
+        
+    num_of_rows = len(pd.read_csv(full_path))    
+    
+    csv_headers = list(pd.read_csv((full_path), nrows=3, usecols=range(3)).columns)
+    
+    preview_headers = "+".join(csv_headers)
+    
+    preview_data = pd.read_csv((full_path), nrows=3, usecols=range(3)).to_json(orient='records')
 
     to_encode.update(
         {
@@ -86,6 +98,9 @@ async def upload_dataset(
             "filename": filename,
             "original_filename": original_filename,
             "file_size": file_size,
+            "num_of_rows": num_of_rows,
+            "preview_headers": str(preview_headers),
+            "preview_data": json.dumps(preview_data),
             "created_at": datetime.now(),
         }
     )
@@ -205,4 +220,30 @@ async def delete_dataset(id: str):
             "message": "Dataset deleted successfully",
             "user": individual_dataset(deleted_dataset),
         },
+    )
+
+"""
+@desc     Delete all datasets
+route     DELETE api/datasets/all-datasets
+@access   Private
+"""
+
+
+async def delete_all_datasets():
+    deleted = dataset_collection.delete_many({})
+
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error deleting datasets...",
+        )
+
+    if os.path.exists(datasets_folder):
+        shutil.rmtree("public/datasets")
+        
+        os.makedirs(datasets_folder, exist_ok=True)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": "All datasets deleted successfully"},
     )

@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from controllers.datasetsController import (
+    delete_all_datasets,
     delete_dataset,
     upload_dataset,
     download_dataset,
@@ -14,4 +15,7 @@ router.add_api_route("/download/{filename}", methods=["GET"], endpoint=download_
 
 router.add_api_route("/", methods=["GET"], endpoint=fetch_datasets)
 
+router.add_api_route("/all-datasets", methods=["DELETE"], endpoint=delete_all_datasets)
+
 router.add_api_route("/{id}", methods=["DELETE"], endpoint=delete_dataset)
+

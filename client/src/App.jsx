@@ -20,8 +20,6 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Analytics from "./pages/admin/Analytics";
 import TrendsMap from "./pages/admin/TrendsMap";
 import UploadDataset from "./pages/admin/UploadDataset";
-import TrendsMap2 from "./pages/admin/TrendsMap2";
-import TrendsMap3 from "./pages/admin/TrendsMap3";
 import UserManagement from "./pages/admin/UserManagement";
 import AddUser from "./pages/admin/AddUser";
 import Help from "./pages/admin/Help";
@@ -191,8 +189,6 @@ function App() {
                 )
               }
             />
-            <Route path="trends-map2" element={<TrendsMap2 />} />
-            <Route path="trends-map3" element={<TrendsMap3 />} />
             {!isPWA && (
               <Route
                 path="user-management"
