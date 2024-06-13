@@ -354,7 +354,7 @@ const TrendsMap = () => {
           }}
           onConfirmLabel="Agree & Continue"
           heading="The data you'll see isn't diagnostic."
-          content="The data are based on suspected symptoms collected from social media and surveys, not verified by healthcare professionals that tested these areas affected."
+          content="The data are based on suspected symptoms collected from social media, not verified by healthcare professionals that tested these areas affected."
           color="primary"
         />
       )}
