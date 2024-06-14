@@ -10,13 +10,9 @@ const Home = () => {
       <main className="flex-grow pb-[96px] flex justify-center items-center">
         <div className="header">
           <p className="heading">
-            Protecting Filipinos, One Disease at a time.
+            HealthPH: Intelligent Disease Surveillance using Social Media
           </p>
-          <p className="subheading">
-            HealthPH monitors social media to track suspected symptoms of
-            Pulmonary Tuberculosis, Pneumonia, COVID, Acute Upper Respiratory
-            Infection (AURI) across all 17 regions.
-          </p>
+          <p className="subheading">The Philippines' Pulse on Health</p>
           {/* <Link
             to="assets/healthph-pre-alpha.apk"
             target="_blank"
