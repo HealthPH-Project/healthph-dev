@@ -31,21 +31,21 @@ const ArticlePage = () => {
 
   const [previewImage, setPreviewImage] = useState(null);
 
-  useEffect(() => {
-    const fetchImagePreview = async () => {
-      try {
-        const response = await import(
-          /* @vite-ignore */
-          "../assets/images/articles/preview/" + articleImage
-        );
-        setPreviewImage(response.default.replace("/@fs", ""));
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchImagePreview = async () => {
+  //     try {
+  //       const response = await import(
+  //         /* @vite-ignore */
+  //         "../assets/images/articles/preview/" + articleImage
+  //       );
+  //       setPreviewImage(response.default.replace("/@fs", ""));
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
 
-    if (articleImage) fetchImagePreview();
-  }, [articleImage]);
+  //   if (articleImage) fetchImagePreview();
+  // }, [articleImage]);
 
   const [imageModalActive, setImageModalActive] = useState(false);
 

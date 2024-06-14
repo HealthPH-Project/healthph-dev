@@ -73,7 +73,7 @@ const Map = ({ filters, data, mapCenter }) => {
   return (
     <>
       {/* MAP CONTAINER */}
-      <div className="map-container">
+      <div className="map-container" id="trends-map-container">
         <div className="map-header">
           <div className="attribution-controls hidden xs:block">
             <div

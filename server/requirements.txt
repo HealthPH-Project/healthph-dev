@@ -13,3 +13,5 @@ jinja2
 pandas
 wordcloud
 nltk
+headless-chrome
+playwright
