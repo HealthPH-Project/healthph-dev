@@ -13,9 +13,9 @@ const Home = () => {
             Protecting Filipinos, One Disease at a time.
           </p>
           <p className="subheading">
-            Begin disease surveillance across the Philippines instantly.
-            Completely free, intelligent risk monitoring, for all 17
-            administrative regions.
+            HealthPH monitors social media to track suspected symptoms of
+            Pulmonary Tuberculosis, Pneumonia, COVID, Acute Upper Respiratory
+            Infection (AURI) across all 17 regions.
           </p>
           {/* <Link
             to="assets/healthph-pre-alpha.apk"

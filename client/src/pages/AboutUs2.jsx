@@ -118,10 +118,10 @@ const AboutUs2 = () => {
       <section className="hero">
         <div className="w-full flex flex-col justify-center items-center px-[16px] pb-[112px] hero-wrapper">
           <HomeNavbar />
-          <p className="heading mt-[56px]">
+          {/* <p className="heading mt-[56px]">
             Your Window into Public Health Trends in the Philippines
-          </p>
-          <p className="subheading">
+          </p> */}
+          <p className="subheading  mt-[56px]">
             HealthPH monitors social media to track suspected symptoms of
             Pulmonary Tuberculosis, Pneumonia, COVID, Acute Upper Respiratory
             Infection (AURI) across all 17 regions.
