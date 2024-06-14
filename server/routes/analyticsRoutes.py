@@ -23,13 +23,15 @@ import time
 from selenium import webdriver
 import base64
 import os
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 def generate_map_image(url):
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')  # Disable GPU for efficiency
 
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
     
     driver.set_window_size(1400, 1700)
     driver.get(url)
