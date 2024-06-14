@@ -23,7 +23,6 @@ import DummyData from "../../assets/data/dummy_data_v3.json";
 import useDeviceDetect from "../../hooks/useDeviceDetect";
 import { useReactToPrint } from "react-to-print";
 import PrintTrendsMap from "../../components/admin/PrintTrendsMap";
-import html2canvas from "html2canvas";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);

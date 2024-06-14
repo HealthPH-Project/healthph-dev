@@ -1,4 +1,3 @@
-import { toJpeg, toPng, toSvg } from "dom-to-image-more";
 import { forwardRef, useEffect, useState } from "react";
 
 const PrintTrendsMap = forwardRef(({ mapImage, dateTable }, ref) => {
