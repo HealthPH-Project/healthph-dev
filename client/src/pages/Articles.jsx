@@ -38,7 +38,7 @@ const Articles = () => {
       <section className="mt-[56px]">
         <div className="about-container mb-[112px]">
           <div className="w-full max-w-[1144px]">
-            <div className="flex justify-start items-center mb-[24px]">
+            {/* <div className="flex justify-start items-center mb-[24px]">
               <Link
                 to="/about-us"
                 className="prod-btn-lg prod-btn-secondary flex items-center"
@@ -51,7 +51,7 @@ const Articles = () => {
                 />
                 <span className="ms-[8px]">Go Back</span>
               </Link>
-            </div>
+            </div> */}
             <p className="section-title">Articles</p>
             <div className="articles">
               {getArticles().map((a, i) => {

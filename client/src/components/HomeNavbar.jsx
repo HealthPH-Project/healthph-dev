@@ -6,6 +6,9 @@ import WebLogoAlt from "../assets/images/website-logo-alt.svg";
 import { useEffect, useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import Icon from "./Icon";
+
+import NULogo from "../assets/images/nu-logo.png";
+
 const HomeNavbar = ({ background = "transparent" }) => {
   const location = useLocation();
 
@@ -45,12 +48,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
           {/* NAV LINKS */}
           <ul>
             <li>
-              <NavLink
-                to="/"
-                className={`prod-btn-lg ${
-                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
-                }`}
-              >
+              <NavLink to="/">
                 <Icon
                   iconName="Home"
                   height="20px"
@@ -61,19 +59,36 @@ const HomeNavbar = ({ background = "transparent" }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/about-us"
-                className={`prod-btn-lg ${
-                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
-                }`}
-              >
+              <NavLink to="/about-us">
                 <Icon
                   iconName="Information"
                   height="20px"
                   width="20px"
                   className="icon"
                 />
-                <span>About Us</span>
+                <span>About The Project</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/articles">
+                <Icon
+                  iconName="Document"
+                  height="20px"
+                  width="20px"
+                  className="icon"
+                />
+                <span>Articles</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/research-team">
+                <Icon
+                  iconName="UserThree"
+                  height="20px"
+                  width="20px"
+                  className="icon"
+                />
+                <span>Research Team</span>
               </NavLink>
             </li>
             {/* <li>
@@ -94,15 +109,25 @@ const HomeNavbar = ({ background = "transparent" }) => {
             </li> */}
           </ul>
 
+          <div className="flex justify-center items-center">
+            <div className="w-[44px] h-full">
+              <img
+                src={NULogo}
+                alt="national-university"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+
           {/* CTA*/}
-          <div className="home-cta flex justify-center items-center">
-            {/* <Link
+          {/* <div className="home-cta flex justify-center items-center"> */}
+          {/* <Link
               to="/login"
               className="prod-btn-lg prod-btn-primary me-[16px]"
             >
               Sign In
             </Link> */}
-            <Link
+          {/* <Link
               to="assets/healthph-pre-alpha.apk"
               target="_blank"
               className="prod-btn-lg prod-btn-secondary flex justify-center items-center"
@@ -115,12 +140,12 @@ const HomeNavbar = ({ background = "transparent" }) => {
                 fill="#8693A0"
                 className="icon ms-[8px]"
               />
-            </Link>
+            </Link> */}
 
-            {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
+          {/* <Link to="/register" className="prod-btn-lg prod-btn-secondary">
             Join HealthPH
           </Link> */}
-          </div>
+          {/* </div> */}
         </div>
 
         <HamburgerMenu

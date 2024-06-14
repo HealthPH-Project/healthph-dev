@@ -4,7 +4,7 @@
 
 @layer components {
   .home-layout {
-    background: url("../images/home-bg.png");
+    background: url("../images/home-bg-ph.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
@@ -45,7 +45,24 @@
     @apply hidden;
   }
 
-  @media screen and (max-width: 768px) {
+  .home-nav .home-nav-links ul li a {
+    @apply prod-btn-lg prod-btn-white;
+  }
+
+  .home-nav.background-solid .home-nav-links ul li a {
+    /* @apply prod-btn-lg prod-btn-ghost; */
+    @apply prod-b2 rounded-[6px] text-center text-gray-700 font-medium py-[6px] px-[12px] me-[4px];
+  }
+
+  .home-nav.background-solid .home-nav-links ul li a:hover:not(.active) {
+    @apply text-gray-900 bg-[#E8E8E8];
+  }
+
+  .home-nav.background-solid .home-nav-links ul li a.active {
+    @apply text-primary-500 bg-primary-100;
+  }
+
+  @media screen and (max-width: 800px) {
     .home-nav .home-nav-links {
       @apply fixed top-0 left-0 max-w-[300px] w-full h-screen bg-white pt-[120px] pb-[24px] px-[16px];
       @apply flex flex-col justify-between items-center;
@@ -117,6 +134,10 @@
     @apply block bg-white w-[20px] h-[3px] rounded-[2px];
     -webkit-transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
     transition: all 0.3s cubic-bezier(0.3, 0.8, 0.5, 1.2);
+  }
+
+  .home-nav.background-solid .hamburger-menu .menu-toggler .bar {
+    @apply bg-gray-500;
   }
 
   .home-nav .hamburger-menu .menu-toggler.active .bar {

@@ -48,7 +48,7 @@ const Testimonials = () => {
     },
   ];
 
-  testimonials = TestimonialsList;
+  testimonials = TestimonialsList["research-team"];
 
   const [testimonialPage, setTestimonialPage] = useState(1);
 

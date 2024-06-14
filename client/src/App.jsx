@@ -37,6 +37,7 @@ import AboutUs from "./pages/AboutUs";
 import Articles from "./pages/Articles";
 import ArticlePage from "./pages/ArticlePage";
 import AboutUs2 from "./pages/AboutUs2";
+import ResearchTeam from "./pages/ResearchTeam";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -121,6 +122,19 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | Article Page" />
                   <ArticlePage />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="research-team"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | Research Team" />
+                  <ResearchTeam />
                 </>
               ) : (
                 <Navigate to="/login" />

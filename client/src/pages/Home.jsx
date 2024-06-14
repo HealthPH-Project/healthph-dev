@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="home-layout">
       <HomeNavbar />
-      <main className="flex-grow">
+      <main className="flex-grow pb-[96px] flex justify-center items-center">
         <div className="header">
           <p className="heading">
             Protecting Filipinos, One Disease at a time.
@@ -33,7 +33,7 @@ const Home = () => {
           </Link> */}
         </div>
 
-        <div className="art"></div>
+        {/* <div className="art"></div> */}
       </main>
 
       {/* <footer className="flex-col sm:flex-row items-start sm:items-center">
