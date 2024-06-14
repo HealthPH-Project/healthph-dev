@@ -249,19 +249,28 @@ const TrendsMap = () => {
   const handlePrintTrendsMap = async () => {
     // setPrintData({ printCenter: [10, 122], printZoom: 7 });
 
-    var node = document.getElementsByClassName("leaflet-container")[0];
-    try {
-      const dataUrl = await toPng(node, {
-        height: node.clientHeight,
-        width: node.clientWidth,
-        filter: filter,
-        quality: 1,
-      });
-      setMapImage(dataUrl);
-    } catch (error) {
-      console.error("Error converting component to PNG:", error);
-    }
+    // var node = document.getElementsByClassName("leaflet-container")[0];
+    // try {
+    //   const dataUrl = await toPng(node, {
+    //     height: node.clientHeight,
+    //     width: node.clientWidth,
+    //     filter: filter,
+    //     quality: 1,
+    //   });
+    //   setMapImage(dataUrl);
+    // } catch (error) {
+    //   console.error("Error converting component to PNG:", error);
+    // }
 
+    console.log("aaa");
+    const response = await fetch(
+      import.meta.env.VITE_API_URL + "/fetch-full-map"
+    );
+
+    const data = await response.json();
+    console.log(data);
+
+    setMapImage(`data:image/png;base64,${data.message}`);
     setTimeout(handlePrint, 500);
   };
 

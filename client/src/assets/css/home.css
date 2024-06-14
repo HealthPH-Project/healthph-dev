@@ -46,16 +46,24 @@
   }
 
   .home-nav .home-nav-links ul li a {
-    @apply prod-btn-lg prod-btn-white;
+    @apply prod-b1 text-primary-50 px-[18px] py-[10px] rounded-[8px];
+  }
+
+  .home-nav .home-nav-links ul li a:hover:not(.active) {
+    background-color: rgba(247, 249, 252, 0.2);
+  }
+
+  .home-nav .home-nav-links ul li a.active {
+    @apply text-white;
+    background-color: rgba(247, 249, 252, 0.2);
   }
 
   .home-nav.background-solid .home-nav-links ul li a {
-    /* @apply prod-btn-lg prod-btn-ghost; */
-    @apply prod-b2 rounded-[6px] text-center text-gray-700 font-medium py-[6px] px-[12px] me-[4px];
+    @apply prod-b1 text-gray-900 px-[18px] py-[10px] rounded-[8px];
   }
 
   .home-nav.background-solid .home-nav-links ul li a:hover:not(.active) {
-    @apply text-gray-900 bg-[#E8E8E8];
+    background-color: rgba(247, 249, 252, 0.2);
   }
 
   .home-nav.background-solid .home-nav-links ul li a.active {

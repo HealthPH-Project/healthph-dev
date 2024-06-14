@@ -38,6 +38,7 @@ import Articles from "./pages/Articles";
 import ArticlePage from "./pages/ArticlePage";
 import AboutUs2 from "./pages/AboutUs2";
 import ResearchTeam from "./pages/ResearchTeam";
+import FullMap from "./pages/admin/FullMap";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -139,6 +140,15 @@ function App() {
               ) : (
                 <Navigate to="/login" />
               )
+            }
+          ></Route>
+          <Route
+            path="full-map"
+            element={
+              <>
+                <HelmetTitle title="HealthPH | Map" />
+                <FullMap />
+              </>
             }
           ></Route>
           <Route element={<AuthLayout />}>
