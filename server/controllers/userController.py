@@ -446,7 +446,6 @@ async def fetch_admins():
     return admins
 
 
-
 """
 @desc     Create a user, admin, or superadmin
 route     POST api/users
@@ -471,6 +470,7 @@ async def create_user(
     if (
         not user.user_type
         or not user.region
+        or not user.accessible_regions
         or not user.organization
         or not user.first_name
         or not user.last_name
@@ -482,6 +482,14 @@ async def create_user(
 
         if not user.region:
             errors.append({"field": "region", "error": "Must choose region"})
+            
+        if not user.accessible_regions:
+            errors.append(
+                {
+                    "field": "accessible_regions",
+                    "error": "Must choose at least one accessible region",
+                }
+            )
 
         if not user.organization:
             errors.append({"field": "organization", "error": "Must enter organization"})
@@ -751,7 +759,9 @@ route     PUT api/users/disable/{id}
 
 
 async def set_disable_status(
-    id: str, data: DisableUserRequest, is_admin: Annotated[AdminResult, Depends(require_admin)]
+    id: str,
+    data: DisableUserRequest,
+    is_admin: Annotated[AdminResult, Depends(require_admin)],
 ):
     # Check if user is an admin or superadmin
     if not is_admin.result:

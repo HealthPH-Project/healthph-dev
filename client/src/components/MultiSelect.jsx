@@ -4,15 +4,20 @@ import Icon from "./Icon";
 const MultiSelect = ({
   placeHolder,
   options,
-  defaultValue,
+  defaultValue = [],
   onChange,
   selectAllLabel,
   selectAll,
+  showSelectAll = true,
   additionalClassname,
   menuClassname,
   menuPlacement,
   editable = true,
+  selectable = true,
+  state,
 }) => {
+  const inputState = state ? "input-" + state : "";
+
   // State variables using React hooks
   const [showMenu, setShowMenu] = useState(false); // Controls the visibility of the dropdown menu
   const [selectedValue, setSelectedValue] = useState(selectAll ? options : []); // Stores the selected value(s)
@@ -20,10 +25,14 @@ const MultiSelect = ({
   const menuRef = useRef(); // Reference to the custom select dropdown menu
 
   useEffect(() => {
-    if (defaultValue) {
-      const selected = options.find((o) => o.value == defaultValue);
-      setSelectedValue([selected]);
-      onChange([selected]);
+    setSelectedValue(selectAll ? options : []);
+  }, [selectAll]);
+
+  useEffect(() => {
+    if (defaultValue.length != 0) {
+      const selected = options.filter((o) => defaultValue.includes(o.value));
+      setSelectedValue(selected);
+      onChange(selected);
     }
   }, []);
 
@@ -81,6 +90,7 @@ const MultiSelect = ({
   };
 
   const onItemClick = (option) => {
+    if (!option) return;
     let newValue;
     if (selectedValue.findIndex((o) => o.value === option.value) >= 0) {
       newValue = removeOption(option);
@@ -99,11 +109,11 @@ const MultiSelect = ({
     <div
       className={`multiselect-dropdown-container ${additionalClassname} ${
         editable ? "" : "read-only"
-      }`}
+      } ${inputState}`}
       tabIndex={0}
       ref={inputRef}
     >
-      <div className="dropdown-input">
+      <div className={`dropdown-input`}>
         <div className={`dropdown-selected-value `}>{getDisplay()}</div>
         {editable && (
           <div className="dropdown-tools">
@@ -122,53 +132,84 @@ const MultiSelect = ({
       </div>
 
       {showMenu && (
-        <div className={`dropdown-menu ${menuClassname}`} ref={menuRef}>
+        <div
+          className={`dropdown-menu ${menuClassname} ${
+            selectable ? "" : "cursor-default"
+          }`}
+          ref={menuRef}
+        >
           {/* SELECT ALL / INDETERMINATE */}
-          <div className="select-all">
-            <div
-              className={`dropdown-item ${
-                selectedValue.length > 0 ? "selected" : ""
-              }`}
-              onClick={() => {
-                setSelectedValue(selectedValue.length == 0 ? options : []);
-                onChange(selectedValue.length == 0 ? options : []);
-              }}
-            >
-              <div className="dropdown-check-wrapper">
-                {selectedValue.length > 0 && (
-                  <Icon
-                    iconName={
-                      selectedValue.length == options.length
-                        ? "Check"
-                        : "IndeterminateCheck"
-                    }
-                    height="20px"
-                    width="20px"
-                    fill="#FFF"
-                  />
-                )}
+          {selectable && showSelectAll && (
+            <div className="select-all">
+              <div
+                className={`dropdown-item ${
+                  selectedValue.length > 0 ? "selected" : ""
+                }`}
+                onClick={() => {
+                  setSelectedValue(selectedValue.length == 0 ? options : []);
+                  onChange(selectedValue.length == 0 ? options : []);
+                }}
+              >
+                <div className="dropdown-check-wrapper">
+                  {selectedValue.length > 0 && (
+                    <Icon
+                      iconName={
+                        selectedValue.length == options.length
+                          ? "Check"
+                          : "IndeterminateCheck"
+                      }
+                      height="20px"
+                      width="20px"
+                      fill="#FFF"
+                    />
+                  )}
+                </div>
+                <span>{selectAllLabel}</span>
               </div>
-              <span>{selectAllLabel}</span>
             </div>
-          </div>
+          )}
 
           {/* OPTIONS */}
-          {options.map((option) => (
-            <div
-              className={`dropdown-item ${isSelected(option) && "selected"}`}
-              key={option.value}
-              id={option.value}
-              onClick={() => onItemClick(option)}
-            >
-              <div className="dropdown-check-wrapper">
-                <Icon iconName="Check" height="20px" width="20px" fill="#FFF" />
-              </div>
-              <span>{option.label}</span>
-            </div>
-          ))}
+          {selectable
+            ? options.map((option) => (
+                <div
+                  className={`dropdown-item ${
+                    isSelected(option) && "selected"
+                  }`}
+                  key={option.value}
+                  id={option.value}
+                  onClick={() => onItemClick(option)}
+                >
+                  <div className="dropdown-check-wrapper">
+                    <Icon
+                      iconName="Check"
+                      height="20px"
+                      width="20px"
+                      fill="#FFF"
+                    />
+                  </div>
+                  <span>{option.label}</span>
+                </div>
+              ))
+            : options.map(
+                (option) =>
+                  defaultValue.includes(option.value) && (
+                    <div
+                      className={`dropdown-item ${
+                        isSelected(option) && "selected"
+                      } !cursor-default`}
+                      key={option.value}
+                      id={option.value}
+                      onClick={null}
+                    >
+                      <span>{option.label}</span>
+                    </div>
+                  )
+              )}
         </div>
       )}
     </div>
   );
 };
+
 export default MultiSelect;

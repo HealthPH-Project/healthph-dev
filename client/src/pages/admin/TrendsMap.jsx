@@ -203,6 +203,34 @@ const TrendsMap = () => {
     return [13, 122];
   };
 
+  const getAccessibleRegionsDisplay = () => {
+    const accessible_regions = user.accessible_regions;
+
+    let display = "";
+
+    const regionNames = Regions.regions.reduce((acc, current) => {
+      acc[current.value] = current.label;
+      return acc;
+    }, {});
+
+    if (accessible_regions.length > 2) {
+      display = `${regionNames[accessible_regions[0]]}, ${
+        regionNames[accessible_regions[1]]
+      } + ${accessible_regions.length - 2}`;
+    } else {
+      for (let i = 0; i < accessible_regions.length; i++) {
+        display += regionNames[accessible_regions[i]];
+        if (accessible_regions.length != i + 1) {
+          display += ", ";
+        }
+      }
+    }
+
+    return accessible_regions.length == Regions.regions.length
+      ? "All Regions"
+      : display;
+  };
+
   return (
     <div className="trends-wrapper">
       <div
@@ -223,18 +251,23 @@ const TrendsMap = () => {
         {/* FILTERS */}
         <div className="filter-group">
           <MultiSelect
-            options={Regions.regions}
-            defaultValue={user.user_type == "USER" ? user.region : null}
+            options={Regions.regions.filter((r) =>
+              user.accessible_regions.includes(r.value)
+            )}
+            defaultValue={
+              user.user_type == "USER" ? user.accessible_regions : []
+            }
             placeHolder="Select Region/s"
             onChange={(e) => handleChangeFilter("region", e)}
-            selectAllLabel="All Regions"
+            selectAllLabel={getAccessibleRegionsDisplay()}
             selectAll={true}
-            additionalClassname="w-full mb-[20px]"
+            showSelectAll={user.user_type == "USER" ? false : true}
+            additionalClassname="w-full"
             menuPlacement="top"
             menuClassname={`${
               sidebarActive ? "menu-bottom" : "menu-top"
             } md:menu-bottom`}
-            editable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
+            // selectable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
           />
           {/* <CustomSelect
             options={getDateRangeOptions()}
@@ -248,7 +281,7 @@ const TrendsMap = () => {
           {!isPWA && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
             <Link
               to="/dashboard/trends-map/upload-dataset"
-              className="prod-btn-base prod-btn-primary w-full flex items-center justify-center"
+              className="prod-btn-base prod-btn-primary w-full flex items-center justify-center mt-[20px]"
             >
               <span>Upload Dataset</span>
               <Icon

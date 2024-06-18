@@ -21,6 +21,7 @@ class UserInDB(User):
 
 class CreateUserRequest(BaseModel):
     region: str
+    accessible_regions: str
     organization: str
     first_name: str
     last_name: str

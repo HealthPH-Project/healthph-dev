@@ -10,9 +10,11 @@ import CustomSelect from "../../components/CustomSelect";
 import InputPassword from "../../components/InputPassword";
 import PasswordRequirements from "../../components/auth/PasswordRequirements";
 import Snackbar from "../../components/Snackbar";
+import Regions from "../../assets/data/regions.json";
 
 import { useCreateUserMutation } from "../../features/api/userSlice";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+import MultiSelect from "../../components/MultiSelect";
 
 const AddUser = () => {
   const user = useSelector((state) => state.auth.user);
@@ -20,6 +22,7 @@ const AddUser = () => {
   const [formData, setFormData] = useState({
     user_type: "",
     region: "",
+    accessible_regions: "",
     organization: "",
     first_name: "",
     last_name: "",
@@ -30,6 +33,7 @@ const AddUser = () => {
   const [formErrors, setFormErrors] = useState({
     user_type: "",
     region: "",
+    accessible_regions: "",
     organization: "",
     first_name: "",
     last_name: "",
@@ -62,6 +66,11 @@ const AddUser = () => {
         user_type: value,
         region: "ALL",
         organization: import.meta.env.VITE_ADMIN_ORG,
+        accessible_regions: Regions.regions
+          .map(({ value }, i) => {
+            return value;
+          })
+          .join(","),
       });
       setFormErrors((formErrors) => ({
         ...formErrors,
@@ -75,12 +84,14 @@ const AddUser = () => {
           user_type: value,
           region: "",
           organization: "",
+          accessible_regions: "",
         });
       } else {
         setFormData({
           ...formData,
           region: "",
           user_type: value,
+          accessible_regions: "",
         });
       }
     }
@@ -99,6 +110,33 @@ const AddUser = () => {
     }));
     setError("");
   };
+
+  const handleChangeAccessibleRegions = (key, value) => {
+    const newValue = value
+      .map(({ value }, i) => {
+        return value;
+      })
+      .join(",");
+    setFormData((filters) => ({
+      ...filters,
+      [key]: newValue,
+    }));
+
+    setFormErrors((formErrors) => ({
+      ...formErrors,
+      accessible_regions: "",
+    }));
+    setError("");
+  };
+
+  useEffect(() => {
+    if (["ADMIN", "SUPERADMIN"].includes(formData.user_type)) {
+      // handleChangeAccessibleRegions(
+      //   "accessible_regions",
+      //   Regions.regions.filter((r) => r.value != "N/A")
+      // );
+    }
+  }, [formData.user_type]);
 
   const generatePassword = () => {
     let pwd = "";
@@ -242,6 +280,14 @@ const AddUser = () => {
       setFormErrors((formErrors) => ({
         ...formErrors,
         region: "Must choose region.",
+      }));
+      flag = true;
+    }
+
+    if (formData.accessible_regions == "") {
+      setFormErrors((formErrors) => ({
+        ...formErrors,
+        accessible_regions: "Must choose at least one accessible region.",
       }));
       flag = true;
     }
@@ -504,11 +550,43 @@ const AddUser = () => {
             </FieldGroup>
           )}
 
+          {formData.user_type != "" && (
+            <FieldGroup
+              label="Accessible Regions"
+              labelFor="accessible-regions"
+              additionalClasses="w-full max-w-[360px] mb-[20px]"
+              caption={
+                formErrors.accessible_regions != ""
+                  ? formErrors.accessible_regions
+                  : ""
+              }
+              state={formErrors.accessible_regions != "" ? "error" : ""}
+            >
+              <MultiSelect
+                options={Regions.regions}
+                placeHolder="Select Region/s"
+                onChange={(e) =>
+                  handleChangeAccessibleRegions("accessible_regions", e)
+                }
+                selectAllLabel="All Regions"
+                selectAll={
+                  ["", "USER"].includes(formData.user_type) ? false : true
+                }
+                // selectAll={true}
+                additionalClassname="w-full mt-[8px]"
+                editable={
+                  ["", "USER"].includes(formData.user_type) ? true : false
+                }
+                state={formErrors.accessible_regions != "" ? "error" : ""}
+              />
+            </FieldGroup>
+          )}
+
           {/* ORGANIZATION */}
           <FieldGroup
             label="Organization"
             labelFor="organization"
-            additionalClasses="w-full mb-[32px]"
+            additionalClasses="w-full mb-[20px]"
             caption={
               formErrors.organization != "" ? formErrors.organization : ""
             }

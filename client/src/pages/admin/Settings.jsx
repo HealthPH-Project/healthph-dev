@@ -16,6 +16,9 @@ import Cookies from "js-cookie";
 import Snackbar from "../../components/Snackbar";
 import { toast } from "react-toastify";
 
+import Regions from "../../assets/data/regions.json";
+import MultiSelect from "../../components/MultiSelect";
+
 const Settings = () => {
   const user = useSelector((state) => state.auth.user);
 
@@ -25,6 +28,7 @@ const Settings = () => {
     organization: user.organization,
     first_name: user.first_name,
     last_name: user.last_name,
+    accessible_regions: user.accessible_regions,
   };
 
   const [editable, setEditable] = useState(false);
@@ -36,6 +40,7 @@ const Settings = () => {
     organization: "",
     first_name: "",
     last_name: "",
+    accessible_regions: "",
   });
 
   const [error, setError] = useState("");
@@ -59,6 +64,52 @@ const Settings = () => {
     setFormErrors((formErrors) => ({
       ...formErrors,
       region: "",
+    }));
+    setError("");
+  };
+
+  const getAccessibleRegionsDisplay = () => {
+    const accessible_regions = user.accessible_regions;
+
+    let display = "";
+
+    const regionNames = Regions.regions.reduce((acc, current) => {
+      acc[current.value] = current.label;
+      return acc;
+    }, {});
+
+    if (accessible_regions.length > 2) {
+      display = `${regionNames[accessible_regions[0]]}, ${
+        regionNames[accessible_regions[1]]
+      } + ${accessible_regions.length - 2}`;
+    } else {
+      for (let i = 0; i < accessible_regions.length; i++) {
+        display += regionNames[accessible_regions[i]];
+        if (accessible_regions.length != i + 1) {
+          display += ", ";
+        }
+      }
+    }
+
+    return accessible_regions.length == Regions.regions.length
+      ? "All Regions"
+      : display;
+  };
+
+  const handleChangeAccessibleRegions = (key, value) => {
+    const newValue = value
+      .map(({ value }, i) => {
+        return value;
+      })
+      .join(",");
+    setFormData((filters) => ({
+      ...filters,
+      [key]: newValue,
+    }));
+
+    setFormErrors((formErrors) => ({
+      ...formErrors,
+      [key]: "",
     }));
     setError("");
   };
@@ -450,6 +501,35 @@ const Settings = () => {
               />
             </FieldGroup>
           )}
+
+          <FieldGroup
+            label="Accessible Regions"
+            labelFor="accessible-regions"
+            additionalClasses="w-full mb-[20px]"
+            caption={
+              formErrors.accessible_regions != ""
+                ? formErrors.accessible_regions
+                : ""
+            }
+            state={formErrors.accessible_regions != "" ? "error" : ""}
+          >
+            <MultiSelect
+              options={Regions.regions.filter((r) =>
+                user.accessible_regions.includes(r.value)
+              )}
+              defaultValue={user.accessible_regions}
+              placeHolder="Select Region/s"
+              onChange={(e) =>
+                handleChangeAccessibleRegions("accessible_regions", e)
+              }
+              selectAllLabel={getAccessibleRegionsDisplay()}
+              selectAll={true}
+              showSelectAll={user.user_type == "USER" ? false : true}
+              additionalClassname="w-full  max-w-[360px] mt-[8px]"
+              // selectable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
+              selectable={false}
+            />
+          </FieldGroup>
 
           {/* ORGANIZATION */}
           <FieldGroup

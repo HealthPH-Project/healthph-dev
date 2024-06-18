@@ -2,6 +2,7 @@ def individual_user(user) -> dict:
     return {
         "id": str(user["_id"]),
         "region": user["region"],
+        "accessible_regions": str(user["accessible_regions"]).split(","),
         "organization": user["organization"],
         "email": user["email"],
         "first_name": user["first_name"] or "",

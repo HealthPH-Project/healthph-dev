@@ -84,11 +84,6 @@
             "label": "Region BARMM",
             "value": "BARMM",
             "order": 16
-        },
-        {
-            "label": "Not Applicable",
-            "value": "N/A",
-            "order": 17
         }
     ]
 }
