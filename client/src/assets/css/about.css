@@ -389,8 +389,9 @@
   }
 
   .image-modal .image-modal-container {
-    @apply bg-white w-[700px] border-2 border-gray-50 rounded-[8px] m-auto py-[20px] px-[36px] relative;
+    @apply bg-white border-2 border-gray-50 rounded-[8px] m-auto py-[20px] px-[36px] relative;
     box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 700px;
   }
 
   .image-modal .image-modal-container .close-icon {
@@ -402,17 +403,34 @@
   }
 
   .image-modal .image-modal-container .image-wrapper {
-    height: 500px;
+    /* height: 500px; */
+    max-height: 500px;
+    height: fit-content;
     width: 100%;
   }
 
   .image-modal .image-modal-container .image-wrapper img {
     height: 100%;
+    max-height: 500px;
     width: 100%;
     object-fit: contain;
   }
 
   .image-modal .image-modal-container .image-caption {
     @apply web-d-p3 font-semibold mt-[10px] text-gray-500;
+  }
+
+  @media screen and (max-width: 576px) {
+    .image-modal .image-modal-container .image-wrapper {
+      max-height: 400px;
+    }
+
+    .image-modal .image-modal-container .image-wrapper img {
+      max-height: 400px;
+    }
+
+    .image-modal .image-modal-container .image-caption {
+      @apply web-m-p3;
+    }
   }
 }
