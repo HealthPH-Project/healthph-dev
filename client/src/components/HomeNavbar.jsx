@@ -8,6 +8,8 @@ import HamburgerMenu from "./HamburgerMenu";
 import Icon from "./Icon";
 
 import NULogo from "../assets/images/nu-logo.png";
+import NULogoLg from "../assets/images/nu-logo-lg.png";
+import NULogoLgAlt from "../assets/images/nu-logo-lg-alt.png";
 
 const HomeNavbar = ({ background = "transparent" }) => {
   const location = useLocation();
@@ -110,9 +112,9 @@ const HomeNavbar = ({ background = "transparent" }) => {
           </ul>
 
           <div className="flex justify-center items-center">
-            <div className="w-[44px] h-full">
+            <div className="w-[152px] h-full">
               <img
-                src={NULogo}
+                src={isMenuActive ? NULogoLgAlt : NULogoLg}
                 alt="national-university"
                 className="w-full h-full object-contain"
               />
@@ -154,7 +156,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
         />
       </div>
       <div
-        className={`nav-backdrop md:!hidden  ${
+        className={`nav-backdrop min-[900px]:!hidden  ${
           isMenuActive ? "active" : ""
         } ${menuAnimate} `}
         onAnimationEnd={handleAnimationEnd}

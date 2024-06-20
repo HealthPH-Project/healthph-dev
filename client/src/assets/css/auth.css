@@ -38,6 +38,11 @@
     @apply prod-b2 text-primary-500 hover:text-primary-600;
   }
 
+  .auth-container form a:not([role='button']).light {
+    @apply text-primary-300 hover:text-primary-300;
+    pointer-events: none;
+  }
+
   .auth-container form .pwd-reqs li {
     @apply flex items-center mb-[4px];
   }

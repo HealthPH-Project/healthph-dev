@@ -1,13 +1,16 @@
 from jose import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import os
+
 # Password hashing
 from passlib.context import CryptContext
+
+from models.auth import OTPCode
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 import bcrypt
-
+import secrets
 
 from dotenv import dotenv_values
 
@@ -51,6 +54,13 @@ def create_reset_password_token(email: str):
         {"sub": email, "exp": datetime.now() + timedelta(minutes=10)},
         key=os.getenv("FORGOT_PWD_SECRET_KEY"),
         algorithm=os.getenv("ALGORITHM"),
+    )
+
+
+def generate_otp_code():
+    return OTPCode(
+        otp_code=f"{secrets.randbelow(999999):06d}",
+        otp_expiry=datetime.now(timezone.utc) + timedelta(minutes=10),
     )
 
 

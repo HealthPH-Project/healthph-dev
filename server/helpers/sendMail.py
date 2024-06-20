@@ -74,6 +74,10 @@ def get_styles():
             line-height: 24px;
             margin: 0;
         }
+        
+        .body .p.big-text {
+            font-size: 48px;
+        }
 
         .body .semibold {
             font-weight: 600;
@@ -116,8 +120,109 @@ def get_styles():
         .body .list .list-indent {
             padding-inline-start: 20px;
         }
+        
+        .body .center-container {
+            width: 100%;
+            display: block;
+        }
+        
+        .body .center-container .center-item {
+            margin: 0 auto;
+            text-align: center;
+        }
     </style>     
     """
+
+
+def mail_verification_code(receiver, data: dict):
+    message = mail_setup(receiver, "Verification Code")
+
+    otp_code, otp_expiry = data.values()
+
+    plain_text = f"""\
+    This email contains a temporary 6-digit verification code for two-factor authentication which will expire in 10 minutes. Use the code below to verify in HealthPH.
+    
+    {otp_code}
+    
+    If you need further assistance, please visit or email the DOH Systems Office at:
+    
+    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
+    (632) 8651-7800 local 1427
+    doh@healthph.org
+    
+    Regards,
+    HealthPH
+    """
+
+    html = f"""\
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>HealthPH</title>
+    </head>
+    <head>
+        {get_styles()}
+    </head>
+    <body class="body">
+        <div class="header">
+          <img class="img" src="cid:Header" alt="" />
+        </div>
+        <div class="main">
+          <p class="p">
+            This email contains a temporary 6-digit verification code for two-factor authentication which will expire in 10 minutes. Use the code below to verify in HealthPH.
+          </p>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="center-container">
+          <p class="p big-text center-item">
+            {otp_code}
+          </p>
+          </div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <p class="p">
+            If you need further assistance, please visit or email the DOH
+            Systems Office at:
+          </p>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="indent">
+            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <div class="spacer"></div>
+            <p class="p">(632) 8651-7800 local 1427</p>
+            <div class="spacer"></div>
+            <p class="p">doh@healthph.org</p>
+          </div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <p class="p">Regards</p>
+          <div class="spacer"></div>
+          <p class="p">HealthPH</p>
+        </div>
+    </body>
+    </html>
+    """
+
+    part1 = MIMEText(plain_text, "plain")
+    part2 = MIMEText(html, "html")
+    message.attach(part1)
+    message.attach(part2)
+
+    fp = open("assets/images/mail-header.png", "rb")
+    header = MIMEImage(fp.read())
+    fp.close()
+
+    header.add_header("Content-ID", "<Header>")
+    message.attach(header)
+
+    return mail_send(receiver=receiver, message=message)
 
 
 def mail_forgot_password(receiver, data: dict):

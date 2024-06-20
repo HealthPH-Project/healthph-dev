@@ -53,7 +53,7 @@ const ArticlePage = () => {
 
   return (
     <div className="article-layout">
-      <HomeNavbar background="solid" />
+      <HomeNavbar />
       <section className="mt-[56px]">
         <div className="article-container">
           <div className="article-wrapper">

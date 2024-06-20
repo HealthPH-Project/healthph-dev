@@ -13,13 +13,28 @@ export const authApi = baseAPI.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+    verifyCode: builder.mutation({
+      query: (formData) => ({
+        url: `/auth/verify-code`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+    resendCode: builder.mutation({
+      query: (formData) => ({
+        url: `/auth/resend-otp-code`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
     registerUser: builder.mutation({
       query: (formData) => ({
         url: "/auth/register",
         method: "POST",
-        body: formData
+        body: formData,
       }),
-      invalidatesTags: ['Users']
+      invalidatesTags: ["Users"],
     }),
     forgotPassword: builder.mutation({
       query: (email) => ({
@@ -47,8 +62,10 @@ export const authApi = baseAPI.injectEndpoints({
 
 export const {
   useAuthenticateMutation,
+  useVerifyCodeMutation,
+  useResendCodeMutation,
   useRegisterUserMutation,
   useForgotPasswordMutation,
   useVerifyResetPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
 } = authApi;

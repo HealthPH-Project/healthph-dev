@@ -70,7 +70,7 @@
     @apply text-primary-500 bg-primary-100;
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 900px) {
     .home-nav .home-nav-links {
       @apply fixed top-0 left-0 max-w-[300px] w-full h-screen bg-white pt-[120px] pb-[24px] px-[16px];
       @apply flex flex-col justify-between items-center;

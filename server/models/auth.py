@@ -32,6 +32,14 @@ class OAuth2PasswordRequestFormJSON:
         self.client_id = client_id
         self.client_secret = client_secret
 
+class OTPCodeRequest(BaseModel):
+    email: str
+    otp_code: str
+    
+class OTPCode(BaseModel):
+    otp_code: str
+    otp_expiry: datetime
+
 class ForgotPasswordRequest(BaseModel):
     email: str
 

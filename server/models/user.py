@@ -17,7 +17,11 @@ class User(BaseModel):
 
 class UserInDB(User):
     password: str
-
+    
+class UserOTP(User):
+    otp_code: str
+    otp_expiry: datetime
+ 
 
 class CreateUserRequest(BaseModel):
     region: str

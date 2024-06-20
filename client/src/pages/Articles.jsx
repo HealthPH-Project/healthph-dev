@@ -33,7 +33,7 @@ const Articles = () => {
 
   return (
     <div className="article-layout">
-      <HomeNavbar background="solid" />
+      <HomeNavbar />
 
       <section className="mt-[56px]">
         <div className="about-container mb-[112px]">
