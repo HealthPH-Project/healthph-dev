@@ -27,12 +27,12 @@ const ResearchTeam = () => {
                 return <TestimonialItem {...v} key={i} />;
               })}
             </div>
-            <p className="section-title">Interns</p>
+            {/* <p className="section-title">Interns</p>
             <div className="testimonials">
               {interns.map((v, i) => {
                 return <TestimonialItem {...v} key={i} />;
               })}
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
