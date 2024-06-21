@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import CustomSelect from "../CustomSelect";
 import Icon from "../Icon";
 
@@ -10,6 +11,7 @@ const Report = ({
   children,
   additionalClasses,
 }) => {
+  const user = useSelector((state) => state.auth.user);
   const regions = [
     { label: "All Regions", value: "all" },
     { label: "Region NCR", value: "NCR" },
@@ -31,6 +33,11 @@ const Report = ({
     { label: "Region BARMM", value: "BARMM" },
   ];
 
+  const filterRegions =
+    user.user_type == "USER"
+      ? regions.filter((r) => user.accessible_regions.includes(r.value))
+      : regions;
+
   return (
     <div className={"report-container " + additionalClasses}>
       <div className="flex justify-between flex-col md:flex-row mb-[16px] md:mb-0">
@@ -40,7 +47,7 @@ const Report = ({
         </div>
         <div className="w-full max-w-[200px]">
           <CustomSelect
-            options={regions}
+            options={filterRegions}
             placeholder="Select Region"
             size="input-select-md"
             value={filter}

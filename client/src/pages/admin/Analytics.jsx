@@ -27,8 +27,11 @@ import {
 import Report from "../../components/admin/Report";
 import { useReactToPrint } from "react-to-print";
 import PrintAnalytics from "../../components/admin/PrintAnalytics";
+import { useSelector } from "react-redux";
 
 const Analytics = () => {
+  const user = useSelector((state) => state.auth.user);
+
   const [filters, setFilters] = useState({
     dateRange: 7,
   });
@@ -57,7 +60,9 @@ const Analytics = () => {
     return options;
   };
 
-  const [topWordsFilter, setTopWordsFilter] = useState("all");
+  const [topWordsFilter, setTopWordsFilter] = useState(
+    user.user_type == "USER" ? user.accessible_regions[0] : "all"
+  );
 
   let {
     data: frequent_words,
@@ -65,7 +70,9 @@ const Analytics = () => {
     isFetching: isTopWordsFetching,
   } = useGenerateFrequentWordsQuery(topWordsFilter);
 
-  const [percentageFilter, setPercentageFilter] = useState("all");
+  const [percentageFilter, setPercentageFilter] = useState(
+    user.user_type == "USER" ? user.accessible_regions[0] : "all"
+  );
 
   let {
     data: percentage,
@@ -76,7 +83,9 @@ const Analytics = () => {
   const COLORS = ["#DBB324", "#007AFF", "#D82727", "#35CA3B"];
   const RADIAN = Math.PI / 180;
 
-  const [wordCloudFilter, setWordCloudFilter] = useState("all");
+  const [wordCloudFilter, setWordCloudFilter] = useState(
+    user.user_type == "USER" ? user.accessible_regions[0] : "all"
+  );
 
   const { data: wordcloud, isFetching: isWordCloudFetching } =
     useGenerateWordCloudQuery(wordCloudFilter);
@@ -89,6 +98,12 @@ const Analytics = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
   });
+
+  const displayPrintButton = () => {
+    let flag = true;
+    flag = isWordCloudFetching || isTopWordsFetching || isPercentageFetching;
+    return !flag;
+  };
 
   return (
     <>
@@ -112,33 +127,38 @@ const Analytics = () => {
           <div className="header flex-col md:flex-row  items-start md:items-center">
             <div className="heading mb-[20px] md:mb-0">Suspected Symptoms</div>
             <div className="w-full sm:w-auto flex flex-col xs:flex-row justify-start lg:justify-center items-start xs:items-center">
-              <button
-                className="prod-btn-base prod-btn-secondary flex justify-center items-center mb-[16px] xs:mb-0"
-                onClick={handlePrint}
-              >
-                <span>Print</span>
-                <Icon
-                  iconName="Printer"
-                  height="20px"
-                  width="20px"
-                  fill="#8693A0"
-                  className="ms-[8px]"
-                />
-              </button>
-              <PrintAnalytics
-                ref={printRef}
-                data={{
-                  frequent_words: frequent_words,
-                  frequent_words_filter: topWordsFilter,
-                  percentage: percentage,
-                  percentage_filter: percentageFilter,
-                  wordcloud: isWordCloudFetching
-                    ? ""
-                    : import.meta.env.VITE_API_URL + wordcloud["wordcloud_url"],
-                  wordcloud_filter: wordCloudFilter,
-                }}
-                dateTable={format(new Date(), "MMMM dd, yyyy")}
-              />
+              {displayPrintButton() && (
+                <>
+                  <button
+                    className="prod-btn-base prod-btn-secondary flex justify-center items-center mb-[16px] xs:mb-0"
+                    onClick={handlePrint}
+                  >
+                    <span>Print</span>
+                    <Icon
+                      iconName="Printer"
+                      height="20px"
+                      width="20px"
+                      fill="#8693A0"
+                      className="ms-[8px]"
+                    />
+                  </button>
+                  <PrintAnalytics
+                    ref={printRef}
+                    data={{
+                      frequent_words: frequent_words,
+                      frequent_words_filter: topWordsFilter,
+                      percentage: percentage,
+                      percentage_filter: percentageFilter,
+                      wordcloud: isWordCloudFetching
+                        ? ""
+                        : import.meta.env.VITE_API_URL +
+                          wordcloud["wordcloud_url"],
+                      wordcloud_filter: wordCloudFilter,
+                    }}
+                    dateTable={format(new Date(), "MMMM dd, yyyy")}
+                  />
+                </>
+              )}
               {/* <CustomSelect
                 options={getDateRangeOptions()}
                 placeholder="Select Date Range"
