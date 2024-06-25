@@ -1,38 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  useDeleteAdminMutation,
-  useDeleteUsersMutation,
-  useFetchAdminsQuery,
-  useFetchUsersQuery,
-  useDisableUserMutation,
-} from "../../features/api/userSlice";
-import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+import { NavLink } from "react-router-dom";
+import { format } from "date-fns";
+import { useReactToPrint } from "react-to-print";
+
 import SkeletonTable from "../../components/SkeletonTable";
 import Icon from "../../components/Icon";
-import Highlighter from "react-highlight-words";
-import { NavLink } from "react-router-dom";
 import Input from "../../components/Input";
-import Datatable from "../../components/admin/Datatable";
-import { format } from "date-fns";
-import Modal from "../../components/admin/Modal";
-import EmptyState from "../../components/admin/EmptyState";
-import { toast } from "react-toastify";
-import Snackbar from "../../components/Snackbar";
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
 import PrintComponent from "../../components/admin/PrintComponent";
+import AdminsTable from "../../components/admin/AdminsTable";
+import UsersTable from "../../components/admin/UsersTable";
+
+import {
+  useFetchAdminsQuery,
+  useFetchUsersQuery,
+} from "../../features/api/userSlice";
 
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.user);
 
-  const [tableTab, setTableTab] = useState("Admins");
-
-  const [search, setSearch] = useState("");
-
-  const [searchAdminRows, setSearchAdminRows] = useState("");
-
-  const [searchUserRows, setSearchUserRows] = useState("");
   let {
     data: admins,
     isLoading: isAdminsLoading,
@@ -45,263 +31,7 @@ const UserManagement = () => {
     isError: isUsersError,
   } = useFetchUsersQuery();
 
-  const [rows, setRows] = useState([]);
-
-  const [userRows, setUserRows] = useState([]);
-
-  const [deleteModalActive, setDeleteModalActive] = useState(false);
-
-  const [disableLoading, setDisableLoading] = useState(false);
-
-  const [disableModalActive, setDisableModalActive] = useState(false);
-
-  const [enableModalActive, setEnableModalActive] = useState(false);
-
-  const [modalData, setModalData] = useState({
-    id: "",
-    name: "",
-    user_type: "",
-  });
-
-  const [isModalLoading, setIsModalLoading] = useState(false);
-
-  const [deleteAdmin] = useDeleteAdminMutation();
-
-  const [deleteUsers] = useDeleteUsersMutation();
-
-  const [disableUser] = useDisableUserMutation();
-
-  const [log_activiy] = useCreateActivityLogMutation();
-
-  useEffect(() => {
-    if (admins) {
-      setRows(admins);
-    }
-  }, [admins, isAdminsLoading]);
-
-  useEffect(() => {
-    if (users) {
-      setUserRows(users);
-    }
-  }, [users, isUsersLoading]);
-
-  useEffect(() => {
-    if (admins) {
-      let searches = search.split(" ");
-      searches = searches.filter((s) => s.length > 0);
-
-      const filteredRows = admins.filter((admin) => {
-        return searches.some((s) => {
-          const reg = new RegExp("^.*" + s + ".*$", "i");
-          if (
-            reg.test(admin["last_name"]) ||
-            reg.test(admin["first_name"]) ||
-            reg.test(admin["email"])
-          ) {
-            return true;
-          }
-        });
-      });
-      setSearchAdminRows(search.length > 0 ? filteredRows : admins);
-      setRows(search.length > 0 ? filteredRows : admins);
-    }
-
-    if (users) {
-      let searches = search.split(" ");
-      searches = searches.filter((s) => s.length > 0);
-
-      const filteredRows = users.filter((user) => {
-        return searches.some((s) => {
-          const reg = new RegExp("^.*" + s + ".*$", "i");
-          if (
-            reg.test(user["last_name"]) ||
-            reg.test(user["first_name"]) ||
-            reg.test(user["email"]) ||
-            reg.test(user["organization"])
-          ) {
-            return true;
-          }
-        });
-      });
-
-      setSearchUserRows(search.length > 0 ? filteredRows : users);
-      setUserRows(search.length > 0 ? filteredRows : users);
-    }
-  }, [search, admins, users, tableTab]);
-
-  const handleDeleteAdmin = async () => {
-    setIsModalLoading(true);
-    let response;
-    if (modalData.user_type == "USER") {
-      response = await deleteUsers(modalData.id);
-    } else {
-      response = await deleteAdmin(modalData.id);
-    }
-
-    if (!response) {
-      toast(
-        <Snackbar
-          iconName="Error"
-          size="snackbar-sm"
-          color="destructive"
-          message={`Failed to delete ${
-            modalData.user_type == "USER" ? "user" : "admin"
-          }`}
-        />,
-        {
-          closeButton: ({ closeToast }) => (
-            <Icon
-              iconName="Close"
-              className="close-icon close-icon-sm close-destructive"
-              onClick={closeToast}
-            />
-          ),
-        }
-      );
-      // setIsLoading(false);
-      return;
-    }
-
-    if ("error" in response) {
-      const { detail } = response["error"]["data"];
-
-      toast(
-        <Snackbar
-          iconName="Error"
-          size="snackbar-sm"
-          color="destructive"
-          message={detail}
-        />,
-        {
-          closeButton: ({ closeToast }) => (
-            <Icon
-              iconName="Close"
-              className="close-icon close-icon-sm close-destructive"
-              onClick={closeToast}
-            />
-          ),
-        }
-      );
-
-      // setIsLoading(false);
-      return;
-    }
-
-    toast(
-      <Snackbar
-        iconName="CheckCircle"
-        size="snackbar-sm"
-        color="success"
-        message={`${
-          modalData.user_type == "USER" ? "User" : "Admin"
-        } deleted successfully`}
-      />,
-      {
-        closeButton: ({ closeToast }) => (
-          <Icon
-            iconName="Close"
-            className="close-icon close-icon-sm close-success"
-            onClick={closeToast}
-          />
-        ),
-      }
-    );
-
-    await log_activiy({
-      user_id: user.id,
-      entry: `Deleted ${modalData.user_type} : ${modalData.name}`,
-      module: "User Management",
-    });
-
-    setIsModalLoading(false);
-    setModalData({ id: "", name: "", user_type: "" });
-  };
-
-  const handleDisableStatus = async (status) => {
-    setDisableLoading(true);
-    const response = await disableUser({ id: modalData.id, status });
-
-    if (!response) {
-      toast(
-        <Snackbar
-          iconName="Error"
-          size="snackbar-sm"
-          color="destructive"
-          message={status ? "Failed to disable user" : "Failed to enable user"}
-        />,
-        {
-          closeButton: ({ closeToast }) => (
-            <Icon
-              iconName="Close"
-              className="close-icon close-icon-sm close-destructive"
-              onClick={closeToast}
-            />
-          ),
-        }
-      );
-      setDisableLoading(false);
-      return;
-    }
-
-    if ("error" in response) {
-      const { detail } = response["error"]["data"];
-
-      toast(
-        <Snackbar
-          iconName="Error"
-          size="snackbar-sm"
-          color="destructive"
-          message={detail}
-        />,
-        {
-          closeButton: ({ closeToast }) => (
-            <Icon
-              iconName="Close"
-              className="close-icon close-icon-sm close-destructive"
-              onClick={closeToast}
-            />
-          ),
-        }
-      );
-
-      setVerificationLoading(false);
-      return;
-    }
-
-    toast(
-      <Snackbar
-        iconName="CheckCircle"
-        size="snackbar-sm"
-        color="success"
-        message={`User ${status ? "disabled" : "enabled"} successfully`}
-      />,
-      {
-        closeButton: ({ closeToast }) => (
-          <Icon
-            iconName="Close"
-            className="close-icon close-icon-sm close-success"
-            onClick={closeToast}
-          />
-        ),
-      }
-    );
-
-    await log_activiy({
-      user_id: user.id,
-      entry: `${status ? "Disabled" : "Enabled"} ${modalData.user_type} : ${
-        modalData.name
-      }`,
-      module: "User Management",
-    });
-
-    setDisableLoading(false);
-    setModalData({ id: "", name: "", user_type: "" });
-    if (status) {
-      setDisableModalActive(false);
-    } else {
-      setEnableModalActive(false);
-    }
-  };
+  const [searchQuery, setSearchQuery] = useState("");
 
   const printRef = useRef();
 
@@ -311,6 +41,65 @@ const UserManagement = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
   });
+
+  const [tabs, setTabs] = useState([
+    { label: "Admins", count: 0 },
+    { label: "Users", count: 0 },
+  ]);
+
+  const [currentTableTab, setCurrentTableTab] = useState(
+    user.user_type == "SUPERADMIN" ? "Admins" : "Users"
+  );
+
+  useEffect(() => {
+    if (admins && users) {
+      if (searchQuery) {
+        let searchQuerySplit = searchQuery.split(" ");
+        searchQuerySplit = searchQuerySplit.filter((s) => s.length > 0);
+
+        const filteredAdmins = admins.filter((admin) => {
+          return searchQuerySplit.some((s) => {
+            const reg = new RegExp("^.*" + s + ".*$", "i");
+            if (
+              reg.test(admin["last_name"]) ||
+              reg.test(admin["first_name"]) ||
+              reg.test(admin["email"])
+            ) {
+              return true;
+            }
+          });
+        });
+
+        const filteredUsers = users.filter((user) => {
+          return searchQuerySplit.some((s) => {
+            const reg = new RegExp("^.*" + s + ".*$", "i");
+            if (
+              reg.test(user["last_name"]) ||
+              reg.test(user["first_name"]) ||
+              reg.test(user["email"]) ||
+              reg.test(user["organization"])
+            ) {
+              return true;
+            }
+          });
+        });
+
+        setTabs([
+          { label: "Admins", count: filteredAdmins.length },
+          { label: "Users", count: filteredUsers.length },
+        ]);
+      } else {
+        setTabs([
+          { label: "Admins", count: admins.length },
+          { label: "Users", count: users.length },
+        ]);
+      }
+    }
+  }, [searchQuery, isAdminsLoading, isUsersLoading]);
+
+  const [currentAdminsData, setCurrentAdminsData] = useState([]);
+
+  const [currentUsersData, setCurrentUsersData] = useState([]);
 
   return (
     <>
@@ -333,18 +122,18 @@ const UserManagement = () => {
                 />
               </div>
             </div>
-            <div className="flex items-start sm:items-center flex-col sm:flex-row mt-[20px] md:mt-0">
+            <div className="flex items-start sm:items-center flex-col sm:flex-row mt-[20[x] md:mt-0">
               <Input
                 size="input-md"
                 id="search"
                 additionalClasses="w-full max-w-[328px]"
                 placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 leadingIcon="Search"
-                trailingIcon={search.length > 0 ? "Close" : undefined}
+                trailingIcon={searchQuery.length > 0 ? "Close" : undefined}
                 onClickTrailing={
-                  search.length > 0 ? () => setSearch("") : undefined
+                  searchQuery.length > 0 ? () => setSearchQuery("") : undefined
                 }
               />
               <div className="flex flex-shrink-0 mt-[20px] sm:mt-0">
@@ -362,21 +151,19 @@ const UserManagement = () => {
                     className="ms-[8px]"
                   />
                 </button>
+
+                {/* PRINT COMPONENT */}
                 <PrintComponent
                   ref={printRef}
                   pageName="User Management"
-                  tableName={tableTab}
+                  tableName={currentTableTab}
                   data={
-                    tableTab == "Admins"
-                      ? search != ""
-                        ? searchAdminRows
-                        : admins
-                      : search != ""
-                      ? searchUserRows
-                      : users
+                    currentTableTab == "Admins"
+                      ? currentAdminsData
+                      : currentUsersData
                   }
                   columns={
-                    tableTab == "Admins"
+                    currentTableTab == "Admins"
                       ? ["FULL NAME", "EMAIL", "USER TYPE", "DATE CREATED"]
                       : [
                           "FULL NAME",
@@ -392,7 +179,7 @@ const UserManagement = () => {
                     let full_name = `${value.first_name} ${value.last_name}`;
 
                     let data = [full_name, value.email];
-                    if (tableTab == "Admins") {
+                    if (currentTableTab == "Admins") {
                       data.push(value.user_type);
                     } else {
                       const regions = {
@@ -444,158 +231,51 @@ const UserManagement = () => {
           </div>
 
           <div className="content">
-            <Datatable
-              datatableTabs={
-                <UserManagementTabs
-                  tabData={[
-                    {
-                      label: "Admins",
-                      count:
-                        search != "" ? searchAdminRows.length : admins.length,
-                    },
-                    {
-                      label: "Users",
-                      count:
-                        search != "" ? searchUserRows.length : users.length,
-                    },
-                  ]}
-                  currentTab={tableTab}
-                  setCurrentTab={setTableTab}
-                />
-              }
-              datatableColumns={
-                tableTab == "Admins"
-                  ? [
-                      { label: "Full Name" },
-                      { label: "Email", tooltip: "Sample tooltip" },
-                      { label: "Date Created" },
-                      { label: "User Type", tooltip: "Sample tooltip" },
-                      { label: "Actions" },
-                    ]
-                  : tableTab == "Users"
-                  ? [
-                      { label: "Full Name" },
-                      { label: "Email", tooltip: "Sample tooltip" },
-                      { label: "Regional Office " },
-                      { label: "Organization ", tooltip: "Sample tooltip" },
-                      { label: "Actions" },
-                    ]
-                  : [{ label: "Full Name" }]
-              }
-              datatableData={
-                tableTab == "Admins"
-                  ? search != ""
-                    ? searchAdminRows
-                    : admins
-                  : search != ""
-                  ? searchUserRows
-                  : users
-              }
-              setDatatableData={
-                tableTab == "Admins"
-                  ? setRows
-                  : tableTab == "Users"
-                  ? setUserRows
-                  : setRows
-              }
-              search={search}
-              rowsPerPage={10}
-              withActions={true}
-              actionsWidth={
-                ["ADMIN", "USER"].includes(user.user_type) ? "100px" : "170px"
-              }
-            >
-              {tableTab == "Admins" ? (
-                <AdminsData
-                  user={user}
-                  admins={admins}
-                  rows={rows}
-                  search={search}
-                  setSearch={setSearch}
-                  setModalData={setModalData}
-                  setDisableModalActive={setDisableModalActive}
-                  setEnableModalActive={setEnableModalActive}
-                  setDeleteModalActive={setDeleteModalActive}
-                />
-              ) : (
-                <UsersData
-                  user={user}
-                  users={users}
-                  rows={userRows}
-                  search={search}
-                  setSearch={setSearch}
-                  setModalData={setModalData}
-                  setDisableModalActive={setDisableModalActive}
-                  setEnableModalActive={setEnableModalActive}
-                  setDeleteModalActive={setDeleteModalActive}
-                />
-              )}
-            </Datatable>
+            {currentTableTab == "Admins" ? (
+              <AdminsTable
+                admins={admins}
+                tableTabs={
+                  <UserManagementTabs
+                    tabs={
+                      user.user_type == "SUPERADMIN"
+                        ? tabs
+                        : tabs.filter((t) => t.label == "Users")
+                    }
+                    currentTab={currentTableTab}
+                    setCurrentTab={setCurrentTableTab}
+                  />
+                }
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setCurrentData={setCurrentAdminsData}
+              />
+            ) : (
+              <UsersTable
+                users={users}
+                tableTabs={
+                  <UserManagementTabs
+                    tabs={
+                      user.user_type == "SUPERADMIN"
+                        ? tabs
+                        : tabs.filter((t) => t.label == "Users")
+                    }
+                    currentTab={currentTableTab}
+                    setCurrentTab={setCurrentTableTab}
+                  />
+                }
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                setCurrentData={setCurrentUsersData}
+              />
+            )}
           </div>
         </div>
-      )}
-
-      {/* MODALS */}
-
-      {deleteModalActive && (
-        <Modal
-          onConfirm={async () => {
-            await handleDeleteAdmin();
-            setDeleteModalActive(false);
-          }}
-          onConfirmLabel="Delete"
-          onCancel={() => {
-            setModalData({ id: "", name: "", user_type: "" });
-            setDeleteModalActive(false);
-          }}
-          onLoadingLabel="Deleting..."
-          onLoading={isModalLoading}
-          heading={`Are you sure you want to delete ${modalData.name}'s account?`}
-          content="This user can never use their account to HealthPH anymore."
-          color="destructive"
-        />
-      )}
-
-      {disableModalActive && (
-        <Modal
-          onLoading={disableLoading}
-          onLoadingLabel={"Disabling"}
-          onConfirm={() => {
-            handleDisableStatus(true);
-          }}
-          onConfirmLabel="Disable"
-          onCancel={() => {
-            setModalData({ id: "", name: "", user_type: "" });
-            setDisableModalActive(false);
-          }}
-          heading={`Are you sure you want to disable ${modalData.name}'s account?`}
-          content="This user will be unable to sign in to HealthPH and lose access to its modules."
-          color="destructive"
-        />
-      )}
-
-      {enableModalActive && (
-        <Modal
-          onLoading={disableLoading}
-          onLoadingLabel={"Enabling"}
-          onConfirm={() => {
-            handleDisableStatus(false);
-          }}
-          onConfirmLabel="Enable"
-          onCancel={() => {
-            setModalData({ id: "", name: "", user_type: "" });
-            setEnableModalActive(false);
-          }}
-          heading={`Are you sure you want to enable ${modalData.name}'s account?`}
-          content="This user will receive full access to HealthPH such as the Analytics, Trends Map, and other modules."
-          color="primary"
-        />
       )}
     </>
   );
 };
 
-const UserManagementTabs = ({ tabData, currentTab, setCurrentTab }) => {
+const UserManagementTabs = ({ tabs, currentTab, setCurrentTab }) => {
   const formatDataLength = (value, minDigit) => {
     return value.length > minDigit
       ? value.toString().padStart(minDigit, "0").slice(0, minDigit)
@@ -605,7 +285,7 @@ const UserManagementTabs = ({ tabData, currentTab, setCurrentTab }) => {
   return (
     <>
       <div className="datatable-tabs-wrapper">
-        {tabData.map(({ label, count }, i) => {
+        {tabs.map(({ label, count }, i) => {
           return (
             <div
               className={`datatable-tab-item ${
@@ -620,316 +300,6 @@ const UserManagementTabs = ({ tabData, currentTab, setCurrentTab }) => {
           );
         })}
       </div>
-    </>
-  );
-};
-
-const AdminsData = ({
-  user,
-  admins,
-  rows,
-  search,
-  setSearch,
-  setModalData,
-  setDisableModalActive,
-  setEnableModalActive,
-  setDeleteModalActive,
-}) => {
-  return (
-    <>
-      {admins.length > 0 ? (
-        rows.length > 0 ? (
-          rows.map(
-            (
-              {
-                id,
-                first_name,
-                last_name,
-                email,
-                created_at,
-                user_type,
-                is_disabled,
-              },
-              i
-            ) => {
-              const searchWords = search.split(" ").filter((s) => s.length > 0);
-              return (
-                <div className="content-row" key={i}>
-                  <div className="row-item">
-                    <Highlighter
-                      highlightClassName="bg-[#FFE81A] text-[#000] font-medium rounded-[2px] p-[2px]"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={`${first_name} ${last_name}`}
-                    />
-                  </div>
-                  <div className="row-item">
-                    <Highlighter
-                      highlightClassName="bg-[#FFE81A] text-[#000] font-medium  rounded-[2px] p-[2px]"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={email}
-                    />
-                  </div>
-                  <div className="row-item">
-                    {format(new Date(created_at), "MMM-dd-yyyy HH:mm a")}
-                  </div>
-                  <div className="row-item">{user_type}</div>
-                  <div className="row-item">
-                    {user && user.user_type == "USER" ? null : (
-                      <div className="flex items-center">
-                        {user.id != id && (
-                          <button
-                            className={`prod-push-btn-sm prod-btn-${
-                              is_disabled ? "primary" : "secondary"
-                            } me-[8px]  min-w-[63px]`}
-                            onClick={() => {
-                              setModalData({
-                                id: id,
-                                name: `${first_name} ${last_name}`,
-                                user_type: user_type,
-                              });
-
-                              if (is_disabled) {
-                                setEnableModalActive(true);
-                              } else {
-                                setDisableModalActive(true);
-                              }
-                            }}
-                          >
-                            {is_disabled ? "Enable" : "Disable"}
-                          </button>
-                        )}
-                        {user.id != id && user.user_type !== "ADMIN" && (
-                          <button
-                            className="prod-push-btn-sm prod-btn-destructive"
-                            onClick={() => {
-                              setModalData({
-                                id: id,
-                                name: `${first_name} ${last_name}`,
-                                user_type: user_type,
-                              });
-                              setDeleteModalActive(true);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            }
-          )
-        ) : (
-          search != "" && (
-            <EmptyState
-              iconName="Search"
-              heading="No Results Found"
-              content="We couldn't find any matches for your search. Please try adjusting your search terms or criteria."
-            >
-              <button
-                className="prod-btn-base prod-btn-secondary flex justify-center items-center"
-                onClick={() => setSearch("")}
-              >
-                <span>Clear Search</span>
-              </button>
-            </EmptyState>
-          )
-        )
-      ) : (
-        <EmptyState
-          iconName="UserTwo"
-          heading="No Administrators Found"
-          content="There are currently no administrators listed. Add new administrators to manage the platform effectively."
-        >
-          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
-            <NavLink
-              to="/dashboard/user-management/add-user"
-              className="prod-btn-base prod-btn-primary flex justify-center items-center ms-[16px]"
-            >
-              <span>Add Admin</span>
-              <Icon
-                iconName="Plus"
-                height="20px"
-                width="20px"
-                fill="#FFF"
-                className="ms-[8px]"
-              />
-            </NavLink>
-          )}
-        </EmptyState>
-      )}
-    </>
-  );
-};
-
-const UsersData = ({
-  user,
-  users,
-  rows,
-  search,
-  setSearch,
-  setModalData,
-  setDisableModalActive,
-  setEnableModalActive,
-  setDeleteModalActive,
-}) => {
-  const displayRegion = (region) => {
-    const regions = {
-      NCR: "National Capital Region",
-      I: "Region I",
-      II: "Region II",
-      III: "Region III",
-      CAR: "Cordillera Administrative Region (CAR)",
-      IVA: "Region IV-A (CALABARZON)",
-      IVB: "Region IV-B (MIMAROPA)",
-      V: "Region V",
-      VI: "Region VI",
-      VII: "Region VII",
-      VIII: "Region VIII",
-      IX: "Region IX",
-      X: "Region X",
-      XI: "Region XI",
-      XII: "Region XII",
-      XIII: "Region XIII",
-      BARMM: "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
-    };
-
-    return regions[region];
-  };
-
-  return (
-    <>
-      {users.length > 0 ? (
-        rows.length > 0 ? (
-          rows.map(
-            (
-              {
-                id,
-                first_name,
-                last_name,
-                email,
-                region,
-                organization,
-                is_disabled,
-                user_type,
-              },
-              i
-            ) => {
-              const searchWords = search.split(" ").filter((s) => s.length > 0);
-              return (
-                <div className="content-row" key={i}>
-                  <div className="row-item">
-                    <Highlighter
-                      highlightClassName="bg-warning-500 font-medium"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={`${first_name} ${last_name}`}
-                    />
-                  </div>
-                  <div className="row-item">
-                    <Highlighter
-                      highlightClassName="bg-warning-500"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={email}
-                    />
-                  </div>
-                  <div className="row-item">{displayRegion(region)}</div>
-                  <div className="row-item">
-                    <Highlighter
-                      highlightClassName="bg-warning-500 font-medium"
-                      searchWords={searchWords}
-                      autoEscape={true}
-                      textToHighlight={organization}
-                    />
-                  </div>
-                  <div className="row-item">
-                    {user && user.user_type == "USER" ? null : (
-                      <div className="flex items-center">
-                        <button
-                          className={`prod-push-btn-sm prod-btn-${
-                            is_disabled ? "primary" : "secondary"
-                          } me-[8px]  min-w-[63px]`}
-                          onClick={() => {
-                            setModalData({
-                              id: id,
-                              name: `${first_name} ${last_name}`,
-                              user_type: user_type,
-                            });
-
-                            if (is_disabled) {
-                              setEnableModalActive(true);
-                            } else {
-                              setDisableModalActive(true);
-                            }
-                          }}
-                        >
-                          {is_disabled ? "Enable" : "Disable"}
-                        </button>
-                        {user.id != id && user.user_type !== "ADMIN" && (
-                          <button
-                            className="prod-push-btn-sm prod-btn-destructive"
-                            onClick={() => {
-                              setModalData({
-                                id: id,
-                                name: `${first_name} ${last_name}`,
-                                user_type: user_type,
-                              });
-                              setDeleteModalActive(true);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            }
-          )
-        ) : (
-          search != "" && (
-            <EmptyState
-              iconName="Search"
-              heading="No Results Found"
-              content="We couldn't find any matches for your search. Please try adjusting your search terms or criteria."
-            >
-              <button
-                className="prod-btn-base prod-btn-secondary flex justify-center items-center"
-                onClick={() => setSearch("")}
-              >
-                <span>Clear Search</span>
-              </button>
-            </EmptyState>
-          )
-        )
-      ) : (
-        <EmptyState
-          iconName="UserThree"
-          heading="No Users Found"
-          content="No users are currently created. Add users to join and participate."
-        >
-          {["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
-            <NavLink
-              to="/dashboard/user-management/add-user"
-              className="prod-btn-base prod-btn-primary flex justify-center items-center ms-[16px]"
-            >
-              <span>Add User</span>
-              <Icon
-                iconName="Plus"
-                height="20px"
-                width="20px"
-                fill="#FFF"
-                className="ms-[8px]"
-              />
-            </NavLink>
-          )}
-        </EmptyState>
-      )}
     </>
   );
 };
