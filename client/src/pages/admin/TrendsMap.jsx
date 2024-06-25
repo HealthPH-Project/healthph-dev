@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format, subDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -19,6 +19,10 @@ import RegionsCenter from "../../assets/data/regions_center.json";
 import Sample from "../../assets/data/sample.json";
 import DummyData from "../../assets/data/dummy_data_v3.json";
 import useDeviceDetect from "../../hooks/useDeviceDetect";
+import PrintTrendsMap from "../../components/admin/PrintTrendsMap";
+import MapScreenshot from "../../components/admin/MapScreenshot";
+import html2canvas from "html2canvas";
+import { useReactToPrint } from "react-to-print";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
@@ -55,7 +59,9 @@ const TrendsMap = () => {
   };
 
   const [filters, setFilters] = useState({
-    region: Regions.regions,
+    region: Regions.regions.filter((r) =>
+      user.accessible_regions.includes(r.value)
+    ),
     dateRange: 7,
     disease: "all",
   });
@@ -231,45 +237,70 @@ const TrendsMap = () => {
       : display;
   };
 
-  return (
-    <div className="trends-wrapper">
-      <div
-        className={`sidebar ${sidebarActive ? "" : "close-sidebar"} ${
-          ["ADMIN", "SUPERADMIN"].includes(user.user_type) && !isPWA
-            ? ""
-            : "sidebar-sm"
-        }`}
-      >
-        <div
-          className="sidebar-toggler"
-          onClick={handleOpenSidebar}
-          {...swipeHandlers}
-        >
-          <span></span>
-        </div>
+  const printRef = useRef();
 
-        {/* FILTERS */}
-        <div className="filter-group">
-          <MultiSelect
-            options={Regions.regions.filter((r) =>
-              user.accessible_regions.includes(r.value)
-            )}
-            defaultValue={
-              user.user_type == "USER" ? user.accessible_regions : []
-            }
-            placeHolder="Select Region/s"
-            onChange={(e) => handleChangeFilter("region", e)}
-            selectAllLabel={getAccessibleRegionsDisplay()}
-            selectAll={true}
-            showSelectAll={user.user_type == "USER" ? false : true}
-            additionalClassname="w-full"
-            menuPlacement="top"
-            menuClassname={`${
-              sidebarActive ? "menu-bottom" : "menu-top"
-            } md:menu-bottom`}
-            // selectable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
-          />
-          {/* <CustomSelect
+  const captureMapRef = useRef();
+
+  const [mapImage, setMapImage] = useState("");
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: "HealthPH - Trends Map",
+    pageStyle:
+      "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
+  });
+
+  const handlePrintTrendsMap = async () => {
+    const canvas = await html2canvas(captureMapRef.current, {
+      useCORS: true,
+      willReadFrequently: true,
+    });
+    canvas.getContext("2d", { willReadFrequently: true });
+    var dataURL = canvas.toDataURL("image/png");
+    setMapImage(dataURL);
+    setTimeout(handlePrint, 500);
+  };
+
+  return (
+    <>
+      <div className="trends-wrapper">
+        <div
+          className={`sidebar ${sidebarActive ? "" : "close-sidebar"} ${
+            ["ADMIN", "SUPERADMIN"].includes(user.user_type) && !isPWA
+              ? ""
+              : "sidebar-sm"
+          }`}
+        >
+          <div
+            className="sidebar-toggler"
+            onClick={handleOpenSidebar}
+            {...swipeHandlers}
+          >
+            <span></span>
+          </div>
+
+          {/* FILTERS */}
+          <div className="filter-group">
+            <MultiSelect
+              options={Regions.regions.filter((r) =>
+                user.accessible_regions.includes(r.value)
+              )}
+              defaultValue={
+                user.user_type == "USER" ? user.accessible_regions : []
+              }
+              placeHolder="Select Region/s"
+              onChange={(e) => handleChangeFilter("region", e)}
+              selectAllLabel={getAccessibleRegionsDisplay()}
+              selectAll={true}
+              showSelectAll={user.user_type == "USER" ? false : true}
+              additionalClassname="w-full"
+              menuPlacement="top"
+              menuClassname={`${
+                sidebarActive ? "menu-bottom" : "menu-top"
+              } md:menu-bottom`}
+              // selectable={["ADMIN", "SUPERADMIN"].includes(user.user_type)}
+            />
+            {/* <CustomSelect
             options={getDateRangeOptions()}
             placeholder="Select Date Range"
             size="input-select-md"
@@ -278,120 +309,143 @@ const TrendsMap = () => {
             additionalClasses="w-full"
           /> */}
 
-          {!isPWA && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
-            <Link
-              to="/dashboard/trends-map/upload-dataset"
-              className="prod-btn-base prod-btn-primary w-full flex items-center justify-center mt-[20px]"
+            {!isPWA && ["ADMIN", "SUPERADMIN"].includes(user.user_type) && (
+              <Link
+                to="/dashboard/trends-map/upload-dataset"
+                className="prod-btn-base prod-btn-primary w-full flex items-center justify-center mt-[20px]"
+              >
+                <span>Upload Dataset</span>
+                <Icon
+                  iconName="Upload"
+                  height="20px"
+                  width="20px"
+                  fill="#FFF"
+                  className="ms-[8px]"
+                />
+              </Link>
+            )}
+            <button
+              className="prod-btn-base prod-btn-secondary w-full flex items-center justify-center mt-[20px]"
+              onClick={handlePrintTrendsMap}
             >
-              <span>Upload Dataset</span>
+              <span>Print Trends Map</span>
               <Icon
-                iconName="Upload"
+                iconName="Printer"
                 height="20px"
                 width="20px"
-                fill="#FFF"
+                fill="#8693A0"
                 className="ms-[8px]"
               />
-            </Link>
-          )}
-        </div>
+            </button>
+            <PrintTrendsMap
+              ref={printRef}
+              mapImage={mapImage}
+              dateTable={format(new Date(), "MMMM dd, yyyy")}
+            />
+          </div>
 
-        {/* TABS */}
-        <div className="sidebar-tabs">
-          <div className="tabs-wrapper">
-            <div
-              className={`tab-item ${filters.disease == "all" ? "active" : ""}`}
-              id="disease-all"
-              onClick={handleChangeDisease}
-            >
-              <span className="label">All</span>
-              <span className="count">
-                {formatDataLength(getTotalCount("all"), 3)}
-              </span>
+          {/* TABS */}
+          <div className="sidebar-tabs">
+            <div className="tabs-wrapper">
+              <div
+                className={`tab-item ${
+                  filters.disease == "all" ? "active" : ""
+                }`}
+                id="disease-all"
+                onClick={handleChangeDisease}
+              >
+                <span className="label">All</span>
+                <span className="count">
+                  {formatDataLength(getTotalCount("all"), 3)}
+                </span>
+              </div>
+              <div
+                className={`tab-item ${
+                  filters.disease == "tuberculosis" ? "active" : ""
+                }`}
+                id="disease-tuberculosis"
+                onClick={handleChangeDisease}
+              >
+                <span className="label">Tuberculosis</span>
+                <span className="count">
+                  {formatDataLength(getTotalCount("tuberculosis"), 3)}
+                </span>
+              </div>
+              <div
+                className={`tab-item ${
+                  filters.disease == "pneumonia" ? "active" : ""
+                }`}
+                id="disease-pneumonia"
+                onClick={handleChangeDisease}
+              >
+                <span className="label">Pneumonia</span>
+                <span className="count">
+                  {formatDataLength(getTotalCount("pneumonia"), 3)}
+                </span>
+              </div>
+              <div
+                className={`tab-item ${
+                  filters.disease == "covid" ? "active" : ""
+                }`}
+                id="disease-covid"
+                onClick={handleChangeDisease}
+              >
+                <span className="label">COVID</span>
+                <span className="count">
+                  {formatDataLength(getTotalCount("covid"), 3)}
+                </span>
+              </div>
+              <div
+                className={`tab-item ${
+                  filters.disease == "auri" ? "active" : ""
+                }`}
+                id="disease-auri"
+                onClick={handleChangeDisease}
+              >
+                <span className="label">AURI</span>
+                <span className="count">
+                  {formatDataLength(getTotalCount("auri"), 3)}
+                </span>
+              </div>
             </div>
-            <div
-              className={`tab-item ${
-                filters.disease == "tuberculosis" ? "active" : ""
-              }`}
-              id="disease-tuberculosis"
-              onClick={handleChangeDisease}
-            >
-              <span className="label">Tuberculosis</span>
-              <span className="count">
-                {formatDataLength(getTotalCount("tuberculosis"), 3)}
-              </span>
-            </div>
-            <div
-              className={`tab-item ${
-                filters.disease == "pneumonia" ? "active" : ""
-              }`}
-              id="disease-pneumonia"
-              onClick={handleChangeDisease}
-            >
-              <span className="label">Pneumonia</span>
-              <span className="count">
-                {formatDataLength(getTotalCount("pneumonia"), 3)}
-              </span>
-            </div>
-            <div
-              className={`tab-item ${
-                filters.disease == "covid" ? "active" : ""
-              }`}
-              id="disease-covid"
-              onClick={handleChangeDisease}
-            >
-              <span className="label">COVID</span>
-              <span className="count">
-                {formatDataLength(getTotalCount("covid"), 3)}
-              </span>
-            </div>
-            <div
-              className={`tab-item ${
-                filters.disease == "auri" ? "active" : ""
-              }`}
-              id="disease-auri"
-              onClick={handleChangeDisease}
-            >
-              <span className="label">AURI</span>
-              <span className="count">
-                {formatDataLength(getTotalCount("auri"), 3)}
-              </span>
-            </div>
+          </div>
+
+          {/* DATA / TRENDS */}
+          <div className="sidebar-data">
+            {sidebarData.map(({ region, data }, i) => {
+              if (filters.region.find((r) => r.label == region))
+                return (
+                  <SidebarDataItem key={i} headerLabel={region} data={data} />
+                );
+            })}
           </div>
         </div>
 
-        {/* DATA / TRENDS */}
-        <div className="sidebar-data">
-          {sidebarData.map(({ region, data }, i) => {
-            if (filters.region.find((r) => r.label == region))
-              return (
-                <SidebarDataItem key={i} headerLabel={region} data={data} />
-              );
-          })}
-        </div>
+        {/* BACKGROUND BLUR */}
+        <div
+          className={`sidebar-back ${sideAnimate}`}
+          onAnimationEnd={handleAnimationEnd}
+          onClick={handleOpenSidebar}
+        ></div>
+
+        <Map filters={filters} data={DummyData} mapCenter={getCenter} />
+
+        {showDisclaimer && (
+          <Modal
+            additionalClasses="z-[12]"
+            onConfirm={() => {
+              setShowDisclaimer(false);
+            }}
+            onConfirmLabel="Agree & Continue"
+            heading="The data you'll see isn't diagnostic."
+            content="The data are based on suspected symptoms collected from social media, not verified by healthcare professionals that tested these areas affected."
+            color="primary"
+          />
+        )}
       </div>
 
-      {/* BACKGROUND BLUR */}
-      <div
-        className={`sidebar-back ${sideAnimate}`}
-        onAnimationEnd={handleAnimationEnd}
-        onClick={handleOpenSidebar}
-      ></div>
-
-      <Map filters={filters} data={DummyData} mapCenter={getCenter} />
-
-      {showDisclaimer && (
-        <Modal
-          additionalClasses="z-[12]"
-          onConfirm={() => {
-            setShowDisclaimer(false);
-          }}
-          onConfirmLabel="Agree & Continue"
-          heading="The data you'll see isn't diagnostic."
-          content="The data are based on suspected symptoms collected from social media, not verified by healthcare professionals that tested these areas affected."
-          color="primary"
-        />
-      )}
-    </div>
+      <MapScreenshot filters={filters} ref={captureMapRef} />
+    </>
   );
 };
 export default TrendsMap;

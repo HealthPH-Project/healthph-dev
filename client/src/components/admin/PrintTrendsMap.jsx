@@ -6,33 +6,13 @@ const PrintTrendsMap = forwardRef(({ mapImage, dateTable }, ref) => {
       ? value.toString().padStart(minDigit, "0").slice(0, minDigit)
       : value.toString().padStart(minDigit, "0");
   };
-  const [image, setImage] = useState(null);
 
-  function filter(node) {
-    // if (node.class.contains)
-    return node.tagName !== "i";
-  }
-  //   useEffect(() => {
-  //     const convertMapToPng = async () => {
-  //       //   var node = document.getElementById("trends-map-container");
-  //       var node = document.getElementsByClassName("leaflet-container")[0];
-
-  //       try {
-  //         const dataUrl = await toPng(node, {
-  //           height: node.clientHeight,
-  //           width: node.clientWidth,
-  //           quality: 0.95,
-  //           filter: filter,
-  //         });
-
-  //         setImage(dataUrl);
-  //       } catch (error) {
-  //         console.error("Error converting component to PNG:", error);
-  //       }
-  //     };
-
-  //     convertMapToPng();
-  //   }, []);
+  const mapLegends = [
+    { id: "TB", label: "Pulmonary Tuberculosis", color: "#DBB324" },
+    { id: "PN", label: "Pneumonia", color: "#007AFF" },
+    { id: "COVID", label: "COVID", color: "#D82727" },
+    { id: "AURI", label: "AURI", color: "#35CA3B" },
+  ];
 
   return (
     <div className="print-component">
@@ -48,6 +28,11 @@ const PrintTrendsMap = forwardRef(({ mapImage, dateTable }, ref) => {
                 <p>Trends Map</p>
               </div>
               <p>As of {dateTable}</p>
+            </div>
+            <div className="flex items-center mt-[12px]">
+              {mapLegends.map((mapLegend, i) => {
+                return <MapLegendItem key={i} {...mapLegend} />;
+              })}
             </div>
             <div className="h-[900px] w-full">
               <img
@@ -66,4 +51,17 @@ const PrintTrendsMap = forwardRef(({ mapImage, dateTable }, ref) => {
     </div>
   );
 });
+
+const MapLegendItem = ({ id, label, color }) => {
+  const bgColor = `bg-[${color}]`;
+  return (
+    <div className="flex items-center me-[16px]">
+      <div
+        className={`h-[16px] w-[16px] rounded-[4px] me-[10px]`}
+        style={{ backgroundColor: color }}
+      ></div>
+      <span className="prod-l3 font-medium">{label}</span>
+    </div>
+  );
+};
 export default PrintTrendsMap;

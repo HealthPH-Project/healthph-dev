@@ -18,6 +18,8 @@ import {
 } from "react-device-detect";
 
 import { useUploadFileMutation } from "./features/api/datasetsSlice";
+import html2canvas from "html2canvas";
+import MapScreenshot from "./components/admin/MapScreenshot";
 
 const Test = () => {
   let x = TestList;
@@ -41,38 +43,71 @@ const Test = () => {
     setSplitCode(code.split(""));
   }, [code]);
 
+  const [image, setImage] = useState(null);
+  const [displayMap, setDisplayMap] = useState(false);
+  const captureRef = useRef();
+  useEffect(() => {
+    // setDisplayMap(false);
+  }, []);
+
+  const handleClick = async () => {
+    console.log("asas");
+    // setDisplayMap(true);
+    // setTimeout(() => {
+    //   console.log("wait");
+    // }, 5000);
+    const canvas = await html2canvas(captureRef.current, { useCORS: true });
+    // const canvas = await html2canvas(document.getElementById("sample"), {
+    //   useCORS: true,
+    // });
+
+    var dataURL = canvas.toDataURL("image/png");
+    setImage(dataURL);
+    // Create an image element from the data URL
+    // var img = new Image();
+    // img.src = dataURL;
+    // img.download = dataURL;
+    // // Create a link element
+    // var a = document.createElement("a");
+    // a.innerHTML = "DOWNLOAD";
+    // a.target = "_blank";
+    // // Set the href of the link to the data URL of the image
+    // a.href = img.src;
+    // // Set the download attribute of the link
+    // a.download = img.download;
+    // // Append the link to the page
+    // document.body.appendChild(a);
+    // // Click the link to trigger the download
+    // a.click();
+  };
+
   return (
     <>
-      <div className="test-layout">
-        <div>
-          <input
-            type="text"
-            className="input input-md"
-            value={code}
-            onChange={handleChangeCode}
-          />
-
-          <div className="grid grid-cols-6">
-            <div className={"border h-24 flex items-center justify-center"}>
-              {splitCode[0] ?? ""}
-            </div>
-            <div className="border h-24 flex items-center justify-center">
-              {splitCode[1] ?? ""}
-            </div>
-            <div className="border h-24 flex items-center justify-center">
-              {splitCode[2] ?? ""}
-            </div>
-            <div className="border h-24 flex items-center justify-center">
-              {splitCode[3] ?? ""}
-            </div>
-            <div className="border h-24 flex items-center justify-center">
-              {splitCode[4] ?? ""}
-            </div>
-            <div className="border h-24 flex items-center justify-center">
-              {splitCode[5] ?? ""}
-            </div>
-          </div>
+      <div className="test-layout  w-[1400px] h-[1700px]">
+        <div className="fixed top-0 left-0 z-50">
+          <button
+            className="prod-btn-base prod-btn-primary"
+            onClick={handleClick}
+          >
+            CLICK
+          </button>
         </div>
+        <div></div>
+        <div className="bg-success-300 w-[300px] h-[300px]">
+          {/* <MapScreenshot filterRegions="all" /> */}
+          <img src={image} className="h-full w-full object-contain" alt="" />
+        </div>
+        {/* <div
+          id="sample"
+          ref={captureRef}
+          className={`${
+            displayMap ? "" : "right-[100%]"
+          } sample-wrapper w-[1400px] h-[1700px] bg-destructive-200 fixed top-0`}
+        >
+          <MapScreenshot filterRegions="all" />
+        </div> */}
+
+        <MapScreenshot filterRegions="I,II,III" ref={captureRef} />
       </div>
     </>
   );

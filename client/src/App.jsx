@@ -19,7 +19,6 @@ import ResetPassword from "./pages/auth/ResetPassword";
 
 import Analytics from "./pages/admin/Analytics";
 import TrendsMap from "./pages/admin/TrendsMap";
-import TrendsMap2 from "./pages/admin/TrendsMap2";
 import UploadDataset from "./pages/admin/UploadDataset";
 import UserManagement from "./pages/admin/UserManagement";
 import AddUser from "./pages/admin/AddUser";
@@ -199,15 +198,6 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | Trends Map" />
                   <TrendsMap />
-                </>
-              }
-            />
-            <Route
-              path="trends-map2"
-              element={
-                <>
-                  <HelmetTitle title="HealthPH | Trends Map" />
-                  <TrendsMap2 />
                 </>
               }
             />
