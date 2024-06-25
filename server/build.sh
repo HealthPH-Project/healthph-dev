@@ -15,5 +15,8 @@ else
   echo "...Using Chrome from cache"
 fi
 
+export PATH="${PATH}:/opt/render/project/.render/chrome/opt/google/chrome"
+echo "Current PATH: $PATH"
+
 # Install Python libraries (replace with your actual requirements)
 # pip install -r requirements.txt

@@ -29,9 +29,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 def generate_map_image(url):
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')  # Disable GPU for efficiency
 
-    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+    # driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+    driver = webdriver.Chrome(options=options)
     
     driver.set_window_size(1400, 1700)
     driver.get(url)
