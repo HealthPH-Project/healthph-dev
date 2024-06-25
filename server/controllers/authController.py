@@ -148,7 +148,7 @@ async def verify_otp_code(request: OTPCodeRequest):
 
     if user.otp_code != otp_code or user.otp_expiry.astimezone(
         timezone.utc
-    ) > datetime.now(timezone.utc):
+    ) < datetime.now(timezone.utc):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid or expired OTP codeqq",
@@ -190,17 +190,17 @@ async def resend_otp_code(email: str = Body(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Failed to resend verification codea",
         )
-        
+
     user_data = user_collection.find_one({"email": email})
-    
+
     if not user_data:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Failed to resend verification codeb",
         )
-        
+
     user = UserInDB(**user_data)
-    
+
     otp: OTPCode = generate_otp_code()
 
     user_collection.find_one_and_update(

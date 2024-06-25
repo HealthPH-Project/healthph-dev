@@ -60,7 +60,7 @@ def create_reset_password_token(email: str):
 def generate_otp_code():
     return OTPCode(
         otp_code=f"{secrets.randbelow(999999):06d}",
-        otp_expiry=datetime.now(timezone.utc) + timedelta(minutes=10),
+        otp_expiry=datetime.now() + timedelta(minutes=10),
     )
 
 
