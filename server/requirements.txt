@@ -13,5 +13,3 @@ jinja2
 pandas
 wordcloud
 nltk
-selenium
-webdriver-manager
