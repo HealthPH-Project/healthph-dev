@@ -16,4 +16,4 @@ else
 fi
 
 # Install Python libraries (replace with your actual requirements)
-pip install -r requirements.txt
+# pip install -r requirements.txt
