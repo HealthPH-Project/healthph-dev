@@ -92,7 +92,6 @@ const Test = () => {
             CLICK
           </button>
         </div>
-        <div></div>
         <div className="bg-success-300 w-[300px] h-[300px]">
           {/* <MapScreenshot filterRegions="all" /> */}
           <img src={image} className="h-full w-full object-contain" alt="" />
@@ -107,7 +106,18 @@ const Test = () => {
           <MapScreenshot filterRegions="all" />
         </div> */}
 
-        <MapScreenshot filterRegions="I,II,III" ref={captureRef} />
+        <MapScreenshot
+          filters={{
+            region: [
+              {
+                label: "Region III",
+                value: "III",
+                order: 3,
+              },
+            ],
+          }}
+          ref={captureRef}
+        />
       </div>
     </>
   );

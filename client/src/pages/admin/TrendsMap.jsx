@@ -257,6 +257,7 @@ const TrendsMap = () => {
     });
     canvas.getContext("2d", { willReadFrequently: true });
     var dataURL = canvas.toDataURL("image/png");
+
     setMapImage(dataURL);
     setTimeout(handlePrint, 500);
   };

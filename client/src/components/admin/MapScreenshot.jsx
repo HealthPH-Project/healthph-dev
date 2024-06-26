@@ -1,12 +1,6 @@
 import { Fragment, forwardRef, useMemo, useState } from "react";
 
-import {
-  LayerGroup,
-  MapContainer,
-  Polygon,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import { LayerGroup, MapContainer, Polygon, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import { SemiCircleMarker } from "react-leaflet-semicircle";
 
@@ -64,12 +58,12 @@ const MapScreenshot = forwardRef(({ filters }, ref) => {
 
     return false;
   };
+
   return (
     <>
       {/* MAP CONTAINER */}
       <div
-        className="map-container w-[1400px] h-[1700px] fixed z-50 top-0 left-[100%]"
-        id="trends-map-container"
+        className="map-container w-[1400px] h-[1700px] fixed z-50 top-0 left-[100%] map-screenshot"
         ref={ref}
       >
         {/* MAP */}
@@ -115,9 +109,7 @@ const MapScreenshot = forwardRef(({ filters }, ref) => {
                                   radius={15}
                                   startAngle={interval * (i + 1) - interval}
                                   stopAngle={interval * (i + 1)}
-                                >
-                                  <Popup>{text}</Popup>
-                                </SemiCircleMarker>
+                                ></SemiCircleMarker>
                               );
                             })}
                           </Fragment>
