@@ -215,7 +215,7 @@
 
   /* ARTICLES */
 
-  .article-layout {
+  .article-layout:not(.about-us) {
     /* @apply bg-gray-50; */
     background: url("../images/home-bg-ph.png");
     background-size: cover;
@@ -225,6 +225,11 @@
     max-width: 100vw;
     height: 100vh;
     overflow-y: auto;
+  }
+
+  .article-layout.about-us {
+    background-color: #f5f5f5;
+    @apply !text-gray-700;
   }
 
   .article-layout .about-container {
@@ -444,6 +449,10 @@
   }
 
   /* ARTICLE PAGE */
+  .article-page-layout {
+    background-color: #f5f5f5;
+  }
+
   .article-page-layout .article-hero-wrapper {
     @apply py-[72px] sm:py-[112px] px-[16px] flex justify-center items-center;
     background-size: cover;

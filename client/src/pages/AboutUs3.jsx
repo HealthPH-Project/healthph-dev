@@ -32,14 +32,14 @@ const AboutUs3 = () => {
   };
 
   return (
-    <div className="article-layout">
-      <HomeNavbar />
+    <div className="article-layout about-us">
+      <HomeNavbar background="solid" />
 
       <section className="mt-[56px]">
         <div className="about-container mb-[112px]">
           <div className="w-full max-w-[1144px]">
-            <p className="section-title">About the Project</p>
-            <div className="article-body text-white">
+            <p className="section-title !text-gray-700">About the Project</p>
+            <div className="article-body text-gray-700">
               <p className="text-justify">
                 <span>
                   The Department of Science and Technology — Philippine Council

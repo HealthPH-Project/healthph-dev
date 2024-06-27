@@ -7,11 +7,18 @@ import HomeNavbar from "../components/HomeNavbar";
 import HomeFooter from "../components/HomeFooter";
 
 import ArticlesList from "../assets/data/articles.json";
+import ArticleItem from "../components/about-us/ArticleItem";
 
 const ArticlePage = () => {
   const { slug } = useParams();
 
   const article = ArticlesList.find((a) => a.articleSlug == slug);
+
+  const latestArticles = ArticlesList.sort(
+    (a, b) => new Date(b.datePublished) - new Date(a.datePublished)
+  )
+    .filter((a) => a.articleSlug != slug)
+    .slice(0, 4);
 
   const {
     articleTitle,
@@ -27,7 +34,7 @@ const ArticlePage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [slug]);
 
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -52,83 +59,112 @@ const ArticlePage = () => {
   const [modalData, setModalData] = useState({ src: "", caption: "" });
 
   return (
-    <div className="article-layout">
-      <HomeNavbar />
-      <section className="mt-[56px]">
-        <div className="article-container">
-          <div className="article-wrapper">
-            <div className="flex justify-start items-center mb-[24px]">
+    <div className="article-page-layout">
+      <HomeNavbar background="solid" />
+      <section
+        className="article-hero-wrapper"
+        style={{
+          backgroundImage:
+            "url('/assets/articles/preview/" + articleImage + "')",
+        }}
+      >
+        <div className="article-hero-overlay"></div>
+        <div className="article-hero ">
+          <div className="flex justify-start items-center mb-[24px]">
+            <Link
+              to="/articles"
+              className="prod-btn-lg prod-btn-secondary flex items-center"
+            >
+              <Icon
+                iconName="ArrowLeft"
+                height="24px"
+                width="24px"
+                fill="#8693A0"
+              />
+              <span className="ms-[8px]">Back to Article List</span>
+            </Link>
+          </div>
+          <div className="article-header">
+            <p className="article-title">{articleTitle}</p>
+            <p className="article-content my-[24px]">
+              {readDuration} •{" "}
+              {format(new Date(datePublished), "MMMM dd, yyyy")}
+            </p>
+            <p className="article-content">{articlePreview}</p>
+          </div>
+        </div>
+      </section>
+      <section className="article-container">
+        <div className="article-wrapper mt-[56px] ">
+          {/* ARTICLE BODY */}
+          <div className="article-body">
+            <p>
+              {articleBody.split("\n").map((v, i) => {
+                const isLast = i == articleBody.split("\n").length - 1;
+                return (
+                  <Fragment key={i}>
+                    <span>{v}</span>
+                    {!isLast && (
+                      <>
+                        <br /> <br />
+                      </>
+                    )}
+                  </Fragment>
+                );
+              })}
+            </p>
+          </div>
+
+          {/* ARTICLE GALLERY */}
+          <div className="article-gallery">
+            {galleryImages.map(({ filename, caption }, i) => {
+              const imagePath =
+                "/assets/articles/gallery/" + galleryFolder + "/";
+              return (
+                <div className="gallery-item" key={i}>
+                  <div
+                    className="image-wrapper"
+                    onClick={() => {
+                      setModalData({
+                        src: imagePath + filename,
+                        caption: caption,
+                      });
+                      setImageModalActive(true);
+                    }}
+                  >
+                    <img src={imagePath + filename} alt={caption} />
+                  </div>
+                  <p className="gallery-caption article-caption">{caption}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* LATEST ARTICLES */}
+          <div className="latest-articles">
+            <div className="flex items-center justify-start mb-[24px]">
+              <p className="section-title">Latest Articles</p>
+            </div>
+            <div className="articles mb-[24px]">
+              {latestArticles.map((a, i) => {
+                if (a.articleTitle != "") {
+                  return <ArticleItem article={a} key={i} />;
+                }
+              })}
+            </div>
+            <div className="flex items-center justify-end">
               <Link
                 to="/articles"
                 className="prod-btn-lg prod-btn-secondary flex items-center"
               >
+                <span className="me-[8px]">See All Articles</span>
                 <Icon
-                  iconName="ArrowLeft"
+                  iconName="ArrowRight"
                   height="24px"
                   width="24px"
                   fill="#8693A0"
                 />
-                <span className="ms-[8px]">Back to Article List</span>
               </Link>
-            </div>
-            <div className="article-header">
-              <p className="article-title">{articleTitle}</p>
-              <p className="article-content my-[24px]">
-                {readDuration} •{" "}
-                {format(new Date(datePublished), "MMMM dd, yyyy")}
-              </p>
-              <p className="article-content">{articlePreview}</p>
-            </div>
-            <div className="article-preview">
-              <div className="article-image-wrapper">
-                <img
-                  src={"/assets/articles/preview/" + articleImage}
-                  alt={articleImageCaption}
-                />
-              </div>
-              <p className="article-caption">{articleImageCaption}</p>
-            </div>
-
-            <div className="article-body">
-              <p>
-                {articleBody.split("\n").map((v, i) => {
-                  const isLast = i == articleBody.split("\n") - 1;
-                  return (
-                    <Fragment key={i}>
-                      <span>{v}</span>
-                      {!isLast && (
-                        <>
-                          <br /> <br />
-                        </>
-                      )}
-                    </Fragment>
-                  );
-                })}
-              </p>
-            </div>
-
-            <div className="article-gallery">
-              {galleryImages.map(({ filename, caption }, i) => {
-                const imagePath =
-                  "/assets/articles/gallery/" + galleryFolder + "/";
-                return (
-                  <div className="gallery-item" key={i}>
-                    <div
-                      className="image-wrapper"
-                      onClick={() => {
-                        setModalData({
-                          src: imagePath + filename,
-                          caption: caption,
-                        });
-                        setImageModalActive(true);
-                      }}
-                    >
-                      <img src={imagePath + filename} alt={caption} />
-                    </div>
-                    <p className="article-caption">{caption}</p>
-                  </div>
-                );
-              })}
             </div>
           </div>
         </div>
