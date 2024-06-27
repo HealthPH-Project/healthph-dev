@@ -114,7 +114,9 @@ const HomeNavbar = ({ background = "transparent" }) => {
           <div className="flex justify-center items-center">
             <div className="w-[152px] h-full">
               <img
-                src={isMenuActive ? NULogoLgAlt : NULogoLg}
+                src={
+                  isMenuActive || background == "solid" ? NULogoLgAlt : NULogoLg
+                }
                 alt="national-university"
                 className="w-full h-full object-contain"
               />
