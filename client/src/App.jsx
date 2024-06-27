@@ -39,6 +39,7 @@ import AboutUs2 from "./pages/AboutUs2";
 import ResearchTeam from "./pages/ResearchTeam";
 import FullMap from "./pages/admin/FullMap";
 import AboutUs3 from "./pages/AboutUs3";
+import ArticlePage2 from "./pages/ArticlePage2";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -123,6 +124,19 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | Article Page" />
                   <ArticlePage />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="articles2/:slug"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | Article Page" />
+                  <ArticlePage2 />
                 </>
               ) : (
                 <Navigate to="/login" />

@@ -442,4 +442,161 @@
       @apply web-m-p3;
     }
   }
+
+  /* ARTICLE PAGE */
+  .article-page-layout .article-hero-wrapper {
+    @apply py-[72px] sm:py-[112px] px-[16px] flex justify-center items-center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .article-page-layout .article-hero-wrapper .article-hero-overlay {
+    @apply absolute top-0 left-0 h-full w-full z-0;
+    background: url("../images/home-bg-ph.png");
+    opacity: 55%;
+    background-size: cover;
+    background-position: cover;
+    box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.1);
+  }
+  .article-page-layout .article-hero {
+    @apply z-10 w-full md:max-w-[544px] lg:max-w-[728px] xl:max-w-[984px] 2xl:max-w-[1144px];
+  }
+
+  .article-page-layout .article-title {
+    /* @apply web-m-h2 xs:web-m-h1 sm:web-d-h2 text-gray-900; */
+    @apply web-m-h2 xs:web-m-h1   sm:web-d-h2 text-white;
+  }
+
+  .article-page-layout .article-content {
+    /* @apply web-d-p3 text-gray-700 text-justify; */
+    @apply web-m-p3 sm:web-d-p3 text-white text-justify;
+  }
+
+  .article-page-layout .article-container {
+    @apply px-[16px] flex justify-center items-center;
+  }
+
+  .article-page-layout .article-container .article-wrapper {
+    @apply w-full md:max-w-[544px] lg:max-w-[728px] xl:max-w-[984px] 2xl:max-w-[1144px];
+  }
+
+  .article-page-layout .article-wrapper .article-body {
+    @apply mb-[56px] web-d-p3 text-gray-700 text-justify;
+  }
+
+  .article-page-layout .article-gallery {
+    @apply flex justify-center flex-wrap w-full gap-[32px];
+  }
+
+  .article-page-layout .article-gallery .gallery-item {
+    @apply w-[262px] sm:w-[307.5px] flex-shrink-0;
+  }
+
+  .article-page-layout .article-gallery .gallery-item .image-wrapper {
+    @apply bg-white w-full cursor-pointer;
+    aspect-ratio: 1;
+  }
+
+  .article-page-layout .article-gallery .gallery-item .image-wrapper img {
+    @apply h-full w-full;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .article-page-layout .article-gallery .gallery-caption {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .article-page-layout .article-wrapper .article-caption {
+    @apply web-d-p3 font-semibold mt-[8px] text-gray-500;
+  }
+
+  .article-page-layout .latest-articles {
+    @apply my-[72px]  xl:my-[112px];
+  }
+
+  .article-page-layout .latest-articles .section-title {
+    @apply web-d-h3 text-gray-700;
+  }
+
+  .article-page-layout .articles {
+    @apply w-full grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px 32px;
+  }
+
+  @media screen and (max-width: 1366px ) {
+    .article-page-layout .articles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .article-page-layout .articles {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .article-page-layout .articles .article-item {
+    @apply w-full bg-white rounded-[8px] overflow-hidden;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1),
+      0px 0px 0px 1px rgba(70, 83, 96, 0.16);
+  }
+
+  .article-page-layout .articles .article-item:nth-child(4) {
+    @apply block xl:hidden;
+  }
+
+  .article-page-layout .articles .article-item .article-image {
+    @apply h-[240px] w-full bg-white;
+  }
+
+  .article-page-layout .articles .article-item .article-image img {
+    @apply w-full h-full;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .article-page-layout .articles .article-item .article-body {
+    @apply p-[18px] w-full mb-0;
+  }
+  .article-page-layout .articles .article-item .article-body .date {
+    @apply web-d-l1 text-gray-500 mb-[8px];
+  }
+
+  .article-page-layout .articles .article-item .article-body .article-title {
+    @apply h-[56px] web-d-h5 text-gray-900 mb-[12px] text-left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+  }
+
+  .article-page-layout .articles .article-item .article-body .article-preview {
+    @apply h-[78px] web-d-p3 text-gray-700 mb-[18px] text-left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+  }
+
+  .article-page-layout .articles .article-item .article-body a {
+    @apply w-full flex items-center justify-center;
+  }
+
+  .article-page-layout footer {
+    @apply bg-primary-800 w-full px-[20px] py-[24px];
+    @apply flex justify-between;
+  }
+
+  .article-page-layout footer .footer-logo img {
+    height: 100%;
+    object-fit: contain;
+  }
 }
