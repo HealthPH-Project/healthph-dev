@@ -70,7 +70,7 @@
     @apply text-primary-500 bg-primary-100;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1100px) {
     .home-nav .home-nav-links {
       @apply fixed top-0 left-0 max-w-[300px] w-full h-screen bg-white pt-[120px] pb-[24px] px-[16px];
       @apply flex flex-col justify-between items-center;
@@ -267,5 +267,69 @@
       background-size: cover;
       background-position: center;
     }
+  }
+
+  footer {
+    @apply bg-primary-800 w-full px-[20px] py-[24px];
+    @apply flex justify-between;
+  }
+
+  footer .footer-logo img {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* CONTACT US */
+  .contact-us-layout {
+    @apply bg-[#F5F5F5];
+  }
+
+  .contact-us-layout .contact-us-container {
+    @apply my-[56px] w-full px-[20px];
+  }
+
+  .contact-us-layout .contact-us-wrapper {
+    @apply w-full max-w-[1326px] mx-auto;
+  }
+
+  .contact-us-layout .contact-us-wrapper .heading {
+    @apply web-m-h2 sm:web-d-h2 text-gray-900 font-semibold;
+  }
+
+  .contact-us-layout .contact-us-wrapper .map-wrapper {
+    @apply my-[36px] sm:my-[56px] h-[500px];
+  }
+
+  .contact-us-layout .contact-us-wrapper .contact-details {
+    @apply grid w-full;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  @media screen and (max-width: 768px) {
+    .contact-us-layout .contact-us-wrapper .contact-details {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .contact-us-layout .contact-us-wrapper .contact-details .contact-detail-item {
+    @apply flex flex-col items-center justify-center text-center;
+  }
+
+  .contact-us-layout .contact-detail-item .contact-icon {
+    @apply rounded-[50%] p-[8px] border-8 border-[#E8F3FF] bg-[#B9DBFF] flex justify-center items-center;
+  }
+  .contact-us-layout .contact-detail-item .contact-detail {
+    @apply my-[20px];
+  }
+
+  .contact-us-layout .contact-detail-item .contact-detail .label {
+    @apply prod-l1 font-semibold text-gray-900 mb-[8px];
+  }
+
+  .contact-us-layout .contact-detail-item .contact-detail .description {
+    @apply prod-p2 text-gray-500;
+  }
+  .contact-us-layout .contact-detail-item .contact-link {
+    @apply text-primary-500 hover:underline hover:underline-offset-2 prod-b2;
   }
 }

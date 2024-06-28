@@ -22,6 +22,7 @@ export { default as IndeterminateCheck } from "./indeterminate-check.svg?react";
 export { default as Information } from "./information.svg?react";
 export { default as List } from "./list.svg?react";
 export { default as ListEnd } from "./list-end.svg?react";
+export { default as Location } from "./location.svg?react";
 export { default as Lock } from "./lock.svg?react";
 export { default as Logout } from "./logout.svg?react";
 export { default as Mail } from "./mail.svg?react";

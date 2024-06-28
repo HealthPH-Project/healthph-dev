@@ -40,6 +40,7 @@ import ResearchTeam from "./pages/ResearchTeam";
 import FullMap from "./pages/admin/FullMap";
 import AboutUs3 from "./pages/AboutUs3";
 import ArticlePage2 from "./pages/ArticlePage2";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -150,6 +151,19 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | Research Team" />
                   <ResearchTeam />
+                </>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          ></Route>
+          <Route
+            path="contact-us"
+            element={
+              !isPWA ? (
+                <>
+                  <HelmetTitle title="HealthPH | Contact Us" />
+                  <ContactUs />
                 </>
               ) : (
                 <Navigate to="/login" />

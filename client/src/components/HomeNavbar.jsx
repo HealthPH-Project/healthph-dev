@@ -28,6 +28,19 @@ const HomeNavbar = ({ background = "transparent" }) => {
       setMenuAnimate("");
     }
   };
+
+  const navLinks = [
+    { path: "/", iconName: "Home", label: "Home" },
+    {
+      path: "/about-the-project",
+      iconName: "Information",
+      label: "About The Project",
+    },
+    { path: "/articles", iconName: "Document", label: "Articles" },
+    { path: "/research-team", iconName: "UserThree", label: "Research Team" },
+    { path: "/contact-us", iconName: "Mail", label: "Contact Us" },
+  ];
+
   return (
     <nav
       className={
@@ -49,50 +62,21 @@ const HomeNavbar = ({ background = "transparent" }) => {
         <div className={"home-nav-links " + menuAnimate}>
           {/* NAV LINKS */}
           <ul>
-            <li>
-              <NavLink to="/">
-                <Icon
-                  iconName="Home"
-                  height="20px"
-                  width="20px"
-                  className="icon"
-                />
-                <span>Home</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/about-us">
-                <Icon
-                  iconName="Information"
-                  height="20px"
-                  width="20px"
-                  className="icon"
-                />
-                <span>About The Project</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/articles">
-                <Icon
-                  iconName="Document"
-                  height="20px"
-                  width="20px"
-                  className="icon"
-                />
-                <span>Articles</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/research-team">
-                <Icon
-                  iconName="UserThree"
-                  height="20px"
-                  width="20px"
-                  className="icon"
-                />
-                <span>Research Team</span>
-              </NavLink>
-            </li>
+            {navLinks.map(({ path, iconName, label }, i) => {
+              return (
+                <li key={i}>
+                  <NavLink to={path}>
+                    <Icon
+                      iconName={iconName}
+                      height="20px"
+                      width="20px"
+                      className="icon"
+                    />
+                    <span>{label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
             {/* <li>
               <NavLink
                 to="/about-us2"
@@ -158,7 +142,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
         />
       </div>
       <div
-        className={`nav-backdrop min-[900px]:!hidden  ${
+        className={`nav-backdrop min-[1100px]:!hidden  ${
           isMenuActive ? "active" : ""
         } ${menuAnimate} `}
         onAnimationEnd={handleAnimationEnd}
