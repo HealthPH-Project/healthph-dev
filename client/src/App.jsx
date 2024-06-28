@@ -80,7 +80,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="about-us"
+            path="about-the-project"
             element={
               !isPWA ? (
                 <>
