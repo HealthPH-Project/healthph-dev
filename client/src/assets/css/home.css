@@ -269,12 +269,12 @@
     }
   }
 
-  footer {
+  footer:not(.auth-footer) {
     @apply bg-primary-800 w-full px-[20px] py-[24px];
     @apply flex justify-between;
   }
 
-  footer .footer-logo img {
+  footer:not(.auth-footer) .footer-logo img {
     height: 100%;
     object-fit: contain;
   }

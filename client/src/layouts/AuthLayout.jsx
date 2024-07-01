@@ -11,7 +11,7 @@ const AuthLayout = () => {
           <div className="auth-container">
             <Outlet />
           </div>
-          <footer>
+          <footer className="auth-footer">
             <span>&#169; HealthPH 2024</span>
             <a
               href={"mailto:" + import.meta.env.VITE_HEALTHPH_EMAIL}
