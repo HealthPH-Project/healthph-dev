@@ -10,6 +10,7 @@ from controllers.userController import (
     delete_users,
     fetch_admins,
     delete_admin,
+    update_user,
 )
 
 router = APIRouter()
@@ -31,6 +32,8 @@ router.add_api_route("", methods=["GET"], endpoint=fetch_users)
 router.add_api_route("", methods=["POST"], endpoint=create_user)
 
 router.add_api_route("/disable/{id}", methods=["PUT"], endpoint=set_disable_status)
+
+router.add_api_route("/update/{id}", methods=["PUT"], endpoint=update_user)
 
 router.add_api_route("/admins", methods=["GET"], endpoint=fetch_admins)
 

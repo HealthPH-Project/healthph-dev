@@ -23,6 +23,7 @@ from models.user import (
     UpdatePersonalInfo,
     UpdateEmailRequest,
     UpdatePasswordRequest,
+    UpdateUserRequest,
     UserInDB,
     SuperadminResult,
 )
@@ -482,7 +483,7 @@ async def create_user(
 
         if not user.region:
             errors.append({"field": "region", "error": "Must choose region"})
-            
+
         if not user.accessible_regions:
             errors.append(
                 {
@@ -848,5 +849,95 @@ async def set_disable_status(
                 else "User enabled successfully."
             ),
             "user": individual_user(new_user),
+        },
+    )
+
+
+"""
+@desc     Update user data
+route     PUT api/users/update/{id}
+@access   Private | ADMIN-SUPERADMIN
+"""
+
+
+async def update_user(
+    id: str,
+    data: UpdateUserRequest,
+    is_admin: Annotated[AdminResult, Depends(require_admin)],
+):
+    
+    errors = []
+    
+    # Check if user is an admin or superadmin
+    if not is_admin.result:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=("Failed to update user."),
+        )
+        
+    # Check fields if empty
+    if (
+        not data.accessible_regions
+    ):
+        if not data.accessible_regions:
+            errors.append(
+                {
+                    "field": "accessible_regions",
+                    "error": "Must choose at least one accessible region",
+                }
+            )
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=errors,
+        )
+
+
+    # Check if there is an id
+    if not id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=("Failed to update user."),
+        )
+
+    # Check if id is a valid ObjectId
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=("Failed to update user."),
+        )
+
+    # Check if user exists with id
+    user_data = user_collection.find_one({"_id": ObjectId(id)})
+
+    if not user_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User does not exist.",
+        )
+
+    # Update user data
+    updated_user = user_collection.find_one_and_update(
+        {"_id": ObjectId(id)},
+        {
+            "$set": {
+                "accessible_regions": data.accessible_regions,
+                "updated_at": datetime.now(),
+            }
+        },
+        return_document=ReturnDocument.AFTER,
+    )
+
+    # If update failed
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=("Failed to update user."),
+        )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": "User updated successfully.",
         },
     )

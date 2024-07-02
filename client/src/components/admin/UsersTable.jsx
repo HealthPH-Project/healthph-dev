@@ -14,8 +14,14 @@ import Snackbar from "../Snackbar";
 import {
   useDeleteUsersMutation,
   useDisableUserMutation,
+  useUpdateUserMutation,
 } from "../../features/api/userSlice";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+import ModalWithBody from "./ModalWithBody";
+import FieldGroup from "../FieldGroup";
+
+import Regions from "../../assets/data/regions.json";
+import MultiSelect from "../MultiSelect";
 
 const UsersTable = ({
   users,
@@ -274,6 +280,128 @@ const UsersTable = ({
     setDeleteModalActive(false);
   };
 
+  const [updateModalActive, setUpdateModalActive] = useState(false);
+
+  const [updateModalData, setUpdateModalData] = useState({
+    id: "",
+    name: "",
+    accessible_regions: [],
+  });
+
+  const [updateModalErrors, setUpdateModalErrors] = useState({
+    accessible_regions: "",
+  });
+
+  const [updateUser] = useUpdateUserMutation();
+
+  const handleUpdateUser = async () => {
+    const payload = {
+      id: updateModalData.id,
+      accessible_regions: updateModalData.accessible_regions.join(","),
+    };
+
+    if (payload.accessible_regions == "" || updateModalData.length == 0) {
+      setUpdateModalErrors((errors) => {
+        return {
+          ...errors,
+          accessible_regions: "Must choose at least one accessible region.",
+        };
+      });
+
+      return;
+    }
+
+    setIsModalLoading(true);
+
+    const response = await updateUser(payload);
+
+    if (!response) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={"Failed to update User"}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      setIsModalLoading(false);
+      return;
+    }
+
+    if ("error" in response) {
+      const { detail } = response["error"]["data"];
+
+      detail.map(({ field, error }, i) => {
+        if (field in updateModalData) {
+          setUpdateModalErrors((formErrors) => ({
+            ...formErrors,
+            [field]: error,
+          }));
+        } else if (field == "error") {
+          setError(error);
+        } else {
+          toast(
+            <Snackbar
+              iconName="Error"
+              size="snackbar-sm"
+              color="destructive"
+              message={detail}
+            />,
+            {
+              closeButton: ({ closeToast }) => (
+                <Icon
+                  iconName="Close"
+                  className="close-icon close-icon-sm close-destructive"
+                  onClick={closeToast}
+                />
+              ),
+            }
+          );
+        }
+      });
+
+      setIsModalLoading(false);
+      return;
+    }
+
+    toast(
+      <Snackbar
+        iconName="CheckCircle"
+        size="snackbar-sm"
+        color="success"
+        message={`User updated successfully`}
+      />,
+      {
+        closeButton: ({ closeToast }) => (
+          <Icon
+            iconName="Close"
+            className="close-icon close-icon-sm close-success"
+            onClick={closeToast}
+          />
+        ),
+      }
+    );
+
+    await log_activity({
+      user_id: user.id,
+      entry: `Updated USER : ${updateModalData.name}`,
+      module: "User Management",
+    });
+
+    setIsModalLoading(false);
+    setUpdateModalData({ id: "", name: "", accessible_regions: [] });
+    setUpdateModalActive(false);
+  };
+
   return (
     <>
       <Datatable
@@ -302,6 +430,7 @@ const UsersTable = ({
                   last_name,
                   email,
                   region,
+                  accessible_regions,
                   organization,
                   is_disabled,
                   user_type,
@@ -344,6 +473,14 @@ const UsersTable = ({
                           <button
                             type="button"
                             className="prod-push-btn-sm prod-btn-primary me-[8px] min-w-[63px]"
+                            onClick={() => {
+                              setUpdateModalData({
+                                id: id,
+                                name: `${first_name} ${last_name}`,
+                                accessible_regions: accessible_regions,
+                              });
+                              setUpdateModalActive(true);
+                            }}
                           >
                             Update
                           </button>
@@ -484,6 +621,62 @@ const UsersTable = ({
           content="This user will receive full access to HealthPH such as the Analytics, Trends Map, and other modules."
           color="primary"
         />
+      )}
+
+      {updateModalActive && (
+        <ModalWithBody
+          onLoading={isModalLoading}
+          onLoadingLabel={"Updating"}
+          onConfirm={() => {
+            handleUpdateUser();
+          }}
+          onConfirmLabel="Update"
+          onCancel={() => {
+            setUpdateModalData({ id: "", name: "", accessible_regions: [] });
+            setUpdateModalActive(false);
+          }}
+          heading={`Update ${updateModalData.name}'s account`}
+          content="This user will receive full access to HealthPH such as the Analytics, Trends Map, and other modules."
+          color="primary"
+        >
+          <div className="p-[20px]">
+            <FieldGroup
+              label="Accessible Regions"
+              labelFor="accessible-regions"
+              additionalClasses="w-full mb-[20px]"
+              caption={
+                updateModalErrors.accessible_regions != ""
+                  ? updateModalErrors.accessible_regions
+                  : ""
+              }
+              state={updateModalErrors.accessible_regions != "" ? "error" : ""}
+            >
+              <MultiSelect
+                options={Regions.regions}
+                defaultValue={updateModalData.accessible_regions}
+                placeHolder="Select Region/s"
+                onChange={(e) => {
+                  setUpdateModalErrors((errors) => {
+                    return { ...errors, accessible_regions: "" };
+                  });
+                  setUpdateModalData((data) => {
+                    return {
+                      ...data,
+                      accessible_regions: e.map((v, i) => v.value),
+                    };
+                  });
+                }}
+                selectAllLabel="All Regions"
+                selectAll={false}
+                additionalClassname="w-full mt-[8px]"
+                editable={true}
+                state={
+                  updateModalErrors.accessible_regions != "" ? "error" : ""
+                }
+              />
+            </FieldGroup>
+          </div>
+        </ModalWithBody>
       )}
     </>
   );
