@@ -10,9 +10,10 @@ import ArticlesList from "../assets/data/articles.json";
 
 const Articles = () => {
   const [articles, setArticles] = useState(
-    ArticlesList.sort(
-      (a, b) => new Date(b.datePublished) - new Date(a.datePublished)
-    )
+    // ArticlesList.sort(
+    //   (a, b) => new Date(b.datePublished) - new Date(a.datePublished)
+    // )
+    ArticlesList.sort((a, b) => b.articleID - a.articleID)
   );
 
   const [articlePage, setArticlePage] = useState(1);
