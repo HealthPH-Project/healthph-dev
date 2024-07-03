@@ -15,86 +15,18 @@ def get_stopwords():
     # Define stopwords
     stopwords = set(STOPWORDS)
 
-    # Load additional tagalog stopwords
-    with open("assets/data/tagalog_stop_words.txt", "r") as f:
-        additional_stopwords_tl = f.read().splitlines()
-
-    # Load additional tagalog stopwords
-    with open("assets/data/tagalog_stop_words_2.txt", "r") as f:
-        additional_stopwords_tl_2 = f.read().splitlines()
-
-    # Load additional english stopwords
-    with open("assets/data/english_stop_words.txt", "r") as f:
-        additional_stopwords_en = f.read().splitlines()
-
-    # Load additional cebuano stopwords
-    with open("assets/data/cebuano_stop_words.txt", "r") as f:
-        additional_stopwords_cb = f.read().splitlines()
-
-    stopwords.update(additional_stopwords_tl)
-    stopwords.update(additional_stopwords_tl_2)
-    stopwords.update(additional_stopwords_en)
-    stopwords.update(additional_stopwords_cb)
-
-    stopwords.update(
-        [
-            "wala",
-            "akong",
-            "ba",
-            "nung",
-            "talaga",
-            "pag",
-            "nang",
-            "de",
-            "amp",
-            "gym",
-            "coach",
-            "lang",
-            "yung",
-            "kasi",
-            "naman",
-            "mo",
-            "di",
-            "si",
-            "nya",
-            "yun",
-            "im",
-            "will",
-            "sya",
-            "nga",
-            "daw",
-            "eh",
-            "que",
-            "ug",
-            "e",
-            "man",
-            "jud",
-            "gi",
-            "oy",
-            "ba",
-            "talaga",
-            "day",
-            "one",
-            "parang",
-            "know",
-            "wala",
-            "alam",
-            "tapos",
-            "pag",
-            "tao",
-            "kayo",
-            "nung",
-            "us",
-            "now",
-            "natin",
-            "nasa",
-            "even",
-            "niyo",
-            "teaser",
-            "ma",
-            "yan"
-        ]
-    )
+    additional_stopwords_files = [
+        "tagalog_stop_words.txt",
+        "english_stop_words.txt",
+        "cebuano_stop_words.txt",
+    ]
+    
+    for s in additional_stopwords_files: 
+        # Load additional stopwords
+        with open(f"assets/data/{s}", "r") as f:
+            additional_stopwords = f.read().splitlines()
+            
+            stopwords.update(additional_stopwords)
     
     return stopwords
 
@@ -137,7 +69,7 @@ def frequent_words(data):
 
     # Define stopwords
     stopwords = get_stopwords()
-    
+
     # Split the post into words and filter out stopwords
     words = [word for word in post.split() if word not in stopwords]
 
@@ -176,9 +108,9 @@ def word_cloud(data, full_path: str):
         max_font_size=50,
         margin=50,
     ).generate(post)
-    
+
     wordcloud.to_file(full_path)
-    
+
     return wordcloud
 
     # return wordcloud
@@ -186,6 +118,7 @@ def word_cloud(data, full_path: str):
     wordcloud.to_image().save(image_buffer, format="PNG")
     image_buffer.seek(0)
     return image_buffer.getvalue()
+
 
 def wordcloud_color_func(
     word, font_size, position, orientation, random_state=None, **kwargs
