@@ -9,7 +9,7 @@
         {
             "name": "Ramon Rodriguez",
             "position": "Project Staff II",
-            "testimonial": "HealthPH is a game-changer for the Filipino people and government agencies that help track diseases in every community. It uses natural language processing techniques to analyze the current health status of the community. It has a dashboard for LGUs to use in their data-driven decisions",
+            "testimonial": "The integration of machine learning with social media data analysis has the potential to transform public health surveillance by providing more granular and immediate insights into disease spread and public sentiment.",
             "image": "ramon-rodriguez.jpeg"
         },
         {
@@ -23,6 +23,12 @@
             "position": "Project Staff II",
             "testimonial": "HealthPH in the near future will leverage the way we listen and pinpoint emerging diseases through social media.",
             "image": "bernie-fabito.jpg"
+        },
+        {
+            "name": "Marilen Pacis",
+            "position": "Project Staff II",
+            "testimonial": "The use of social media data in disease surveillance empowers the Philippines to enhance public health monitoring and response efforts, especially in remote or underserved areas.",
+            "image": "marilen-pacis.jpg"
         },
         {
             "name": "Mico Magtira",
