@@ -2,7 +2,6 @@ import HomeNavbar from "../components/HomeNavbar";
 import TestimonialsList from "../assets/data/testimonials.json";
 import TestimonialItem from "../components/about-us/TestimonialItem";
 import HomeFooter from "../components/HomeFooter";
-import TestimonialItem2 from "../components/about-us/TestimonialItem2";
 
 const ResearchTeam = () => {
   const dostPCHRD = TestimonialsList["dost-pchrd"];
@@ -23,9 +22,9 @@ const ResearchTeam = () => {
               })}
             </div>
             <p className="section-title">Research Team</p>
-            <div className="testimonials2">
+            <div className="testimonials">
               {researchTeam.map((v, i) => {
-                return <TestimonialItem2 {...v} key={i} />;
+                return <TestimonialItem {...v} key={i} />;
               })}
             </div>
             {/* <p className="section-title">Interns</p>

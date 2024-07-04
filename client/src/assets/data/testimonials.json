@@ -7,6 +7,12 @@
             "image": "mideth-abisado.png"
         },
         {
+            "name": "Ramon Rodriguez",
+            "position": "Project Staff II",
+            "testimonial": "HealthPH is a game-changer for the Filipino people and government agencies that help track diseases in every community. It uses natural language processing techniques to analyze the current health status of the community. It has a dashboard for LGUs to use in their data-driven decisions",
+            "image": "ramon-rodriguez.jpeg"
+        },
+        {
             "name": "Joseph Marvin Imperial",
             "position": "Project Staff II",
             "testimonial": "I envision HealthPH to be one of the first initiatives for open research where artifacts, findings, code, data, and resources are openly available to the public and adjacent research communities for consumption, dissemination, and advancement of scientific progress in Health x AI.",
@@ -45,16 +51,16 @@
     ],
     "dost-pchrd": [
         {
-            "name": "Timothy Jen Roxas",
-            "position": "Project Manager",
-            "testimonial": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum sint deleniti nemo facilis reprehenderit atque.",
-            "image": ""
+            "name": "Engr. Timothy Jen Roxas",
+            "position": "Project Manager, Digital and Frontier Technologies for Health, DOST-PCHRD",
+            "testimonial": "HealthPH is the perfect introduction of state-of-the-art techniques of disease surveillance in the Philippines, made possible through artificial intelligence. The monitoring of social media posts in four (4) different languages makes it possible for a fast, reliable, and nationwide system for the early detection of respiratory diseases to be made.",
+            "image": "timothy-jen-roxas.jpeg"
         },
         {
-            "name": "Louise Sky Olaguer",
-            "position": "*Position",
-            "testimonial": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum sint deleniti nemo facilis reprehenderit atque.",
-            "image": ""
+            "name": "Ms. Louise Sky Olaguer",
+            "position": "Program Head, Digital and Frontier Technologies for Health DOST-PCHRD",
+            "testimonial": "Through the commendable efforts of the HealthPH team, the creation of an inclusive and innovative disease monitoring tool for respiratory diseases is no longer a dream. By utlizing informal data sources such as social media, the early detection of respiratory diseases can now reach the farthest of the Philippine islands. Through data analytics, the government and LGUs can also provide timely intervention to prevent disease, outbreaks and bring about a safer, healthier Philippines.",
+            "image": "louise-sky-olaguer.jpg"
         }
     ],
     "interns": [

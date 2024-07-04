@@ -1,16 +1,16 @@
 const TestimonialItem = ({ name, position, image, testimonial }) => {
   return (
     <div className="testimonial-item">
-      <div className="testimonial-header">
-        <div className="details">
+      <div className="testimonial-image-wrapper">
+        {image && <img src={"/assets/research-team/" + image} alt={name} />}
+      </div>
+      <div className="testimonial-body">
+        <div className="mb-[12px]">
           <p className="testimonial-name">{name}</p>
           <p className="testimonial-position">{position}</p>
         </div>
-        <div className="testimonial-image">
-          {image && <img src={"/assets/research-team/" + image} alt={name} />}
-        </div>
+        <p className="testimonial-text">{testimonial}</p>
       </div>
-      <p className="testimonial-text">{testimonial}</p>
     </div>
   );
 };
