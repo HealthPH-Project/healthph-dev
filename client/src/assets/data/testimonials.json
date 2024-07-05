@@ -7,6 +7,12 @@
             "image": "mideth-abisado.png"
         },
         {
+            "name": "Avonn Nova",
+            "position": "College Dean, College of Computing and Information Technologies",
+            "testimonial": "E-governance and social media integration enable us to tap into real-time data streams, providing a dynamic and responsive approach to managing public health crises.",
+            "image": "avonn-nova.jpg"
+        },
+        {
             "name": "Ramon Rodriguez",
             "position": "Project Staff II",
             "testimonial": "The integration of machine learning with social media data analysis has the potential to transform public health surveillance by providing more granular and immediate insights into disease spread and public sentiment.",
@@ -27,8 +33,8 @@
         {
             "name": "Emeliza Yabut",
             "position": "Project Staff II",
-            "testimonial": "HealthPH is a new tool in disease surveillance that uses the power of social media. This platform will help public officials detect the outbreak earlier and have an intervention that can save lives.",
-            "image": "bernie-fabito.jpg"
+            "testimonial": "The utilization of social media for disease surveillance in the Philippines bridges gaps in conventional data collection, offering a comprehensive view of public health dynamics.",
+            "image": "emeliza-yabut.png"
         },
         {
             "name": "Marilen Pacis",
