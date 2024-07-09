@@ -5,7 +5,7 @@
         ],
         "target": {
             "namespace": "android_app",
-            "package_name": "com.onrender.healthph_dev.twa",
+            "package_name": "org.healthph_project.twa",
             "sha256_cert_fingerprints": [
                 "49:CB:CB:AF:7E:60:63:8B:CF:9C:54:1F:70:3C:C0:71:8B:6D:21:58:BD:C6:EF:7F:89:96:82:4F:AA:D4:70:5A"
             ]
