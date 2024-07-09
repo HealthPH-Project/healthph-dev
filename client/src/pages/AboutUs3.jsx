@@ -32,10 +32,10 @@ const AboutUs3 = () => {
   };
 
   return (
-    <div className="article-layout about-us">
+    <div className="article-layout about-us flex flex-col min-h-[100vh]">
       <HomeNavbar background="solid" />
 
-      <section className="mt-[56px]">
+      <section className="mt-[56px] flex-grow">
         <div className="about-container mb-[112px]">
           <div className="w-full max-w-[1144px]">
             <p className="section-title !text-gray-700">About the Project</p>
@@ -52,8 +52,16 @@ const AboutUs3 = () => {
                     for Health Research and Development (DOST-PCHRD)
                   </a>
                   , through the Grants-in-Aid (GIA) Program, has recently
-                  approved National University's research proposal to promote
-                  public health surveillance in the Philippines.{" "}
+                  approved{" "}
+                  <a
+                    href="https://national-u.edu.ph/"
+                    className="underline underline-offset-2"
+                    target="_blank"
+                  >
+                    National University
+                  </a>
+                  's research proposal to promote public health surveillance in
+                  the Philippines.{" "}
                 </span>
                 <br /> <br />
                 <span>
@@ -71,23 +79,16 @@ const AboutUs3 = () => {
                 </span>
                 <br /> <br />
                 <span>
-                  The HealthPH project, led by Dr. Mideth B. Abisado at{" "}
-                  <a
-                    href="https://national-u.edu.ph/"
-                    className="underline underline-offset-2"
-                    target="_blank"
-                  >
-                    National University Philippines
-                  </a>
-                  , epitomizes this innovative approach. With the advent of
-                  COVID-19, the importance of early detection and real-time
-                  monitoring of infectious diseases has become paramount. The
-                  project's primary objective is to develop and deploy an
-                  advanced system that leverages social media data to detect and
-                  monitor symptoms towards probable disease outbreaks. HealthPH
-                  aims to provide timely and accurate information to health
-                  authorities, enabling them to respond swiftly and effectively
-                  to emerging public health threats.{" "}
+                  The HealthPH project, led by Dr. Mideth B. Abisado at National
+                  University Philippines , epitomizes this innovative approach.
+                  With the advent of COVID-19, the importance of early detection
+                  and real-time monitoring of infectious diseases has become
+                  paramount. The project's primary objective is to develop and
+                  deploy an advanced system that leverages social media data to
+                  detect and monitor symptoms towards probable disease
+                  outbreaks. HealthPH aims to provide timely and accurate
+                  information to health authorities, enabling them to respond
+                  swiftly and effectively to emerging public health threats.{" "}
                 </span>
                 <br /> <br />
                 <span>

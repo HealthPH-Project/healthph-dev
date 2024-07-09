@@ -10,8 +10,8 @@ const ContactUs = () => {
       iconFill: true,
       label: "Email",
       desc: "HealthPH is here to communicate!",
-      linkText: "example@gmail.com",
-      link: "mailto:example@gmail.com",
+      linkText: import.meta.env.VITE_HEALTHPH_EMAIL,
+      link: "mailto:" + import.meta.env.VITE_HEALTHPH_EMAIL,
     },
     {
       icon: "Location",
@@ -23,9 +23,9 @@ const ContactUs = () => {
     },
   ];
   return (
-    <div className="contact-us-layout">
+    <div className="contact-us-layout flex flex-col min-h-[100vh]">
       <HomeNavbar background="solid" />
-      <div className="contact-us-container">
+      <div className="contact-us-container flex-grow">
         <div className="contact-us-wrapper">
           <p className="heading">Contact Us</p>
 

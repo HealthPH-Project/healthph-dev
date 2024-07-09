@@ -1,5 +1,12 @@
 {
     "research-team": [
+        
+        {
+            "name": "Dr. Jessie Barrot",
+            "position": "AVP, Research and Development",
+            "testimonial": "HealthPH transforms social media data into actionable insights for proactive disease surveillance and a healthier tomorrow.",
+            "image": "jessie-barrot.jpeg"
+        },
         {
             "name": "Dr. Mideth Abisado",
             "position": "Project Lead",
@@ -71,6 +78,12 @@
             "position": "Project Technical Assistant VI",
             "testimonial": "The HealthPH website offers a compelling visual representation of social media surveillance efforts in the Philippines.",
             "image": "jean-malolos.jpg"
+        },
+        {
+            "name": "Mathias Villacarlos",
+            "position": "Project Technical Assistant III",
+            "testimonial": "HealthPH leverages the power of social media to revolutionize disease surveillance and public health monitoring. By harnessing advanced algorithms and real-time data analysis, HealthPH provides timely and accurate insights into disease trends and outbreaks. This innovative approach enhances the ability of health authorities to respond swiftly and effectively, ultimately improving public health outcomes and ensuring the well-being of communities across the nation.",
+            "image": "mathias-villacarlos.png"
         }
     ],
     "dost-pchrd": [
@@ -83,7 +96,7 @@
         {
             "name": "Ms. Louise Sky Olaguer",
             "position": "Program Head, Digital and Frontier Technologies for Health DOST-PCHRD",
-            "testimonial": "Through the commendable efforts of the HealthPH team, the creation of an inclusive and innovative disease monitoring tool for respiratory diseases is no longer a dream. By utlizing informal data sources such as social media, the early detection of respiratory diseases can now reach the farthest of the Philippine islands. Through data analytics, the government and LGUs can also provide timely intervention to prevent disease, outbreaks and bring about a safer, healthier Philippines.",
+            "testimonial": "Through the commendable efforts of the HealthPH team, the creation of an inclusive and innovative disease monitoring tool for respiratory diseases is no longer a dream. By utlizing informal data sources such as social media, the early detection of respiratory diseases can now reach the farthest of the Philippine islands. Through data analytics, the government and LGUs can also provide timely intervention to prevent disease outbreaks and bring about a safer, healthier Philippines.",
             "image": "louise-sky-olaguer.jpg"
         }
     ],
