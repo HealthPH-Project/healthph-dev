@@ -297,7 +297,8 @@
   }
 
   .contact-us-layout .contact-us-wrapper .map-wrapper {
-    @apply my-[36px] sm:my-[56px] h-[500px];
+    /* @apply my-[36px] sm:my-[56px] h-[500px]; */
+    @apply h-[540px] relative;
   }
 
   .contact-us-layout .contact-us-wrapper .contact-details {
@@ -305,6 +306,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 32px;
   }
+
   @media screen and (max-width: 768px) {
     .contact-us-layout .contact-us-wrapper .contact-details {
       grid-template-columns: repeat(1, 1fr);
@@ -331,5 +333,42 @@
   }
   .contact-us-layout .contact-detail-item .contact-link {
     @apply text-primary-500 hover:underline hover:underline-offset-2 prod-b2;
+  }
+
+  .contact-us-layout .contact-us-grid {
+    @apply grid mt-[36px] sm:mt-[56px];
+    grid-template-columns: 480px 1fr;
+    gap: 56px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .contact-us-layout .contact-us-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-us-layout .contact-us-grid .map-label-wrapper {
+    @apply absolute top-[130px] w-[321.54px] p-[10px];
+    /* @apply absolute top-[0] w-[321.54px] p-[10px]; */
+  }
+
+  .contact-us-layout .contact-us-grid .map-label-container {
+    @apply bg-primary-50 rounded-[8px] p-[12px];
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  }
+
+  .contact-us-layout .contact-us-grid .map-label-container .label {
+    @apply prod-l1 text-gray-900 font-semibold mb-[8px];
+  }
+  .contact-us-layout .contact-us-grid .map-label-container .description {
+    @apply prod-p2 text-gray-500 mb-[12px];
+  }
+
+  .contact-us-layout .contact-us-grid .map-label-container .link {
+    @apply prod-b2 text-primary-500;
+  }
+
+  .gm-style .place-card {
+    background-color: red !important;
   }
 }
