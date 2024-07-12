@@ -201,13 +201,6 @@ def mail_contact_us(receiver, data: dict):
     message.attach(part1)
     message.attach(part2)
 
-    # fp = open("assets/images/mail-header.png", "rb")
-    # header = MIMEImage(fp.read())
-    # fp.close()
-
-    # header.add_header("Content-ID", "<Header>")
-    # message.attach(header)
-
     return mail_send(receiver=receiver, message=message)
 
 
@@ -221,7 +214,7 @@ def mail_verification_code(receiver, data: dict):
     
     {otp_code}
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH at:
     
     Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
     healthph@national-u.edu.ph
@@ -262,18 +255,15 @@ def mail_verification_code(receiver, data: dict):
           <div class="spacer"></div>
           <div class="spacer"></div>
           <p class="p">
-            If you need further assistance, please visit or email the DOH
-            Systems Office at:
+            If you need further assistance, please visit or email the HealthPH Office at:
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="indent">
-            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
             <div class="spacer"></div>
-            <p class="p">(632) 8651-7800 local 1427</p>
-            <div class="spacer"></div>
-            <p class="p">doh@healthph.org</p>
+            <p class="p">healthph@national-u.edu.ph</p>
           </div>
           <div class="spacer"></div>
           <div class="spacer"></div>
@@ -314,11 +304,10 @@ def mail_forgot_password(receiver, data: dict):
     May we remind you that you only have 10 minutes to reset your password by using the link above.
     If you did not reset your password within that duration, you will be required to send your email again at Sign In > Forgot Password.
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -367,18 +356,15 @@ def mail_forgot_password(receiver, data: dict):
           <div class="spacer"></div>
           <div class="spacer"></div>
           <p class="p">
-            If you need further assistance, please visit or email the DOH
-            Systems Office at:
+            If you need further assistance, please visit or email the HealthPH Office at:
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="indent">
-            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
             <div class="spacer"></div>
-            <p class="p">(632) 8651-7800 local 1427</p>
-            <div class="spacer"></div>
-            <p class="p">doh@healthph.org</p>
+            <p class="p">healthph@national-u.edu.ph</p>
           </div>
           <div class="spacer"></div>
           <div class="spacer"></div>
@@ -409,7 +395,7 @@ def mail_forgot_password(receiver, data: dict):
 def mail_add_user(receiver, data: dict):
     message = mail_setup(receiver, "User Account Created")
 
-    last_name, first_name, region, organization, email, password = data.values()
+    last_name, first_name, region, organization, accessible_regions, email, password = data.values()
 
     plain_text = f"""\
     This email contains your credentials to access HealthPH. 
@@ -423,6 +409,7 @@ def mail_add_user(receiver, data: dict):
     Last Name: {last_name}
     First Name: {first_name}
     Regional Office: {region}
+    Accessible Regions: {accessible_regions}
     Organization: {organization}
     
     You will be using the same password to all these systems. The system created this during the account activation process. 
@@ -443,9 +430,8 @@ def mail_add_user(receiver, data: dict):
     
     If you need further assistance, please visit or email the DOH Systems Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -506,6 +492,11 @@ def mail_add_user(receiver, data: dict):
             </p>
             <div class="spacer"></div>
             <p class="p">
+                <span class="bold">Accessible Regions</span>:{" "}
+                <span class="link">{accessible_regions}</span>
+            </p>
+            <div class="spacer"></div>
+            <p class="p">
                 <span class="bold">Organization</span>:{" "}
                 <span class="link">{organization }</span>
             </p>
@@ -539,18 +530,15 @@ def mail_add_user(receiver, data: dict):
             <div class="spacer"></div>
             <div class="spacer"></div>
             <p class="p">
-                If you need further assistance, please visit or email the DOH
-                Systems Office at:
+                If you need further assistance, please visit or email the HealthPH Office at:
             </p>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="indent">
-                <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+                <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
                 <div class="spacer"></div>
-                <p class="p">(632) 8651-7800 local 1427</p>
-                <div class="spacer"></div>
-                <p class="p">doh@healthph.org</p>
+                <p class="p">healthph@national-u.edu.ph</p>
             </div>
             <div class="spacer"></div>
             <div class="spacer"></div>
@@ -612,11 +600,10 @@ def mail_add_admin(receiver, data: dict):
     a. The admin is able to edit their full name, department, organization, email address, and password.
     b. The admin is able to delete their account when not in use. 
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -693,18 +680,15 @@ def mail_add_admin(receiver, data: dict):
             <div class="spacer"></div>
             <div class="spacer"></div>
             <p class="p">
-                If you need further assistance, please visit or email the DOH
-                Systems Office at:
+                If you need further assistance, please visit or email the HealthPH Office at:
             </p>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="indent">
-                <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+                <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
                 <div class="spacer"></div>
-                <p class="p">(632) 8651-7800 local 1427</p>
-                <div class="spacer"></div>
-                <p class="p">doh@healthph.org</p>
+                <p class="p">healthph@national-u.edu.ph</p>
             </div>
             <div class="spacer"></div>
             <div class="spacer"></div>
@@ -768,11 +752,10 @@ def mail_add_superadmin(receiver, data: dict):
     a. The superadmin is able to edit their full name, department, organization, email address, and password.
     b. The superadmin is able to delete their account when not in use. 
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -851,18 +834,15 @@ def mail_add_superadmin(receiver, data: dict):
             <div class="spacer"></div>
             <div class="spacer"></div>
             <p class="p">
-                If you need further assistance, please visit or email the DOH
-                Systems Office at:
+                If you need further assistance, please visit or email the HealthPH Office at:
             </p>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="spacer"></div>
             <div class="indent">
-                <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+                <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
                 <div class="spacer"></div>
-                <p class="p">(632) 8651-7800 local 1427</p>
-                <div class="spacer"></div>
-                <p class="p">doh@healthph.org</p>
+                <p class="p">healthph@national-u.edu.ph</p>
             </div>
             <div class="spacer"></div>
             <div class="spacer"></div>
@@ -896,11 +876,10 @@ def mail_enabled(receiver):
     plain_text = f"""\
     This email contains that your account has been ENABLED. You will now be able to sign in to HealthPH and fully utilize HealthPH and its modules. 
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -932,18 +911,15 @@ def mail_enabled(receiver):
           <div class="spacer"></div>
           <div class="spacer"></div>
           <p class="p">
-            If you need further assistance, please visit or email the DOH
-            Systems Office at:
+            If you need further assistance, please visit or email the HealthPH Office at:
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="indent">
-            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
             <div class="spacer"></div>
-            <p class="p">(632) 8651-7800 local 1427</p>
-            <div class="spacer"></div>
-            <p class="p">doh@healthph.org</p>
+            <p class="p">healthph@national-u.edu.ph</p>
           </div>
           <div class="spacer"></div>
           <div class="spacer"></div>
@@ -979,11 +955,10 @@ def mail_disabled(receiver):
     
     If you think this is not the case, please contact us.
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -1019,18 +994,15 @@ def mail_disabled(receiver):
           <div class="spacer"></div>
           <div class="spacer"></div>
           <p class="p">
-            If you need further assistance, please visit or email the DOH
-            Systems Office at:
+            If you need further assistance, please visit or email the HealthPH Office at:
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="indent">
-            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
             <div class="spacer"></div>
-            <p class="p">(632) 8651-7800 local 1427</p>
-            <div class="spacer"></div>
-            <p class="p">doh@healthph.org</p>
+            <p class="p">healthph@national-u.edu.ph</p>
           </div>
           <div class="spacer"></div>
           <div class="spacer"></div>
@@ -1062,13 +1034,12 @@ def mail_delete_account(receiver):
     message = mail_setup(receiver, "Account Deleted")
 
     plain_text = f"""\
-    This email contains that your account has been DELETED. You are still allowed to create another account if you wan to use HealthPH in another time.
+    This email contains that your account has been DELETED. You are still allowed to request another account if you want to use HealthPH in another time.
     
-    If you need further assistance, please visit or email the DOH Systems Office at:
+    If you need further assistance, please visit or email the HealthPH Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH
@@ -1094,24 +1065,21 @@ def mail_delete_account(receiver):
           <p>
             This email contains that your account has been 
             <span class="bold red">DELETED</span>. 
-            You are still allowed to create another account if you wan to use HealthPH in another time.
+            You are still allowed to request another account if you wan to use HealthPH in another time.
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <p class="p">
-            If you need further assistance, please visit or email the DOH
-            Systems Office at:
+            If you need further assistance, please visit or email the HealthPH Office at:
           </p>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="spacer"></div>
           <div class="indent">
-            <p class="p">San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines</p>
+            <p class="p">Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila</p>
             <div class="spacer"></div>
-            <p class="p">(632) 8651-7800 local 1427</p>
-            <div class="spacer"></div>
-            <p class="p">doh@healthph.org</p>
+            <p class="p">healthph@national-u.edu.ph</p>
           </div>
           <div class="spacer"></div>
           <div class="spacer"></div>

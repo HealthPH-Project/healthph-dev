@@ -598,6 +598,9 @@ async def create_user(
                 "last_name": user.last_name,
                 "region": regions[user.region],
                 "organization": user.organization,
+                "accessible_regions": ",".join(
+                    list(map(lambda x: regions[x], user.accessible_regions.split(",")))
+                ),
                 "email": user.email,
                 "password": user.password,
             },
@@ -865,20 +868,18 @@ async def update_user(
     data: UpdateUserRequest,
     is_admin: Annotated[AdminResult, Depends(require_admin)],
 ):
-    
+
     errors = []
-    
+
     # Check if user is an admin or superadmin
     if not is_admin.result:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=("Failed to update user."),
         )
-        
+
     # Check fields if empty
-    if (
-        not data.accessible_regions
-    ):
+    if not data.accessible_regions:
         if not data.accessible_regions:
             errors.append(
                 {
@@ -891,7 +892,6 @@ async def update_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=errors,
         )
-
 
     # Check if there is an id
     if not id:
