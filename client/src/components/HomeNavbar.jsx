@@ -139,6 +139,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
         <HamburgerMenu
           isMenuActive={isMenuActive}
           handleClick={handleOpenMenu}
+          additionalClasses="block min-[1100px]:hidden"
         />
       </div>
       <div

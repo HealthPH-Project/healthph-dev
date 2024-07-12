@@ -272,6 +272,7 @@ const Navbar = () => {
         <HamburgerMenu
           isMenuActive={isMenuActive}
           handleClick={handleOpenMenu}
+          additionalClasses="block md:hidden"
         />
 
         <div
