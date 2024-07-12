@@ -8,6 +8,9 @@ import ScrollToTop from "../../components/ScrollToTop";
 import Highlighter from "react-highlight-words";
 import useDeviceDetect from "../../hooks/useDeviceDetect";
 
+import UserNavigation from "../../assets/images/help/user-navigation.png";
+import HelpImage from "../../components/admin/HelpImage";
+
 const Help = () => {
   const user = useSelector((state) => state.auth.user);
 
@@ -83,7 +86,7 @@ const Help = () => {
         {
           sectionDesc:
             "The application provides the admin a simple navigation to go through the dashboard. The three mains modules are the Analytics, Trends Map, and User Management. Moreover, the admin can monitor the user activities and manage their personal information in using the application.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-navigation" />,
         },
       ],
     },
@@ -94,7 +97,7 @@ const Help = () => {
         {
           sectionDesc:
             "Once every user have successfully signed in to HealthPH, the user is directed to the Analytics Page that are consist of summary of data, visualization charts, and many more. The user can filter the data by region and print them in PDF form.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-analytics" />,
         },
       ],
     },
@@ -105,7 +108,7 @@ const Help = () => {
         {
           sectionDesc:
             "The main module of HealthPH is the Trends Map. The admin is provided with a map of the Philippines to track suspected symptoms in all 17 administrative regions.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-trends-map" />,
         },
       ],
       subSections: [
@@ -116,12 +119,12 @@ const Help = () => {
             {
               sectionDesc:
                 "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as Tuberculosis, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="admin-map" />,
             },
             {
               sectionDesc:
                 "Moreover, the map allows every users to zoom in and out of the map and redirect them to their current location.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="admin-map-2" />,
             },
           ],
         },
@@ -132,7 +135,7 @@ const Help = () => {
             {
               sectionDesc:
                 "Other than viewing the data using the map, every user can view the data in list view. The list view provides the admin to filter the data by region/s, upload data sets, and view each suspected symptoms in a list.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="admin-list-view" />,
             },
           ],
         },
@@ -143,12 +146,12 @@ const Help = () => {
             {
               sectionDesc:
                 "To continue using the Trends Map with new data, the admin can upload a data set in CSV form and view past uploaded data set on the bottom with a table provided. The admin is also provided with instructions in providing the required data by using the CSV Template located on the top left side.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="admin-upload-dataset" />,
             },
             {
               sectionDesc:
                 "Once the admin have provided the required data using the CSV Template, the admin should proceed in clicking 'Upload CSV' then they will be required to do a final check of the CSV data they uploaded by displaying a preview of the table. Once the final check is done, they can proceed again in clicking 'Upload CSV.' After that, the data set will be updated and be displayed in the Trends Map",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="admin-upload-dataset-2" />,
             },
           ],
         },
@@ -161,7 +164,7 @@ const Help = () => {
         {
           sectionDesc:
             "This module provides the admin and super admin to manage its users and themselves. The super admin and admin can add users and manage their status to use the application. However, only the super admin has the privilege to delete users in HealthPH.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-user-management" />,
         },
       ],
     },
@@ -172,7 +175,7 @@ const Help = () => {
         {
           sectionDesc:
             "This module provides every admin to monitor the user activities of all types of users.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-activity-logs" />,
         },
       ],
     },
@@ -183,7 +186,7 @@ const Help = () => {
         {
           sectionDesc:
             "This module provides every user to edit their personal information, email address, password, and the ability to delete their account. Moreover, every user can check their current status if they can use HealthPH. If a user's status is 'active', they can use the application with their respective privilege and user type. In the case of their status labeled as 'inactive', they are unable to navigate the application can only access the Settings module.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="admin-settings" />,
         },
       ],
     },
@@ -197,7 +200,7 @@ const Help = () => {
         {
           sectionDesc:
             "The application provides the user a simple navigation to go through the dashboard. The two mains modules are the Analytics and Trends Map. Moreover, the user can manage their personal information in using the application.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="user-navigation" />,
         },
       ],
     },
@@ -208,7 +211,7 @@ const Help = () => {
         {
           sectionDesc:
             "Once every user have successfully signed in to HealthPH, the user is directed to the Analytics Page that are consist of summary of data, visualization charts, and many more. The user can filter the data by region and print them in PDF form.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage iamge="user-analytics" />,
         },
       ],
     },
@@ -219,7 +222,7 @@ const Help = () => {
         {
           sectionDesc:
             "The main module of HealthPH is the Trends Map. The admin is provided with a map of the Philippines to track suspected symptoms in all 17 administrative regions.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="user-trends-map" />,
         },
       ],
       subSections: [
@@ -230,12 +233,12 @@ const Help = () => {
             {
               sectionDesc:
                 "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as Tuberculosis, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="user-map" />,
             },
             {
               sectionDesc:
                 "Moreover, the map allows every users to zoom in and out of the map and redirect them to their current location.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="user-map-2" />,
             },
           ],
         },
@@ -246,7 +249,7 @@ const Help = () => {
             {
               sectionDesc:
                 "Other than viewing the data using the map, every user can view the data in list view. The list view provides the admin to filter the data by region/s, upload data sets, and view each suspected symptoms in a list.",
-              sectionImage: <SampleImage />,
+              sectionImage: <HelpImage image="user-list-view" />,
             },
           ],
         },
@@ -259,7 +262,7 @@ const Help = () => {
         {
           sectionDesc:
             "This module provides every user to edit their personal information, email address, password, and the ability to delete their account. Moreover, every user can check their current status if they can use HealthPH. If a user's status is 'active', they can use the application with their respective privilege and user type. In the case of their status labeled as 'inactive', they are unable to navigate the application can only access the Settings module.",
-          sectionImage: <SampleImage />,
+          sectionImage: <HelpImage image="user-settings" />,
         },
       ],
     },
@@ -531,7 +534,3 @@ const Help = () => {
   );
 };
 export default Help;
-
-const SampleImage = () => {
-  return <div className="sample-image"></div>;
-};
