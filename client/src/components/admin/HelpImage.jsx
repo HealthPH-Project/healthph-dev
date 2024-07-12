@@ -73,7 +73,7 @@ const HelpImage = ({ image }) => {
   const [modalActive, setModalActive] = useState(false);
 
   useEffect(() => {
-    if (!isPWA) {
+    if (isPWA) {
       const screenWidth = window.innerWidth;
       if (screenWidth <= 360) {
         setSize("sm");
