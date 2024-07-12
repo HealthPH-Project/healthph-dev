@@ -85,7 +85,7 @@ const Help = () => {
       description: [
         {
           sectionDesc:
-            "The application provides the admin a simple navigation to go through the dashboard. The three mains modules are the Analytics, Trends Map, and User Management. Moreover, the admin can monitor the user activities and manage their personal information in using the application.",
+            "The application provides the admin a simple navigation to go through the dashboard. The three main modules are the Analytics, Trends Map, and User Management. Moreover, the admin can monitor the user activities and manage their personal information in using the application.",
           sectionImage: <HelpImage image="admin-navigation" />,
         },
       ],
