@@ -43,6 +43,50 @@ const UploadDataset = () => {
   const [file, setFile] = useState(null);
 
   const onFileSelect = (data, fileInfo, originalFile) => {
+    if (fileInfo.type != "text/csv") {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message="Invalid file type"
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      inputFile.current.value = "";
+      return;
+    }
+
+    if (data.length == 0) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message="Invalid file uploaded"
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      inputFile.current.value = "";
+      return;
+    }
+
     setFile(originalFile);
 
     setPreviewData({
