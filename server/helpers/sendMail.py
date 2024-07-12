@@ -84,7 +84,7 @@ def get_styles():
         }
 
         .body .bold {
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .body .red {
@@ -134,6 +134,83 @@ def get_styles():
     """
 
 
+def mail_contact_us(receiver, data: dict):
+    name, email, subject, message_body = data.values()
+    
+    message = mail_setup(receiver, subject)
+    
+    plain_text = f"""\
+    Hello, HealthPH!
+    
+    This is {name}.
+    
+    {message_body}
+    
+    Regards,
+    {name}
+    {email}
+    
+    """
+    
+    html = f"""\
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>HealthPH</title>
+    </head>
+    <head>
+        {get_styles()}
+    </head>
+    <body class="body">
+        <div class="main">
+          <p class="p">
+            Hello, HealthPH!
+          </p>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <p class="p">
+            This is <span class="semibold">{name}</span>.
+          </p>
+          <div class="spacer"></div>
+          <p class="p">
+            {message_body}
+          </p>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <div class="spacer"></div>
+          <p class="p">
+            Regards,
+          </p>
+          <p class="p">
+            {name}
+          </p>
+          <p class="p">
+            {email}
+          </p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    part1 = MIMEText(plain_text, "plain")
+    part2 = MIMEText(html, "html")
+    message.attach(part1)
+    message.attach(part2)
+
+    # fp = open("assets/images/mail-header.png", "rb")
+    # header = MIMEImage(fp.read())
+    # fp.close()
+
+    # header.add_header("Content-ID", "<Header>")
+    # message.attach(header)
+
+    return mail_send(receiver=receiver, message=message)
+
+
 def mail_verification_code(receiver, data: dict):
     message = mail_setup(receiver, "Verification Code")
 
@@ -146,9 +223,8 @@ def mail_verification_code(receiver, data: dict):
     
     If you need further assistance, please visit or email the DOH Systems Office at:
     
-    San Lazaro Compound, Tayuman, Sta. Cruz, Manila, Philippines
-    (632) 8651-7800 local 1427
-    doh@healthph.org
+    Room 512, HealthPH Research Laboratory, Sampaloc, Manila, 1008 Metro Manila
+    healthph@national-u.edu.ph
     
     Regards,
     HealthPH

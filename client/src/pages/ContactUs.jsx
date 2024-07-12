@@ -6,6 +6,7 @@ import ContactDetailItem from "../components/about-us/ContactDetailItem";
 import FieldGroup from "../components/FieldGroup";
 import Input from "../components/Input";
 import Textarea from "../components/Textarea";
+import { useSendContactUsMutation } from "../features/api/miscSlice";
 
 const ContactUs = () => {
   const contactDetails = [
@@ -41,15 +42,52 @@ const ContactUs = () => {
     message: "",
   });
 
+  const [error, setError] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [isMessageSent, setIsMessageSent] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [sendMessage] = useSendContactUsMutation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!checkError()) {
+      // if (true) {
       setIsLoading(true);
+      const response = await sendMessage(formData);
+
+      if (!response) {
+        setError("Failed to send message. Please try again later.");
+        setIsLoading(false);
+        return;
+      }
+
+      if ("error" in response) {
+        const { detail } = response["error"]["data"];
+
+        detail.map(({ field, error }, i) => {
+          if (field in formData) {
+            setFormErrors((formErrors) => ({
+              ...formErrors,
+              [field]: error,
+            }));
+          }
+
+          if (field == "error") {
+            setError(error);
+          }
+        });
+
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
+      setError("");
+      setIsMessageSent(true);
     }
   };
 
@@ -130,6 +168,9 @@ const ContactUs = () => {
                 </>
               ) : (
                 <form method="POST" onSubmit={handleSubmit}>
+                  {error && (
+                    <p className="prod-p4 text-[#D82727] mb-[8px]">{error}</p>
+                  )}
                   <FieldGroup
                     label="Name*"
                     labelFor="name"
@@ -147,6 +188,7 @@ const ContactUs = () => {
                       onChange={(e) => {
                         setFormData({ ...formData, name: e.target.value });
                         setFormErrors({ ...formErrors, name: "" });
+                        setError("");
                       }}
                       state={formErrors.name != "" ? "error" : ""}
                       // required
@@ -169,6 +211,7 @@ const ContactUs = () => {
                       onChange={(e) => {
                         setFormData({ ...formData, email: e.target.value });
                         setFormErrors({ ...formErrors, email: "" });
+                        setError("");
                       }}
                       state={formErrors.email != "" ? "error" : ""}
                       // required
@@ -191,6 +234,7 @@ const ContactUs = () => {
                       onChange={(e) => {
                         setFormData({ ...formData, subject: e.target.value });
                         setFormErrors({ ...formErrors, subject: "" });
+                        setError("");
                       }}
                       state={formErrors.subject != "" ? "error" : ""}
                       // required
@@ -205,12 +249,15 @@ const ContactUs = () => {
                   >
                     <div className="input-textarea-wrapper mt-[8px] w-full">
                       <textarea
-                        className="input-textarea input-textarea-base sm:input-textarea-lg w-full h-[116px]"
+                        className={`input-textarea input-textarea-base sm:input-textarea-lg w-full h-[116px] ${
+                          formErrors.message != "" ? "input-error" : ""
+                        }`}
                         id="message"
                         placeholder="Enter message"
                         onChange={(e) => {
                           setFormData({ ...formData, message: e.target.value });
                           setFormErrors({ ...formErrors, message: "" });
+                          setError("");
                         }}
                         value={formData.message}
                       ></textarea>
