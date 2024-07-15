@@ -18,13 +18,21 @@ const ContactUs = () => {
       linkText: import.meta.env.VITE_HEALTHPH_EMAIL,
       link: "mailto:" + import.meta.env.VITE_HEALTHPH_EMAIL,
     },
+    // {
+    //   icon: "Location",
+    //   iconFill: false,
+    //   label: "Venue",
+    //   desc: "Visit our place.",
+    //   linkText: "HealthPH Research Laboratory Room 512",
+    //   link: "https://national-u.edu.ph",
+    // },
     {
-      icon: "Location",
-      iconFill: false,
-      label: "Venue",
-      desc: "Visit our place.",
-      linkText: "HealthPH Research Laboratory Room 512",
-      link: "https://national-u.edu.ph",
+      icon: "Phone",
+      iconFill: true,
+      label: "Phone Number",
+      desc: "Call us.",
+      linkText: "0951-230-5977",
+      link: "tel:09512305977",
     },
   ];
 
@@ -144,6 +152,8 @@ const ContactUs = () => {
       <div className="contact-us-container flex-grow">
         <div className="contact-us-wrapper">
           <p className="heading">Contact Us</p>
+
+          {/* CONTACT US GRID */}
           <div className="contact-us-grid">
             {/* FORM */}
             <div className="form-wrapper">
@@ -297,6 +307,25 @@ const ContactUs = () => {
                 className="w-full"
               ></iframe>
             </div>
+          </div>
+
+          {/* CONTACT DETAILS */}
+          <div className="contact-details mt-[56px]">
+            {contactDetails.map((v, i) => {
+              const { icon, iconFill, label, desc, link, linkText } = v;
+
+              return (
+                <ContactDetailItem
+                  key={i}
+                  icon={icon}
+                  iconFill={iconFill}
+                  label={label}
+                  desc={desc}
+                  link={link}
+                  linkText={linkText}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

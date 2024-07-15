@@ -29,6 +29,7 @@ export { default as Mail } from "./mail.svg?react";
 export { default as Megaphone } from "./megaphone.svg?react";
 export { default as Minus } from "./minus.svg?react";
 export { default as PaperFail } from "./paper-fail.svg?react";
+export { default as Phone } from "./phone.svg?react";
 export { default as Plus } from "./plus.svg?react";
 export { default as Printer } from "./printer.svg?react";
 export { default as QuestionCircle } from "./question-circle.svg?react";
