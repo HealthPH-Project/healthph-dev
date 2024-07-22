@@ -206,7 +206,7 @@ const UserManagement = () => {
                       data.push(value.organization);
                     }
                     data.push(
-                      format(new Date(value.created_at), "MMM-dd-yyyy HH:mm a")
+                      format(new Date(value.created_at), "MMM dd, yyyy hh:mm a")
                     );
                     return data;
                   }}

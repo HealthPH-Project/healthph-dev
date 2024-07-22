@@ -125,7 +125,7 @@ const ActivityLogs = () => {
                 displayFunc={(value) => {
                   let data = [value.user_name, value.entry, value.module];
                   data.push(
-                    format(new Date(value.created_at), "MMM-dd-yyyy HH:mm a")
+                    format(new Date(value.created_at), "MMM dd, yyyy hh:mm a")
                   );
                   return data;
                 }}
@@ -178,7 +178,7 @@ const ActivityLogs = () => {
                           />
                         </div>
                         <div className="row-item">
-                          {format(new Date(created_at), "MMM dd, yyyy HH:mm a")}
+                          {format(new Date(created_at), "MMM dd, yyyy hh:mm a")}
                         </div>
                       </div>
                     );

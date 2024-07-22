@@ -448,7 +448,7 @@ const UploadDataset = () => {
                           <div className="row-item">
                             {format(
                               new Date(created_at),
-                              "MMM-dd-yyyy HH:mm a"
+                              "MMM dd, yyyy hh:mm a"
                             )}
                           </div>
                           <div className="row-item">

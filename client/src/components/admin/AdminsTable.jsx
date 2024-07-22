@@ -306,7 +306,7 @@ const AdminsTable = ({
                       />
                     </div>
                     <div className="row-item">
-                      {format(new Date(created_at), "MMM-dd-yyyy HH:mm a")}
+                      {format(new Date(created_at), "MMM dd, yyyy hh:mm a")}
                     </div>
                     <div className="row-item">{user_type}</div>
                     <div className="row-item">
