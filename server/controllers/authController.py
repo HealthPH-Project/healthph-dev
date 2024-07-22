@@ -9,6 +9,8 @@ import re
 import os
 from dotenv import dotenv_values
 
+from helpers.miscHelpers import get_ph_datetime
+
 config_dotenv = dotenv_values()
 
 from config.database import user_collection
@@ -364,7 +366,7 @@ async def reset_password(req: ResetPasswordRequest):
     # Find user in database and update password with new hashed password
     user_collection.find_one_and_update(
         {"email": user.email},
-        {"$set": {"password": new_pwd, "updated_at": datetime.now()}},
+        {"$set": {"password": new_pwd, "updated_at": get_ph_datetime()}},
     )
 
     return JSONResponse(

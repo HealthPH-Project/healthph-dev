@@ -31,6 +31,7 @@ from middleware.requireAuth import require_auth
 from middleware.requireAdmin import require_admin
 from middleware.requireSuperadmin import require_superadmin
 from schema.userSchema import individual_user, list_users
+from helpers.miscHelpers import get_ph_datetime
 
 """
 @desc     Update personal information of user
@@ -119,7 +120,7 @@ async def update_personal_info(data: UpdatePersonalInfo):
                 "last_name": data.last_name,
                 "region": data.region,
                 "organization": data.organization,
-                "updated_at": datetime.now(),
+                "updated_at": get_ph_datetime(),
             }
         },
         return_document=ReturnDocument.AFTER,
@@ -224,7 +225,7 @@ async def update_email(data: UpdateEmailRequest):
         {
             "$set": {
                 "email": data.email,
-                "updated_at": datetime.now(),
+                "updated_at": get_ph_datetime(),
             }
         },
         return_document=ReturnDocument.AFTER,
@@ -336,7 +337,7 @@ async def update_password(data: UpdatePasswordRequest):
         {
             "$set": {
                 "password": generate_hashed_password(data.password),
-                "updated_at": datetime.now(),
+                "updated_at": get_ph_datetime(),
             }
         },
         return_document=ReturnDocument.AFTER,
@@ -815,7 +816,7 @@ async def set_disable_status(
         {
             "$set": {
                 "is_disabled": data.disable_status,
-                "updated_at": datetime.now(),
+                "updated_at": get_ph_datetime(),
             }
         },
         return_document=ReturnDocument.AFTER,
@@ -922,7 +923,7 @@ async def update_user(
         {
             "$set": {
                 "accessible_regions": data.accessible_regions,
-                "updated_at": datetime.now(),
+                "updated_at": get_ph_datetime(),
             }
         },
         return_document=ReturnDocument.AFTER,

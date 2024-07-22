@@ -6,6 +6,7 @@ import os
 from passlib.context import CryptContext
 
 from models.auth import OTPCode
+from helpers.miscHelpers import get_ph_datetime
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -33,9 +34,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
 
     if expires_delta:
-        expire = datetime.now() + expires_delta
+        expire = get_ph_datetime() + expires_delta
     else:
-        expire = datetime.now() + timedelta(minutes=15)
+        expire = get_ph_datetime() + timedelta(minutes=15)
 
     to_encode.update({"exp": expire})
 
@@ -51,7 +52,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 # For resetting password
 def create_reset_password_token(email: str):
     return jwt.encode(
-        {"sub": email, "exp": datetime.now() + timedelta(minutes=10)},
+        {"sub": email, "exp": get_ph_datetime() + timedelta(minutes=10)},
         key=os.getenv("FORGOT_PWD_SECRET_KEY"),
         algorithm=os.getenv("ALGORITHM"),
     )
@@ -60,7 +61,7 @@ def create_reset_password_token(email: str):
 def generate_otp_code():
     return OTPCode(
         otp_code=f"{secrets.randbelow(999999):06d}",
-        otp_expiry=datetime.now() + timedelta(minutes=10),
+        otp_expiry=get_ph_datetime() + timedelta(minutes=10),
     )
 
 

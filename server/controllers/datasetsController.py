@@ -18,6 +18,7 @@ from models.user import AdminResult
 from middleware.requireAdmin import require_admin
 from schema.datasetSchema import individual_dataset, list_datasets
 from helpers.datasetsHelpers import annotation
+from helpers.miscHelpers import get_ph_datetime
 
 # Folder to store datasets
 datasets_folder = Path("public/datasets")
@@ -27,17 +28,20 @@ def annotate_dataset(raw_dataset_filename: str):
     print(raw_dataset_filename)
 
     raw_dataset_filename_split = str.split(raw_dataset_filename, sep=".")
-    result_filename = f"{raw_dataset_filename_split[0]}-annotated.{raw_dataset_filename_split[1]}"
+    result_filename = (
+        f"{raw_dataset_filename_split[0]}-annotated.{raw_dataset_filename_split[1]}"
+    )
 
     print(result_filename)
     annotation(raw_dataset_filename, result_filename)
     pass
 
 
-def test_func ():
+def test_func():
     print("TEST START")
     time.sleep(5)
     print("TEST END")
+
 
 """
 @desc     Upload a single dataset
@@ -84,7 +88,7 @@ async def upload_dataset(
 
     original_filename = filename
 
-    filename = f"{(round(datetime.now().timestamp() * 1000))}-{filename}"
+    filename = f"{(round(get_ph_datetime().timestamp() * 1000))}-{filename}"
 
     file_size = file.size
 
@@ -123,7 +127,7 @@ async def upload_dataset(
             "num_of_rows": num_of_rows,
             "preview_headers": str(preview_headers),
             "preview_data": json.dumps(preview_data),
-            "created_at": datetime.now(),
+            "created_at": get_ph_datetime(),
         }
     )
 
@@ -137,7 +141,7 @@ async def upload_dataset(
 
     background_tasks.add_task(annotate_dataset, filename)
     # background_tasks.add_task(test_func)
-    
+
     print("Annotation Started")
 
     return JSONResponse(

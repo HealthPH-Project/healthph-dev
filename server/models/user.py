@@ -2,6 +2,8 @@ from gc import disable
 from pydantic import BaseModel
 from datetime import datetime
 
+from helpers.miscHelpers import get_ph_datetime
+
 
 class User(BaseModel):
     region: str
@@ -11,8 +13,8 @@ class User(BaseModel):
     email: str
     is_disabled: bool | None = False
     user_type: str | None = "USER"
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
+    created_at: datetime = get_ph_datetime()
+    updated_at: datetime = get_ph_datetime()
 
 
 class UserInDB(User):
@@ -34,8 +36,8 @@ class CreateUserRequest(BaseModel):
     password: str
     is_disabled: bool | None = False
     user_type: str
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
+    created_at: datetime = get_ph_datetime()
+    updated_at: datetime = get_ph_datetime()
 
 
 class UpdatePersonalInfo(BaseModel):

@@ -7,6 +7,8 @@ from models.activityLogs import ActivityLog
 from schema.activityLogSchema import list_activity_logs
 from datetime import datetime
 
+from helpers.miscHelpers import get_ph_datetime
+
 """
 @desc     Fetch all activity logs
 route     GET api/activity_logs
@@ -47,7 +49,8 @@ async def create_activity_log(data: ActivityLog):
     # Check if id is valid object ID
     if not ObjectId.is_valid(to_encode["user_id"]):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Error creating activity log..."
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Error creating activity log...",
         )
 
     user_data = user_collection.find_one({"_id": ObjectId(to_encode["user_id"])})
@@ -65,7 +68,7 @@ async def create_activity_log(data: ActivityLog):
         {
             "user_name": f"{user_data['first_name']} {user_data['last_name']}",
             "user_type": user_data["user_type"],
-            "created_at": datetime.now(),
+            "created_at": get_ph_datetime(),
         }
     )
 
