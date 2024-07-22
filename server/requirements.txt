@@ -15,4 +15,5 @@ wordcloud
 nltk
 geopy
 scikit-learn
+scikit-multilearn
 tqdm

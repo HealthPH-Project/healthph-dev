@@ -3,23 +3,41 @@ import json
 import os
 from pathlib import Path
 import shutil
+import time
 from numpy import full
 import pymongo
 from typing_extensions import Annotated
 import pandas as pd
 
 from bson import ObjectId
-from fastapi import Depends, HTTPException, UploadFile, status
+from fastapi import BackgroundTasks, Depends, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, JSONResponse
 
 from config.database import user_collection, dataset_collection
 from models.user import AdminResult
 from middleware.requireAdmin import require_admin
 from schema.datasetSchema import individual_dataset, list_datasets
+from helpers.datasetsHelpers import annotation
 
 # Folder to store datasets
 datasets_folder = Path("public/datasets")
 
+
+def annotate_dataset(raw_dataset_filename: str):
+    print(raw_dataset_filename)
+
+    raw_dataset_filename_split = str.split(raw_dataset_filename, sep=".")
+    result_filename = f"{raw_dataset_filename_split[0]}-annotated.{raw_dataset_filename_split[1]}"
+
+    print(result_filename)
+    annotation(raw_dataset_filename, result_filename)
+    pass
+
+
+def test_func ():
+    print("TEST START")
+    time.sleep(5)
+    print("TEST END")
 
 """
 @desc     Upload a single dataset
@@ -29,7 +47,9 @@ route     POST api/datasets/upload
 
 
 async def upload_dataset(
-    file: UploadFile, is_admin: Annotated[AdminResult, Depends(require_admin)]
+    background_tasks: BackgroundTasks,
+    file: UploadFile,
+    is_admin: Annotated[AdminResult, Depends(require_admin)],
 ):
     # Check if user is an admin or superadmin
     if not is_admin.result:
@@ -80,17 +100,19 @@ async def upload_dataset(
     full_path = datasets_folder / filename
 
     contents = await file.read()
-    
+
     with open(full_path, "wb") as f:
         f.write(contents)
-        
-    num_of_rows = len(pd.read_csv(full_path))    
-    
+
+    num_of_rows = len(pd.read_csv(full_path))
+
     csv_headers = list(pd.read_csv((full_path), nrows=3, usecols=range(3)).columns)
-    
+
     preview_headers = "+".join(csv_headers)
-    
-    preview_data = pd.read_csv((full_path), nrows=3, usecols=range(3)).to_json(orient='records')
+
+    preview_data = pd.read_csv((full_path), nrows=3, usecols=range(3)).to_json(
+        orient="records"
+    )
 
     to_encode.update(
         {
@@ -112,6 +134,11 @@ async def upload_dataset(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to upload dataset",
         )
+
+    background_tasks.add_task(annotate_dataset, filename)
+    # background_tasks.add_task(test_func)
+    
+    print("Annotation Started")
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -222,6 +249,7 @@ async def delete_dataset(id: str):
         },
     )
 
+
 """
 @desc     Delete all datasets
 route     DELETE api/datasets/all-datasets
@@ -240,7 +268,7 @@ async def delete_all_datasets():
 
     if os.path.exists(datasets_folder):
         shutil.rmtree("public/datasets")
-        
+
         os.makedirs(datasets_folder, exist_ok=True)
 
     return JSONResponse(

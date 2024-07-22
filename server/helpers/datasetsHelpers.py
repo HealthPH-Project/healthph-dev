@@ -19,6 +19,8 @@ from packages.skmultilearn.adapt import MLkNN
 # Folder to store annotated_datasets
 annotated_datasets_folder = Path("public/annotated_datasets")
 
+# Folder for public datasets
+datasets_folder = Path("public/datasets")
 
 def get_stopwords():
     # Define stopwords
@@ -69,8 +71,8 @@ def clean_text(text):
 
 def clean_dataframe(df):
     cleaned_df = df.copy()
-    cleaned_df["post"] = cleaned_df["post"].apply(clean_text)
-    cleaned_df = cleaned_df.dropna(subset=["post"])
+    cleaned_df["posts"] = cleaned_df["posts"].apply(clean_text)
+    cleaned_df = cleaned_df.dropna(subset=["posts"])
     return cleaned_df
 
 
@@ -185,9 +187,9 @@ def get_disease(annotation, disease_code: str):
 """
 
 
-def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post: str):
-    post_tfidf = vectorizer.transform(post)
-
+def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
+    post_tfidf = vectorizer.transform([str(post)])
+    
     predicted_post_array = mlknn_c.predict(post_tfidf).toarray()
 
     predicted_post = predicted_post_array[0]
@@ -203,10 +205,12 @@ def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post: str):
     return annotate if len(annotate) > 0 else "X"
 
 
-async def annotation(raw_dataset_filename: str, result_filename: str):
+def annotation(raw_dataset_filename: str, result_filename: str):
     """
     MODEL TRAINING
     """
+
+    print("Model Tranining STARTED")
 
     # Dataset for model training
     training_dataset_filename = "assets/data/augmented_dataset.csv"
@@ -242,14 +246,18 @@ async def annotation(raw_dataset_filename: str, result_filename: str):
 
     mlknn_classifier.fit(X_train_tfidf, y_train)
 
+    print("Model Tranining FINISHED")
+
     """
         ANNOTATION
     """
 
     tqdm.pandas()
+    
+    raw_dataset_path = datasets_folder / raw_dataset_filename
 
     # Read raw dataset
-    raw_dataset = pd.read_csv(raw_dataset_filename)
+    raw_dataset = pd.read_csv(raw_dataset_path)
 
     # Raw dataset dataframe columns: [region, province, posts]
     raw_dataset_df = pd.DataFrame(raw_dataset, columns=["region", "province", "posts"])
@@ -262,17 +270,21 @@ async def annotation(raw_dataset_filename: str, result_filename: str):
         lambda x: get_PH_code(x["filtered_location"]), axis=1
     )
 
-    raw_dataset["lat"] = raw_dataset_df.apply(
+    raw_dataset_df["lat"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[0], axis=1
     )
+    
+    print("LAT finished")
 
-    raw_dataset["long"] = raw_dataset_df.apply(
+    raw_dataset_df["long"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[1], axis=1
     )
+    print("LONG finished")
 
     raw_dataset_df["annotations"] = raw_dataset_df.apply(
         lambda x: annotate_posts(vectorizer, mlknn_classifier, x["posts"]), axis=1
     )
+    print("ANNOTATIONS finished")
 
     annotated_df = clean_dataframe(raw_dataset_df)
 
@@ -289,6 +301,6 @@ async def annotation(raw_dataset_filename: str, result_filename: str):
 
     annotated_datasets_path = annotated_datasets_folder / result_filename
 
-    annotated_df.to_csv(annotated_datasets_path)
+    annotated_df.to_csv(annotated_datasets_path, index=False)
 
     print("==== DATASET ANNOTATED ====")
