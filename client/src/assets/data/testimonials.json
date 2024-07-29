@@ -8,16 +8,22 @@
             "image": "jessie-barrot.jpeg"
         },
         {
-            "name": "Dr. Mideth Abisado",
-            "position": "Project Lead",
-            "testimonial": "Our mission with HealthPH is to weave advanced technology into the fabric of our public health system, ensuring the well-being of every Filipino and preserving the legacy of our diverse languages.",
-            "image": "mideth-abisado.png"
+            "name": "Dr. Arnold Eniego",
+            "position": "Director, External Research Grant",
+            "testimonial": "HealthPH is a game-changer in disease surveillance. It uses innovative approaches to improve public health, ultimately contributing to nation-building and a better quality of life for all.",
+            "image": "arnold-eniego.jpg"
         },
         {
             "name": "Avonn Nova",
             "position": "College Dean, College of Computing and Information Technologies",
             "testimonial": "E-governance and social media integration enable us to tap into real-time data streams, providing a dynamic and responsive approach to managing public health crises.",
             "image": "avonn-nova.jpg"
+        },
+        {
+            "name": "Dr. Mideth Abisado",
+            "position": "Project Lead",
+            "testimonial": "Our mission with HealthPH is to weave advanced technology into the fabric of our public health system, ensuring the well-being of every Filipino and preserving the legacy of our diverse languages.",
+            "image": "mideth-abisado.png"
         },
         {
             "name": "Ramon Rodriguez",
@@ -53,7 +59,7 @@
             "name": "Dr. Maria Luisa Bautista",
             "position": "Project Staff II",
             "testimonial": "Social media analytics can complement traditional surveillance methods, providing a more comperehensive picture of disease activity.",
-            "image": ""
+            "image": "maria-luisa-bautista.jpg"
         },
         {
             "name": "Mico Magtira",
