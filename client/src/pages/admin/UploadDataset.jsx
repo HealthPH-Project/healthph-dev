@@ -316,6 +316,7 @@ const UploadDataset = () => {
   const [previewModalData, setPreviewModalData] = useState({
     filename: "",
     num_of_rows: 0,
+    dataset_type: "",
     preview_headers: [],
     preview_data: [],
   });
@@ -407,7 +408,7 @@ const UploadDataset = () => {
                 datatableHeader="Datasets"
                 datatableColumns={[
                   { label: "File Name" },
-                  { label: "File Size" },
+                  { label: "File Size (TYPE)" },
                   { label: "Uploaded By" },
                   { label: "Date Uploaded" },
                   { label: "Actions" },
@@ -427,6 +428,7 @@ const UploadDataset = () => {
                         filename,
                         original_filename,
                         file_size,
+                        dataset_type,
                         num_of_rows,
                         preview_data,
                         preview_headers,
@@ -437,12 +439,16 @@ const UploadDataset = () => {
                       const download_link =
                         import.meta.env.VITE_API_URL +
                         "/datasets/download/" +
-                        filename;
+                        id;
                       return (
                         <div className="content-row" key={i}>
-                          <div className="row-item">{original_filename}</div>
+                          {/* <div className="row-item">{original_filename}</div> */}
+                          <div className="row-item">{filename}</div>
                           <div className="row-item">
                             {displayFileSize(file_size)}
+                            <span className="font-medium ms-1">
+                              ({dataset_type})
+                            </span>
                           </div>
                           <div className="row-item">{user_name}</div>
                           <div className="row-item">
@@ -459,6 +465,7 @@ const UploadDataset = () => {
                                   setPreviewModalData({
                                     filename: original_filename,
                                     num_of_rows: num_of_rows,
+                                    dataset_type: dataset_type,
                                     preview_headers: preview_headers,
                                     preview_data: JSON.parse(preview_data),
                                   });
@@ -616,6 +623,9 @@ const UploadDataset = () => {
             <div className="modal-data">
               <p className="mb-[8px]">
                 Filename: <span>{previewModalData.filename}</span>
+              </p>
+              <p className="mb-[8px]">
+                Dataset Type: <span>{previewModalData.dataset_type}</span>
               </p>
               <p>
                 Number of Rows: <span>{previewModalData.num_of_rows}</span>

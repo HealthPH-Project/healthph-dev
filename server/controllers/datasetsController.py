@@ -25,18 +25,65 @@ datasets_folder = Path("public/datasets")
 
 annotated_datasets_folder = Path("public/annotated_datasets")
 
-def annotate_dataset(raw_dataset_filename: str):
-    print(raw_dataset_filename)
 
+def annotate_dataset(
+    dataset_data: dict,
+    raw_dataset_filename: str,
+    original_filename: str,
+    user_name: str,
+):
+    print('===== ANNOTATION STARTED =====\n')
+    
+    # Split the raw dataset filename [<filename>, 'csv']
     raw_dataset_filename_split = str.split(raw_dataset_filename, sep=".")
+    
+    # Append '-annotated' to filename
     result_filename = (
         f"{raw_dataset_filename_split[0]}-annotated.{raw_dataset_filename_split[1]}"
     )
+    
+    # Annotated dataset
+    annotated_datasets_path: str = annotation(raw_dataset_filename, result_filename)
 
-    print(result_filename)
-    annotation(raw_dataset_filename, result_filename)
-    
-    
+    file_size = os.stat(annotated_datasets_path).st_size
+
+    num_of_rows = len(pd.read_csv(annotated_datasets_path))
+
+    csv_headers = ["posts", "filtered_location", "annotations"]
+
+    preview_headers = "+".join(csv_headers)
+
+    preview_data = pd.read_csv(
+        (annotated_datasets_path),
+        nrows=3,
+        usecols=csv_headers,
+    ).to_json(orient="records")
+
+    to_encode = dict(dataset_data).copy()
+
+    to_encode.update(
+        {
+            "user_name": user_name,
+            "filename": result_filename,
+            "original_filename": original_filename,
+            "file_size": file_size,
+            "num_of_rows": num_of_rows,
+            "preview_headers": str(preview_headers),
+            "preview_data": json.dumps(preview_data),
+            "dataset_type": "ANNOTATED",
+            "created_at": get_ph_datetime(),
+        }
+    )
+
+    new_annotated_dataset = dataset_collection.insert_one(dict(to_encode))
+
+    if not new_annotated_dataset:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to upload annotated dataset",
+        )
+
+    print("DATASET ANNOTATED SUCCESSFULLY")
     pass
 
 
@@ -109,9 +156,15 @@ async def upload_dataset(
 
     csv_headers = list(pd.read_csv((full_path), nrows=3, usecols=range(3)).columns)
 
+    csv_headers = ["region", "province", "posts"]
+
     preview_headers = "+".join(csv_headers)
 
     preview_data = pd.read_csv((full_path), nrows=3, usecols=range(3)).to_json(
+        orient="records"
+    )
+
+    preview_data = pd.read_csv((full_path), nrows=3, usecols=csv_headers).to_json(
         orient="records"
     )
 
@@ -124,6 +177,7 @@ async def upload_dataset(
             "num_of_rows": num_of_rows,
             "preview_headers": str(preview_headers),
             "preview_data": json.dumps(preview_data),
+            "dataset_type": "RAW",
             "created_at": get_ph_datetime(),
         }
     )
@@ -136,10 +190,13 @@ async def upload_dataset(
             detail="Failed to upload dataset",
         )
 
-    background_tasks.add_task(annotate_dataset, filename)
-    # background_tasks.add_task(test_func)
-
-    print("Annotation Started")
+    background_tasks.add_task(
+        annotate_dataset,
+        dataset_data,
+        filename,
+        original_filename,
+        f"{user_data['first_name']} {user_data['last_name']}",
+    )
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -154,8 +211,37 @@ route     GET api/datasets/download/{filename}
 """
 
 
-async def download_dataset(filename: str):
-    full_path = datasets_folder / filename
+async def download_dataset(id: str):
+    # Check if there is id
+    if not id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Error downloading dataset...",
+        )
+
+    # Check if id is valid object ID
+    if not ObjectId.is_valid(id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Failed to download dataset"
+        )
+
+    # Check if data exists in database
+    dataset_data = dataset_collection.find_one({"_id": ObjectId(id)})
+
+    if not (dataset_data):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found"
+        )
+
+    filename = dataset_data["filename"]
+    
+    # Check if dataset is RAW or ANNOTATED dataset
+    if dataset_data["dataset_type"] == "RAW":
+        full_path = datasets_folder / filename
+    elif dataset_data["dataset_type"] == "ANNOTATED":
+        full_path = annotated_datasets_folder / filename
+
+    # full_path = datasets_folder / filename
 
     if not os.path.isfile(full_path):
         return {"message": f"File {filename} not found."}
@@ -237,8 +323,13 @@ async def delete_dataset(id: str):
             detail="Failed to delete dataset.",
         )
 
-    full_path = datasets_folder / dataset_data["filename"]
+    # Check if deleted dataset is RAW or ANNOTATED dataset
+    if deleted_dataset["dataset_type"] == "RAW":
+        full_path = datasets_folder / dataset_data["filename"]
+    elif deleted_dataset["dataset_type"] == "ANNOTATED":
+        full_path = annotated_datasets_folder / dataset_data["filename"]
 
+    # Remove dataset from directory
     if os.path.exists(full_path):
         os.remove(full_path)
 
@@ -246,7 +337,7 @@ async def delete_dataset(id: str):
         status_code=status.HTTP_200_OK,
         content={
             "message": "Dataset deleted successfully",
-            "user": individual_dataset(deleted_dataset),
+            "dataset": individual_dataset(deleted_dataset),
         },
     )
 

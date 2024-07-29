@@ -22,6 +22,7 @@ annotated_datasets_folder = Path("public/annotated_datasets")
 # Folder for public datasets
 datasets_folder = Path("public/datasets")
 
+
 def get_stopwords():
     # Define stopwords
     stopwords = set(STOPWORDS)
@@ -189,7 +190,7 @@ def get_disease(annotation, disease_code: str):
 
 def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
     post_tfidf = vectorizer.transform([str(post)])
-    
+
     predicted_post_array = mlknn_c.predict(post_tfidf).toarray()
 
     predicted_post = predicted_post_array[0]
@@ -253,7 +254,7 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     """
 
     tqdm.pandas()
-    
+
     raw_dataset_path = datasets_folder / raw_dataset_filename
 
     # Read raw dataset
@@ -273,7 +274,7 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     raw_dataset_df["lat"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[0], axis=1
     )
-    
+
     print("LAT finished")
 
     raw_dataset_df["long"] = raw_dataset_df.apply(
@@ -304,3 +305,5 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     annotated_df.to_csv(annotated_datasets_path, index=False)
 
     print("==== DATASET ANNOTATED ====")
+
+    return  annotated_datasets_path

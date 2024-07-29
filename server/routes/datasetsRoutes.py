@@ -11,7 +11,7 @@ router = APIRouter()
 
 router.add_api_route("/upload", methods=["POST"], endpoint=upload_dataset)
 
-router.add_api_route("/download/{filename}", methods=["GET"], endpoint=download_dataset)
+router.add_api_route("/download/{id}", methods=["GET"], endpoint=download_dataset)
 
 router.add_api_route("/", methods=["GET"], endpoint=fetch_datasets)
 
