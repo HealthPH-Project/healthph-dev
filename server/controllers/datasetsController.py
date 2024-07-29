@@ -23,6 +23,7 @@ from helpers.miscHelpers import get_ph_datetime
 # Folder to store datasets
 datasets_folder = Path("public/datasets")
 
+annotated_datasets_folder = Path("public/annotated_datasets")
 
 def annotate_dataset(raw_dataset_filename: str):
     print(raw_dataset_filename)
@@ -34,13 +35,9 @@ def annotate_dataset(raw_dataset_filename: str):
 
     print(result_filename)
     annotation(raw_dataset_filename, result_filename)
+    
+    
     pass
-
-
-def test_func():
-    print("TEST START")
-    time.sleep(5)
-    print("TEST END")
 
 
 """
