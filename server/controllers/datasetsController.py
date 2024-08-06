@@ -19,6 +19,7 @@ from middleware.requireAdmin import require_admin
 from schema.datasetSchema import individual_dataset, list_datasets
 from helpers.datasetsHelpers import annotation
 from helpers.miscHelpers import get_ph_datetime
+from controllers.pointControllers import delete_point
 
 # Folder to store datasets
 datasets_folder = Path("public/datasets")
@@ -32,16 +33,16 @@ def annotate_dataset(
     original_filename: str,
     user_name: str,
 ):
-    print('===== ANNOTATION STARTED =====\n')
-    
+    print("===== ANNOTATION STARTED =====\n")
+
     # Split the raw dataset filename [<filename>, 'csv']
     raw_dataset_filename_split = str.split(raw_dataset_filename, sep=".")
-    
+
     # Append '-annotated' to filename
     result_filename = (
         f"{raw_dataset_filename_split[0]}-annotated.{raw_dataset_filename_split[1]}"
     )
-    
+
     # Annotated dataset
     annotated_datasets_path: str = annotation(raw_dataset_filename, result_filename)
 
@@ -234,7 +235,7 @@ async def download_dataset(id: str):
         )
 
     filename = dataset_data["filename"]
-    
+
     # Check if dataset is RAW or ANNOTATED dataset
     if dataset_data["dataset_type"] == "RAW":
         full_path = datasets_folder / filename
@@ -292,7 +293,7 @@ route     DELETE api/datasets/{id}
 """
 
 
-async def delete_dataset(id: str):
+async def delete_dataset(background_tasks: BackgroundTasks, id: str):
     # Check if there is id
     if not id:
         raise HTTPException(
@@ -333,6 +334,8 @@ async def delete_dataset(id: str):
     if os.path.exists(full_path):
         os.remove(full_path)
 
+    background_tasks.add_task(delete_point, dataset_data["filename"])
+    
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={

@@ -1,0 +1,59 @@
+region,province,PH_code,posts,filtered_location,lat,long,annotations,extracted_words
+NCR,Metro Manila,PH-00,"Don't feel well, i have panghihina","14.5619689, 121.01805780594316",14.5619689,121.01805780594316,AURI,panghihina
+NCR,Metro Manila,PH-00,"Don't feel well, i have pamamayat","14.5619689, 121.01805780594316",14.5619689,121.01805780594316,"AURI,PN",pamamayat
+I,Pangasinan,PH-01,"Don't feel well, i have panghihina","15.916667, 120.333333",15.916667,120.333333,"AURI,PN",panghihina
+I,La Union,PH-01,"Don't feel well, i have lagnat","16.5735957, 120.4089899",16.5735957,120.4089899,AURI,lagnat
+I,Ilocos Norte,PH-01,"Don't feel well, i have tb","18.166667, 120.75",18.166667,120.75,"AURI,COVID",tb
+II,Quirino,PH-02,"Don't feel well, i have tb","16.283333, 121.583333",16.283333,121.583333,AURI,tb
+II,Cagayan,PH-02,"Don't feel well, i have cough","18.0, 121.833333",18.0,121.833333,"PN,COVID",cough
+II,Batanes,PH-02,"Don't feel well, i have covid","20.5, 121.9",20.5,121.9,"AURI,TB",covid
+II,Cagayan,PH-02,"Don't feel well, i have sipon","18.0, 121.833333",18.0,121.833333,COVID,sipon
+III,Tarlac,PH-03,"Don't feel well, i have tb","15.4937252, 120.4964091",15.4937252,120.4964091,AURI,tb
+III,Bulacan,PH-03,"Don't feel well, i have cough","15.0, 121.083333",15.0,121.083333,"COVID,AURI",cough
+III,Tarlac,PH-03,"Don't feel well, i have sipon","15.4937252, 120.4964091",15.4937252,120.4964091,"COVID,TB",sipon
+IV-A,Cavite,PH-40,"Don't feel well, i have pamumutla","14.2554073, 120.8671503",14.2554073,120.8671503,COVID,pamumutla
+IV-A,Quezon,PH-40,"Don't feel well, i have tb","13.9, 122.0",13.9,122.0,COVID,tb
+IV-A,Quezon,PH-40,"Don't feel well, i have chills","13.9, 122.0",13.9,122.0,"PN,TB",chills
+IV-B,Romblon,PH-41,"Don't feel well, i have cough","12.5, 122.2",12.5,122.2,"TB,AURI",cough
+IV-B,Romblon,PH-41,"Don't feel well, i have pamamayat","12.5, 122.2",12.5,122.2,TB,pamamayat
+IV-B,Marinduque,PH-41,"Don't feel well, i have panghihina","13.416667, 121.95",13.416667,121.95,AURI,panghihina
+IV-B,Oriental Mindoro,PH-41,"Don't feel well, i have chills","13.2, 121.2",13.2,121.2,AURI,chills
+CAR,Mountain Province,PH-14,"Don't feel well, i have pagkapagod","16.6496974, 121.222187",16.6496974,121.222187,PN,pagkapagod
+CAR,Benguet,PH-14,"Don't feel well, i have cough","16.52, 120.69",16.52,120.69,COVID,cough
+CAR,Kalinga,PH-14,"Don't feel well, i have cough","17.5494509, 120.9485748",17.5494509,120.9485748,"COVID,TB",cough
+CAR,Kalinga,PH-14,"Don't feel well, i have chills","17.5494509, 120.9485748",17.5494509,120.9485748,"COVID,AURI",chills
+V,Albay,PH-05,"Don't feel well, i have panghihina","13.216667, 123.55",13.216667,123.55,"COVID,AURI",panghihina
+V,Albay,PH-05,"Don't feel well, i have cough","13.216667, 123.55",13.216667,123.55,TB,cough
+V,Camarines Sur,PH-05,"Don't feel well, i have chills","13.6428216, 123.3282338",13.6428216,123.3282338,"COVID,TB",chills
+VI,Iloilo,PH-06,"Don't feel well, i have tb","10.9522168, 122.5799456",10.9522168,122.5799456,AURI,tb
+VI,Aklan,PH-06,"Don't feel well, i have cough","11.6297894, 122.2481177",11.6297894,122.2481177,PN,cough
+VI,Capiz,PH-06,"Don't feel well, i have covid","11.3852987, 122.6377315",11.3852987,122.6377315,COVID,covid
+VII,Negros Oriental,PH-07,"Don't feel well, i have sipon","9.31195655, 123.30331407545816",9.31195655,123.30331407545816,"COVID,TB",sipon
+VII,Cebu,PH-07,"Don't feel well, i have chills","10.2931062, 123.9020773",10.2931062,123.9020773,AURI,chills
+VII,Siquijor,PH-07,"Don't feel well, i have lagnat","9.2155864, 123.5138212",9.2155864,123.5138212,TB,lagnat
+VII,Negros Oriental,PH-07,"Don't feel well, i have sipon","9.31195655, 123.30331407545816",9.31195655,123.30331407545816,PN,sipon
+VIII,Northern Samar,PH-08,"Don't feel well, i have ubo","12.42, 124.81",12.42,124.81,"COVID,TB",ubo
+VIII,Leyte,PH-08,"Don't feel well, i have sipon","10.7841157, 124.89232097699272",10.7841157,124.89232097699272,"TB,COVID",sipon
+VIII,Eastern Samar,PH-08,"Don't feel well, i have lagnat","11.73, 125.37",11.73,125.37,"COVID,AURI",lagnat
+VIII,Southern Leyte,PH-08,"Don't feel well, i have tb","10.3475099, 125.1250896",10.3475099,125.1250896,COVID,tb
+VIII,Samar,PH-08,"Don't feel well, i have chills","11.79822185, 125.16904177391692",11.79822185,125.16904177391692,PN,chills
+IX,Zamboanga Sibugay,PH-09,"Don't feel well, i have pamumutla","7.7877097, 122.5744217",7.7877097,122.5744217,"AURI,PN",pamumutla
+IX,Zamboanga del Norte,PH-09,"Don't feel well, i have pamamayat","8.0, 122.666667",8.0,122.666667,"TB,PN",pamamayat
+IX,Zamboanga del Norte,PH-09,"Don't feel well, i have lagnat","8.0, 122.666667",8.0,122.666667,COVID,lagnat
+X,Misamis Oriental,PH-10,"Don't feel well, i have pamamayat","8.6534807, 124.8235205",8.6534807,124.8235205,"PN,COVID",pamamayat
+X,Bukidnon,PH-10,"Don't feel well, i have pamumutla","8.022778, 124.998611",8.022778,124.998611,COVID,pamumutla
+XI,Davao del Sur,PH-11,"Don't feel well, i have pagkapagod","6.6983658, 125.3612135",6.6983658,125.3612135,"AURI,COVID",pagkapagod
+XI,Davao de Oro,PH-11,"Don't feel well, i have lagnat","7.45, 126.07",7.45,126.07,"PN,TB",lagnat
+XII,Cotabato,PH-12,"Don't feel well, i have pagkapagod","7.27, 124.86",7.27,124.86,"AURI,TB",pagkapagod
+XII,Sultan Kudarat,PH-12,"Don't feel well, i have ubo","6.5556705, 124.3271496",6.5556705,124.3271496,COVID,ubo
+XII,Sarangani,PH-12,"Don't feel well, i have sipon","5.874722, 125.275278",5.874722,125.275278,"PN,TB",sipon
+XII,Cotabato,PH-12,"Don't feel well, i have ubo","7.27, 124.86",7.27,124.86,TB,ubo
+XIII,Dinagat Islands,PH-13,"Don't feel well, i have panghihina","10.1577932, 125.5851827",10.1577932,125.5851827,AURI,panghihina
+XIII,Agusan del Norte,PH-13,"Don't feel well, i have lagnat","8.92, 125.46",8.92,125.46,"PN,TB",lagnat
+XIII,Surigao del Sur,PH-13,"Don't feel well, i have pamamayat","8.84, 126.15",8.84,126.15,PN,pamamayat
+XIII,Surigao del Norte,PH-13,"Don't feel well, i have panghihina","9.7022868, 125.5464831",9.7022868,125.5464831,"COVID,AURI",panghihina
+XIII,Agusan del Norte,PH-13,"Don't feel well, i have chills","8.92, 125.46",8.92,125.46,TB,chills
+BARMM,Tawi-Tawi,PH-15,"Don't feel well, i have chills","5.2057, 120.0265",5.2057,120.0265,"TB,PN",chills
+BARMM,Basilan,PH-15,"Don't feel well, i have pamamayat","6.55, 122.0666667",6.55,122.0666667,TB,pamamayat
+BARMM,Basilan,PH-15,"Don't feel well, i have panghihina","6.55, 122.0666667",6.55,122.0666667,"AURI,PN",panghihina
+BARMM,Maguindanao del Sur,PH-15,"Don't feel well, i have cough","6.9234196, 124.5365357",6.9234196,124.5365357,"TB,COVID",cough

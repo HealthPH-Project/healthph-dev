@@ -16,6 +16,7 @@ from routes.userRoutes import router as userRouter
 from routes.activityLogRoutes import router as activityLogRouter
 from routes.analyticsRoutes import router as analyticsRouter
 from routes.datasetsRoutes import router as datasetsRouter
+from routes.pointRoutes import router as pointRouter
 from routes.miscRoutes import router as miscRouter
 
 app = FastAPI()
@@ -48,6 +49,7 @@ api_app.include_router(
     router=activityLogRouter, tags=["Activity Logs"], prefix="/activity-logs"
 )
 api_app.include_router(router=datasetsRouter, tags=["Datasets"], prefix="/datasets")
+api_app.include_router(router=pointRouter, tags=["Points"], prefix="/points")
 api_app.include_router(router=analyticsRouter, tags=["Analytics"])
 api_app.include_router(router=miscRouter, tags=["Misc"])
 
