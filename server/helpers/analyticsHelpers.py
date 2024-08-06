@@ -82,55 +82,58 @@ def get_geopy_latlong(address: str):
     except:
         return "-999, -999"
 
+
 # Get the address details given the latitude and longitude
-def get_geopy_reverse(latlong: str): 
+def get_geopy_reverse(latlong: str):
     if latlong == "-999, -999":
         return {}
-    
+
     geolocator = Nominatim(user_agent="https")
-    
+
     try:
         reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1)
-        
-        location : Location = reverse(latlong, language="en", exactly_one=True)
-        
-        return location.raw['address']
+
+        location: Location = reverse(latlong, language="en", exactly_one=True)
+
+        return location.raw["address"]
     except:
         return {}
-    
+
+
 # Get the PH-Code for region tagging
-def get_PH_code (latlong: str):
+def get_PH_code(latlong: str):
     if latlong == "-999, -999":
         return "N/A"
-    else: 
+    else:
         address = get_geopy_reverse(latlong)
-        
+
         if "ISO3166-2-lvl3" not in address.keys():
             return "N/A"
-        
+
         return address["ISO3166-2-lvl3"]
-    
+
+
 # Check if latitude and longitude coordinates are within in Philippine boundaries
 def is_latlong_within_ph(latlong):
-  # Check if latitude is within PH bounds
-  if latlong[0] < 4.6666667 or latlong[0] > 21.16666667:
+    # Check if latitude is within PH bounds
+    if latlong[0] < 4.6666667 or latlong[0] > 21.16666667:
         return "-999, -999"
 
-  # Check if longitude is within PH bounds
-  if latlong[1] < 116.666666667 or latlong[1] > 126.5666666666:
+    # Check if longitude is within PH bounds
+    if latlong[1] < 116.666666667 or latlong[1] > 126.5666666666:
         return "-999, -999"
 
-  return f"{latlong[0]}, {latlong[1]}"
+    return f"{latlong[0]}, {latlong[1]}"
 
 
-# 
+#
 def filter_location(province, region):
     # Combine province and region for location
     location_str = str(province) + ", " + str(region)
-    
+
     # Get latitude and longitude of location
     latlong = get_geopy_latlong(location_str)
-    
+
     # Check if latitude and longitude is valid
     if latlong == "-999, -999":
         # If not, try getting latitude and longitude for region only
@@ -148,6 +151,7 @@ def filter_location(province, region):
 
 
 def frequent_words(data):
+    print(data.post[1])
     # Prepare the post data: concatenate all rows in the post column into a single string
     post = " ".join(review for review in data.post).lower()
     # Remove punctuation and numbers
