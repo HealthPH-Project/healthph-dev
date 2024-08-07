@@ -265,6 +265,12 @@ async def create_points(annotated_filename):
     return "Success points"
 
 
+"""
+@desc     Fetch points
+route     POST api/points/fetch-points
+@access   Private
+"""
+
 async def fetch_points():
     """
     OUTPUT
@@ -385,8 +391,6 @@ async def fetch_points():
 
     # Return result as a list of dictionaries
     return list(result.values())
-
-    return points_dict
 
 
 def delete_point(dataset_src):
