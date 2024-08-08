@@ -23,6 +23,10 @@ import PrintTrendsMap from "../../components/admin/PrintTrendsMap";
 import MapScreenshot from "../../components/admin/MapScreenshot";
 import html2canvas from "html2canvas";
 import { useReactToPrint } from "react-to-print";
+import {
+  useFetchPointsByDiseaseQuery,
+  useFetchPointsQuery,
+} from "../../features/api/pointsSlice";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
@@ -34,6 +38,18 @@ const TrendsMap = () => {
   const [sidebarActive, setSidebarActive] = useState(false);
 
   const [sideAnimate, setSideAnimate] = useState("");
+
+  const {
+    data: points,
+    isLoading: isPointsLoading,
+    error: isPointsError,
+  } = useFetchPointsQuery();
+
+  const {
+    data: pointsDisease,
+    isLoading: isPointsDiseaseLoading,
+    error: isPointsDiseaseError,
+  } = useFetchPointsByDiseaseQuery();
 
   const swipeHandlers = useSwipe({
     directions: ["up", "down"],
@@ -356,9 +372,11 @@ const TrendsMap = () => {
                 onClick={handleChangeDisease}
               >
                 <span className="label">All</span>
-                <span className="count">
-                  {formatDataLength(getTotalCount("all"), 3)}
-                </span>
+                {pointsDisease && (
+                  <span className="count">
+                    {formatDataLength(pointsDisease["count"]["total"], 3)}
+                  </span>
+                )}
               </div>
               <div
                 className={`tab-item ${
@@ -368,9 +386,11 @@ const TrendsMap = () => {
                 onClick={handleChangeDisease}
               >
                 <span className="label">Tuberculosis</span>
-                <span className="count">
-                  {formatDataLength(getTotalCount("tuberculosis"), 3)}
-                </span>
+                {pointsDisease && (
+                  <span className="count">
+                    {formatDataLength(pointsDisease["count"]["TB"], 3)}
+                  </span>
+                )}
               </div>
               <div
                 className={`tab-item ${
@@ -380,9 +400,11 @@ const TrendsMap = () => {
                 onClick={handleChangeDisease}
               >
                 <span className="label">Pneumonia</span>
-                <span className="count">
-                  {formatDataLength(getTotalCount("pneumonia"), 3)}
-                </span>
+                {pointsDisease && (
+                  <span className="count">
+                    {formatDataLength(pointsDisease["count"]["PN"], 3)}
+                  </span>
+                )}
               </div>
               <div
                 className={`tab-item ${
@@ -392,9 +414,11 @@ const TrendsMap = () => {
                 onClick={handleChangeDisease}
               >
                 <span className="label">COVID</span>
-                <span className="count">
-                  {formatDataLength(getTotalCount("covid"), 3)}
-                </span>
+                {pointsDisease && (
+                  <span className="count">
+                    {formatDataLength(pointsDisease["count"]["COVID"], 3)}
+                  </span>
+                )}
               </div>
               <div
                 className={`tab-item ${
@@ -404,21 +428,52 @@ const TrendsMap = () => {
                 onClick={handleChangeDisease}
               >
                 <span className="label">AURI</span>
-                <span className="count">
-                  {formatDataLength(getTotalCount("auri"), 3)}
-                </span>
+                {pointsDisease && (
+                  <span className="count">
+                    {formatDataLength(pointsDisease["count"]["AURI"], 3)}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
           {/* DATA / TRENDS */}
           <div className="sidebar-data">
-            {sidebarData.map(({ region, data }, i) => {
+            {pointsDisease &&
+              pointsDisease["data"].map(
+                ({ region, keywords, annotations }, i) => {
+                  const diseaseCode = {
+                    tuberculosis: "TB",
+                    pneumonia: "PN",
+                    covid: "COVID",
+                    auri: "AURI",
+                  };
+
+                  const showByDisease =
+                    filters.disease == "all" ||
+                    annotations.includes(diseaseCode[filters.disease]);
+
+                  if (
+                    filters.region.find((r) => r.value == region) &&
+                    showByDisease
+                  )
+                    return (
+                      <SidebarDataItem
+                        key={i}
+                        headerLabel={region}
+                        data={keywords}
+                        currentDisease={filters.disease}
+                      />
+                    );
+                }
+              )}
+
+            {/* {sidebarData.map(({ region, data }, i) => {
               if (filters.region.find((r) => r.label == region))
                 return (
                   <SidebarDataItem key={i} headerLabel={region} data={data} />
                 );
-            })}
+            })} */}
           </div>
         </div>
 
@@ -429,7 +484,13 @@ const TrendsMap = () => {
           onClick={handleOpenSidebar}
         ></div>
 
-        <Map filters={filters} data={DummyData} mapCenter={getCenter} />
+        <Map
+          filters={filters}
+          data={DummyData}
+          mapCenter={getCenter}
+          points={points}
+          isPointsLoading={isPointsLoading}
+        />
 
         {showDisclaimer && (
           <Modal

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../Icon";
 
-const ContentBodyItem = ({ disease_name, date, count }) => {
+const ContentBodyItem = ({ disease_name, date, count, keyword }) => {
   const getDiseaseName = () => {
     switch (disease_name) {
       case "tubercolosis":
@@ -18,10 +18,8 @@ const ContentBodyItem = ({ disease_name, date, count }) => {
   return (
     <div className="content-body-item">
       <div>
-        <p className="prod-p3 font-medium text-gray-700 mb-[5px]">
-          {getDiseaseName()}
-        </p>
-        <p className="prod-p3 font-medium text-gray-300">Jan 1, 2024</p>
+        <p className="prod-p3 font-medium text-gray-700 mb-[5px]">{keyword}</p>
+        {/* <p className="prod-p3 font-medium text-gray-300">{keyword}</p> */}
       </div>
       <div>
         <p className="prod-p3 font-medium text-gray-700">{count}</p>
@@ -30,7 +28,33 @@ const ContentBodyItem = ({ disease_name, date, count }) => {
   );
 };
 
-const SidebarDataItem = ({ headerLabel, data }) => {
+const SidebarDataItem = ({ headerLabel, data, currentDisease }) => {
+  const regionsName = {
+    NCR: "National Capital Region",
+    I: "Region I",
+    II: "Region II",
+    III: "Region III",
+    V: "Region V",
+    VI: "Region VI",
+    VII: "Region VII",
+    VIII: "Region VIII",
+    IX: "Region IX",
+    X: "Region X",
+    XI: "Region XI",
+    XII: "Region XII",
+    XIII: "Region XIII",
+    BARMM: "Bangsamoro Autonomous Region in Muslim Mindanao",
+    CAR: "Cordillera Administrative Region",
+    IVA: "CALABARZON",
+    IVB: "MIMAROPA",
+  };
+
+  const diseaseCode = {
+    tuberculosis: "TB",
+    pneumnia: "PN",
+    covid: "COVID",
+    auri: "AURI",
+  };
   const [itemActive, setItemActive] = useState(false);
   return (
     <div className={`sidebar-data-item ${itemActive ? "active" : ""}`}>
@@ -38,7 +62,7 @@ const SidebarDataItem = ({ headerLabel, data }) => {
         className="sidebar-data-header"
         onClick={() => setItemActive(!itemActive)}
       >
-        <span>{headerLabel}</span>
+        <span>{regionsName[headerLabel]}</span>
         <Icon
           iconName="ChevronDown"
           height="20px"
@@ -77,7 +101,11 @@ const SidebarDataItem = ({ headerLabel, data }) => {
           </div>
           <div className="content-body">
             {data.map((v, i) => {
-              return <ContentBodyItem key={i} {...v} />;
+              if (
+                currentDisease == "all" ||
+                v.annotation.includes(diseaseCode[currentDisease])
+              )
+                return <ContentBodyItem key={i} {...v} keyword={v.key} />;
             })}
           </div>
         </div>

@@ -271,6 +271,7 @@ route     POST api/points/fetch-points
 @access   Private
 """
 
+
 async def fetch_points():
     """
     OUTPUT
@@ -297,8 +298,7 @@ async def fetch_points():
         ...
     ]
     """
-    
-    
+
     start_date = get_ph_datetime() - timedelta(days=7)
 
     datasets = dataset_collection.find(
@@ -307,12 +307,42 @@ async def fetch_points():
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
 
-    points_data = point_collection.find(
-        {"dataset_source": {"$in": valid_datasets}}
-    )
+    # regions = [
+    #     "NCR",
+    #     "I",
+    #     "II",
+    #     "III",
+    #     "V",
+    #     "VI",
+    #     "VII",
+    #     "VIII",
+    #     "IX",
+    #     "X",
+    #     "XI",
+    #     "XII",
+    #     "XIII",
+    #     "BARMM",
+    #     "CAR",
+    #     "IVA",
+    #     "IVB",
+    # ]
+
+    # if region == "all":
+    #     points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
+    # elif region in regions:
+    #     points_data = point_collection.find(
+    #         {"region": region, "dataset_source": {"$in": valid_datasets}}
+    #     )
+    # else:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #         detail="Failed to fetch points",
+    #     )
+
+    points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
 
     points = list_points(points_data)
-    
+
     # Initialize empty dictionary to store combined data
     result = {}
 
@@ -389,8 +419,121 @@ async def fetch_points():
             if not found:  # If point_keyword does not exists, add to existing keywords
                 result[unique_key]["keywords"].append(point_keyword)
 
+        result[unique_key]["keywords"] = sorted(
+            result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
+        )
+
     # Return result as a list of dictionaries
-    return list(result.values())
+    return sorted(list(result.values()), key=lambda x: x["PH_code"])
+
+
+async def fetch_points_by_disease():
+    start_date = get_ph_datetime() - timedelta(days=7)
+
+    datasets = dataset_collection.find(
+        {"created_at": {"$gte": start_date}}, {"filename": 1}
+    )
+
+    valid_datasets = [dataset["filename"] for dataset in datasets]
+
+    points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
+
+    points = list_points(points_data)
+
+    # Initialize empty dictionary to store combined data
+    result = {}
+
+    for point in points:
+        # Create a unique key based on [PH_code, region]
+        unique_key = (point["PH_code"], point["region"])
+
+        # Check if unique_key exists in result
+        # If it does not exists create new key-value pair with the unique_key
+        if unique_key not in result:
+            result[unique_key] = {
+                "PH_code": point["PH_code"],
+                "region": point["region"],
+                "annotations": point["annotations"],
+                "annotations_count": point["annotations_count"],
+                "keywords": [],
+            }
+        else:  # If it already exists,
+            # Get existing record from result
+            existing_record = result[unique_key]
+
+            """
+            ANNOTATIONS
+            """
+
+            # Get existing annotations from existing record
+            existing_annotations: list = existing_record["annotations"]
+            # Merged the existing annotations and new annotations, preventing duplicates
+            merged_annotations = list(set(existing_annotations + point["annotations"]))
+            # Update the existing record annotations with the new merged annotations
+            result[unique_key]["annotations"] = merged_annotations
+
+            """
+            ANNOTATIONS COUNT
+            """
+
+            # Initialize Counter to combine counts
+            new_annotations_count = Counter()
+            # Update the counter with the existing annotations count and new annotations count
+            new_annotations_count.update(existing_record["annotations_count"])
+            new_annotations_count.update(point["annotations_count"])
+            # Update the existing record annotations_count with the new annotations count
+            result[unique_key]["annotations_count"] = dict(new_annotations_count)
+
+        """
+        KEYWORDS 
+        """
+
+        # Iterate over keywords of point
+        for point_keyword in point["keywords"]:
+            found = False
+
+            # Iterate over existing keywords
+            for existing_keyword in result[unique_key]["keywords"]:
+                # Check if keyword already exists
+                if point_keyword["key"] == existing_keyword["key"]:
+                    # If it exists, add the count values
+                    existing_keyword["count"] += point_keyword["count"]
+                    # Get the annotation of the existing keyword
+                    existing_keyword_annotation: list = existing_keyword["annotation"]
+                    # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
+                    merged_keyword_annotations = list(
+                        set(existing_keyword_annotation + point_keyword["annotation"])
+                    )
+                    # Update existing keyword annotations with the merged annotations
+                    existing_keyword["annotation"] = merged_keyword_annotations
+                    # If match is found, exit loop
+                    found = True
+                    break
+            if not found:  # If point_keyword does not exists, add to existing keywords
+                result[unique_key]["keywords"].append(point_keyword)
+
+        result[unique_key]["keywords"] = sorted(
+            result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
+        )
+
+    result = sorted(list(result.values()), key=lambda x: x["PH_code"])
+
+    disease_count = Counter({"TB": 0, "PN": 0, "AURI": 0, "COVID": 0})
+    total_count = 0
+
+    for r in result:
+        disease_count.update(r["annotations_count"])
+
+        for keyword in r["keywords"]:
+            total_count += keyword["count"]
+
+    disease_count["total"] = total_count
+
+    # Return result as a list of dictionaries
+    return {
+        "count": disease_count,
+        "data": result,
+    }
 
 
 def delete_point(dataset_src):

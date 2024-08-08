@@ -5,18 +5,15 @@ import {
   MapContainer,
   Polygon,
   TileLayer,
-  CircleMarker,
-  Circle,
   Popup,
   LayerGroup,
-  SVGOverlay,
 } from "react-leaflet";
 import { SemiCircle, SemiCircleMarker } from "react-leaflet-semicircle";
 import Regions from "../../assets/data/regions.json";
 import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
 import { format } from "date-fns";
 
-const Map = ({ filters, data, mapCenter }) => {
+const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
   const zoomOptions = { max: 10, min: 7 };
 
   const [zoom, setZoom] = useState(zoomOptions.min);
@@ -27,8 +24,6 @@ const Map = ({ filters, data, mapCenter }) => {
     [22, 116],
     [4, 128],
   ];
-
-  const purpleOptions = { color: "purple" };
 
   const [map, setMap] = useState(null);
 
@@ -156,54 +151,68 @@ const Map = ({ filters, data, mapCenter }) => {
 
               {showAttribution && <AttributionControl position="topleft" />}
 
-              <LayerGroup>
-                {RegionsCoordinates.map(({ id, coordinates }, i) => {
-                  return (
-                    displayRegion(id) &&
-                    filters.region.length !== Regions.regions.length && (
-                      <Polygon
-                        key={id}
-                        pathOptions={{ color: "#88F", fill: false, weight: 5 }}
-                        positions={coordinates}
-                      />
-                    )
-                  );
-                })}
-              </LayerGroup>
-
-              <LayerGroup>
-                {data &&
-                  data.map(
-                    ({ latitude, longitude, region, sickness, text }, i) => {
+              {!isPointsLoading && (
+                <>
+                  <LayerGroup>
+                    {RegionsCoordinates.map(({ id, coordinates }, i) => {
                       return (
-                        (displayRegion(region) ||
-                          filters.region.length == Regions.regions.length) && (
-                          <Fragment key={i}>
-                            {sickness.map((v, i) => {
-                              const interval = 360 / sickness.length;
-                              return (
-                                <SemiCircleMarker
-                                  className="z-10"
-                                  key={i}
-                                  position={[latitude, longitude]}
-                                  color={getColor(v)}
-                                  radius={15}
-                                  startAngle={interval * (i + 1) - interval}
-                                  stopAngle={interval * (i + 1)}
-                                >
-                                  <Popup>{text}</Popup>
-                                </SemiCircleMarker>
-                              );
-                            })}
-                          </Fragment>
+                        displayRegion(id) &&
+                        filters.region.length !== Regions.regions.length && (
+                          <Polygon
+                            key={id}
+                            pathOptions={{
+                              color: "#88F",
+                              fill: false,
+                              weight: 5,
+                            }}
+                            positions={coordinates}
+                          />
                         )
                       );
-                    }
-                  )}
-              </LayerGroup>
+                    })}
+                  </LayerGroup>
+
+                  <LayerGroup>
+                    {points &&
+                      points.map(
+                        ({ lat, long, region, annotations, keywords }, i) => {
+                          const texts = keywords.slice(0, 3);
+                          return (
+                            (displayRegion(region) ||
+                              filters.region.length ==
+                                Regions.regions.length) && (
+                              <Fragment key={i}>
+                                {annotations.map((v, i) => {
+                                  const interval = 360 / annotations.length;
+                                  return (
+                                    <SemiCircleMarker
+                                      className="z-10"
+                                      key={i}
+                                      position={[lat, long]}
+                                      color={getColor(v)}
+                                      radius={15}
+                                      startAngle={interval * (i + 1) - interval}
+                                      stopAngle={interval * (i + 1)}
+                                    >
+                                      <Popup>
+                                        {texts.map(({ key }, i) => {
+                                          return <p key={i}>{key}</p>;
+                                        })}
+                                      </Popup>
+                                    </SemiCircleMarker>
+                                  );
+                                })}
+                              </Fragment>
+                            )
+                          );
+                        }
+                      )}
+                  </LayerGroup>
+                </>
+              )}
             </MapContainer>
           ),
-          [filters, showAttribution, data]
+          [filters, showAttribution, data, points, isPointsLoading]
         )}
       </div>
     </>

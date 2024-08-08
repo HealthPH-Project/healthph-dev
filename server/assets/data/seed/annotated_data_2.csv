@@ -11,13 +11,13 @@ II,Cagayan,PH-02,"Don't feel well, i have sipon","18.0, 121.833333",18.0,121.833
 III,Tarlac,PH-03,"Don't feel well, i have tb","15.4937252, 120.4964091",15.4937252,120.4964091,AURI,tb
 III,Bulacan,PH-03,"Don't feel well, i have cough","15.0, 121.083333",15.0,121.083333,"COVID,AURI",cough
 III,Tarlac,PH-03,"Don't feel well, i have sipon","15.4937252, 120.4964091",15.4937252,120.4964091,"COVID,TB",sipon
-IV-A,Cavite,PH-40,"Don't feel well, i have pamumutla","14.2554073, 120.8671503",14.2554073,120.8671503,COVID,pamumutla
-IV-A,Quezon,PH-40,"Don't feel well, i have tb","13.9, 122.0",13.9,122.0,COVID,tb
-IV-A,Quezon,PH-40,"Don't feel well, i have chills","13.9, 122.0",13.9,122.0,"PN,TB",chills
-IV-B,Romblon,PH-41,"Don't feel well, i have cough","12.5, 122.2",12.5,122.2,"TB,AURI",cough
-IV-B,Romblon,PH-41,"Don't feel well, i have pamamayat","12.5, 122.2",12.5,122.2,TB,pamamayat
-IV-B,Marinduque,PH-41,"Don't feel well, i have panghihina","13.416667, 121.95",13.416667,121.95,AURI,panghihina
-IV-B,Oriental Mindoro,PH-41,"Don't feel well, i have chills","13.2, 121.2",13.2,121.2,AURI,chills
+IVA,Cavite,PH-40,"Don't feel well, i have pamumutla","14.2554073, 120.8671503",14.2554073,120.8671503,COVID,pamumutla
+IVA,Quezon,PH-40,"Don't feel well, i have tb","13.9, 122.0",13.9,122.0,COVID,tb
+IVA,Quezon,PH-40,"Don't feel well, i have chills","13.9, 122.0",13.9,122.0,"PN,TB",chills
+IVB,Romblon,PH-41,"Don't feel well, i have cough","12.5, 122.2",12.5,122.2,"TB,AURI",cough
+IVB,Romblon,PH-41,"Don't feel well, i have pamamayat","12.5, 122.2",12.5,122.2,TB,pamamayat
+IVB,Marinduque,PH-41,"Don't feel well, i have panghihina","13.416667, 121.95",13.416667,121.95,AURI,panghihina
+IVB,Oriental Mindoro,PH-41,"Don't feel well, i have chills","13.2, 121.2",13.2,121.2,AURI,chills
 CAR,Mountain Province,PH-14,"Don't feel well, i have pagkapagod","16.6496974, 121.222187",16.6496974,121.222187,PN,pagkapagod
 CAR,Benguet,PH-14,"Don't feel well, i have cough","16.52, 120.69",16.52,120.69,COVID,cough
 CAR,Kalinga,PH-14,"Don't feel well, i have cough","17.5494509, 120.9485748",17.5494509,120.9485748,"COVID,TB",cough
