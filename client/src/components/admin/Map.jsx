@@ -177,34 +177,38 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
                       points.map(
                         ({ lat, long, region, annotations, keywords }, i) => {
                           const texts = keywords.slice(0, 3);
-                          return (
-                            (displayRegion(region) ||
-                              filters.region.length ==
-                                Regions.regions.length) && (
-                              <Fragment key={i}>
-                                {annotations.map((v, i) => {
-                                  const interval = 360 / annotations.length;
-                                  return (
-                                    <SemiCircleMarker
-                                      className="z-10"
-                                      key={i}
-                                      position={[lat, long]}
-                                      color={getColor(v)}
-                                      radius={15}
-                                      startAngle={interval * (i + 1) - interval}
-                                      stopAngle={interval * (i + 1)}
-                                    >
-                                      <Popup>
-                                        {texts.map(({ key }, i) => {
-                                          return <p key={i}>{key}</p>;
-                                        })}
-                                      </Popup>
-                                    </SemiCircleMarker>
-                                  );
-                                })}
-                              </Fragment>
-                            )
-                          );
+                          if (!annotations.includes("X")) {
+                            return (
+                              (displayRegion(region) ||
+                                filters.region.length ==
+                                  Regions.regions.length) && (
+                                <Fragment key={i}>
+                                  {annotations.map((v, i) => {
+                                    const interval = 360 / annotations.length;
+                                    return (
+                                      <SemiCircleMarker
+                                        className="z-10"
+                                        key={i}
+                                        position={[lat, long]}
+                                        color={getColor(v)}
+                                        radius={15}
+                                        startAngle={
+                                          interval * (i + 1) - interval
+                                        }
+                                        stopAngle={interval * (i + 1)}
+                                      >
+                                        <Popup>
+                                          {texts.map(({ key }, i) => {
+                                            return <p key={i}>{key}</p>;
+                                          })}
+                                        </Popup>
+                                      </SemiCircleMarker>
+                                    );
+                                  })}
+                                </Fragment>
+                              )
+                            );
+                          }
                         }
                       )}
                   </LayerGroup>

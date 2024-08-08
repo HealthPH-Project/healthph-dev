@@ -203,7 +203,7 @@ def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
         if a == 1:
             annotate.append(annotations[i])
 
-    return annotate if len(annotate) > 0 else "X"
+    return ",".join(annotate) if len(annotate) > 0 else "X"
 
 
 def annotation(raw_dataset_filename: str, result_filename: str):
@@ -290,7 +290,93 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     annotated_df = clean_dataframe(raw_dataset_df)
 
     symptom_set = set(
-        ["cough", "fever", "ubo", "sipon"]
+        [
+            "cough",
+            "fever",
+            "ubo",
+            "sipon",
+            "cough",
+            "cough for more than three weeks",
+            "tuberculosis",
+            "tb",
+            "hemoptysis",
+            "coughing up with blood",
+            "cough with blood",
+            "blood in phlegm",
+            "chest pain when coughing",
+            "dyspnea",
+            "difficulty of breathing",
+            "shortness of breath",
+            "weight loss",
+            "cachexia",
+            "fever",
+            "low grade fever",
+            "afternoon fever",
+            "night sweat",
+            "weakness",
+            "anorexia",
+            "loss of appetite",
+            "tiredness",
+            "fatigue",
+            "anemia",
+            "low iron in the blood",
+            "ubo",
+            "mahigit tatlong linggong ubo",
+            "matagal ng may ubo",
+            "hindi nawawala ang ubo",
+            "pag-ubo na may kasamang dugo",
+            "umuubo ng may dugo",
+            "may dugo sa plema",
+            "masakit sa dibdib kapag umuubo",
+            "masakit ang dibdib",
+            "nahihirapan huminga",
+            "hinahabol ang paghinga",
+            "pagbaba ng timbang",
+            "pamamayat",
+            "namamayat",
+            "pumapayat",
+            "lagnat",
+            "sinat",
+            "lagnat sa hapon o sa gabi",
+            "pagpapawis sa gabi",
+            "nagpapawis sa gabi",
+            "panghihina",
+            "nanghihina",
+            "walang ganang kumain",
+            "hindi magana sa pagkain",
+            "pagkahapo",
+            "pagod na pagod",
+            "pamumutla",
+            "mababa ang dugo",
+            "hubak",
+            "kapin sa tulo ka semana nga ubo",
+            "tb",
+            "tb",
+            "naghubak na naay kauban na dugo",
+            "nagsuka na naay dugo",
+            "plima may dugo",
+            "naay dugo sa kughal or plima",
+            "nag sakit ang dughan ug mo hubak",
+            "sakit ang dughan",
+            "nag lisud ug hinga",
+            "halos dili ka ginhawa",
+            "ning mubo ang timbang",
+            "pagkaniwang",
+            "hilanat",
+            "nay gamay na hilanat",
+            "gi hilantan sa kulop",
+            "danggas",
+            "pagkaluya",
+            "nagkahuyang",
+            "walay gana mo kaon",
+            "kapoyun",
+            "gikapoy",
+            "duason",
+            "gamay ug pula sa dugo",
+            "nagluya",
+            "giduas",
+            "hamubo ug dugo",
+        ]
     )  # Define your existing set of words
 
     annotated_df["extracted_words"] = annotated_df["posts"].apply(
@@ -306,4 +392,4 @@ def annotation(raw_dataset_filename: str, result_filename: str):
 
     print("==== DATASET ANNOTATED ====")
 
-    return  annotated_datasets_path
+    return annotated_datasets_path

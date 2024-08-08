@@ -19,7 +19,7 @@ from middleware.requireAdmin import require_admin
 from schema.datasetSchema import individual_dataset, list_datasets
 from helpers.datasetsHelpers import annotation
 from helpers.miscHelpers import get_ph_datetime
-from controllers.pointControllers import delete_point
+from controllers.pointControllers import delete_point, create_points
 
 # Folder to store datasets
 datasets_folder = Path("public/datasets")
@@ -85,6 +85,8 @@ def annotate_dataset(
         )
 
     print("DATASET ANNOTATED SUCCESSFULLY")
+    
+    create_points(result_filename)
     pass
 
 

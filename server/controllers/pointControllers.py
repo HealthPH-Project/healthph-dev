@@ -83,7 +83,7 @@ async def seed_points():
             )
 
     for annotated_dataset in annotated_datasets_final:
-        await create_points(annotated_dataset)
+        create_points(annotated_dataset)
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -91,7 +91,7 @@ async def seed_points():
     )
 
 
-async def create_points(annotated_filename):
+def create_points(annotated_filename):
     """
     OUTPUT
 
@@ -141,118 +141,127 @@ async def create_points(annotated_filename):
         annotations = str.split(a_d["annotations"], sep=",")
         extracted_word = a_d["extracted_words"]
 
-        # Check if there are records in the <to_encode_dict'> with the same [PH_code, lat, long]
-        # If it already exists, return the index, else return -1
-        record_index = next(
-            (
-                i
-                for (i, d) in enumerate(to_encode_dict)
-                if check_unique_location(d, a_d)
-            ),
-            -1,
-        )
-
-        # If the record exists, update the data
-        if record_index >= 0:
-
-            existing_record = to_encode_dict[record_index]
-
-            """
-            ANNOTATIONS
-            """
-
-            # Get the existing annotations from existing record
-            existing_annotations = existing_record["annotations"]
-            # Merged the existing annotations and the new annotations, preventing duplicates
-            merged_annotations = list(set(annotations).union(set(existing_annotations)))
-            # Update the existing annotations with the new merged annotations
-            to_encode_dict[record_index]["annotations"] = merged_annotations
-
-            """
-            ANNOTATIONS COUNT
-            """
-
-            # Get the existing annotations count from existing record
-            annotations_count = existing_record["annotations_count"]
-            # Iterate over the new annotations
-            for annotation in annotations:
-                # If the annotation, already exists as a key in the annotations_count
-                # Add 1 to the value, else, add new key-value pair with value of 1
-                annotations_count[annotation] = annotations_count.get(annotation, 0) + 1
-            # Update the existing annotations count with the new annotations count
-            to_encode_dict[record_index]["annotations_count"] = annotations_count
-
-            """
-            KEYWORDS
-            """
-
-            # Get the existing list of keywords from existing record
-            existing_keywords: list = existing_record["keywords"]
-
-            # Check if the extracted word is already in the existing keywords
+        if "X" not in annotations:
+            # Check if there are records in the <to_encode_dict'> with the same [PH_code, lat, long]
             # If it already exists, return the index, else return -1
-            keyword_index = next(
+            record_index = next(
                 (
                     i
-                    for (i, keyword) in enumerate(existing_keywords)
-                    if keyword["key"] == extracted_word
+                    for (i, d) in enumerate(to_encode_dict)
+                    if check_unique_location(d, a_d)
                 ),
                 -1,
             )
 
-            # If the keyword exists, add 1 to count.
-            # Merged the annotations for that specific keyword
-            if keyword_index >= 0:
-                # Get the existing and matching keyword
-                matching_keyword = existing_keywords[keyword_index]
+            # If the record exists, update the data
+            if record_index >= 0:
+
+                existing_record = to_encode_dict[record_index]
 
                 """
-                KEYWORD COUNT
+                ANNOTATIONS
                 """
 
-                # Add 1 to count
-                matching_keyword["count"] = matching_keyword["count"] + 1
-
-                """
-                KEYWORD ANNOTATIONS
-                """
-
-                # Get the annotations from the matching keyword
-                matching_keyword_annotations = matching_keyword["annotation"]
-                # Merged the existing annotations from the matching keyword and new annotations, preventing duplicates
-                merged_matching_keyword_annotations = list(
-                    set(annotations).union(set(matching_keyword_annotations))
+                # Get the existing annotations from existing record
+                existing_annotations = existing_record["annotations"]
+                # Merged the existing annotations and the new annotations, preventing duplicates
+                merged_annotations = list(
+                    set(annotations).union(set(existing_annotations))
                 )
-                # Updated the annotations of the matching keyword with the merged annotations
-                matching_keyword["annotation"] = merged_matching_keyword_annotations
+                # Update the existing annotations with the new merged annotations
+                to_encode_dict[record_index]["annotations"] = merged_annotations
 
-                # Update the matching keyword
-                existing_keywords[keyword_index] = matching_keyword
-            else:  # If the keyword does not exist,
-                # Add new keyword to existing keyword with count of 1
-                existing_keywords.append(
-                    {"key": extracted_word, "count": 1, "annotation": annotations}
+                """
+                ANNOTATIONS COUNT
+                """
+
+                # Get the existing annotations count from existing record
+                annotations_count = existing_record["annotations_count"]
+                # Iterate over the new annotations
+                for annotation in annotations:
+                    # If the annotation, already exists as a key in the annotations_count
+                    # Add 1 to the value, else, add new key-value pair with value of 1
+                    annotations_count[annotation] = (
+                        annotations_count.get(annotation, 0) + 1
+                    )
+                # Update the existing annotations count with the new annotations count
+                to_encode_dict[record_index]["annotations_count"] = annotations_count
+
+                """
+                KEYWORDS
+                """
+
+                # Get the existing list of keywords from existing record
+                existing_keywords: list = existing_record["keywords"]
+
+                # Check if the extracted word is already in the existing keywords
+                # If it already exists, return the index, else return -1
+                keyword_index = next(
+                    (
+                        i
+                        for (i, keyword) in enumerate(existing_keywords)
+                        if keyword["key"] == extracted_word
+                    ),
+                    -1,
                 )
 
-            # Update the existing record keywords with the new keywords list
-            to_encode_dict[record_index]["keywords"] = existing_keywords
+                # If the keyword exists, add 1 to count.
+                # Merged the annotations for that specific keyword
+                if keyword_index >= 0:
+                    # Get the existing and matching keyword
+                    matching_keyword = existing_keywords[keyword_index]
 
-        else:  # If the record does not exist, append new record to the <to_encode_list>
-            to_encode_dict.append(
-                {
-                    "PH_code": PH_code,
-                    "region": region,
-                    "province": province,
-                    "lat": lat,
-                    "long": long,
-                    "annotations": annotations,
-                    "annotations_count": {a: 1 for a in annotations},
-                    "keywords": [
+                    """
+                    KEYWORD COUNT
+                    """
+
+                    # Add 1 to count
+                    matching_keyword["count"] = matching_keyword["count"] + 1
+
+                    """
+                    KEYWORD ANNOTATIONS
+                    """
+
+                    # Get the annotations from the matching keyword
+                    matching_keyword_annotations = matching_keyword["annotation"]
+                    # Merged the existing annotations from the matching keyword and new annotations, preventing duplicates
+                    merged_matching_keyword_annotations = list(
+                        set(annotations).union(set(matching_keyword_annotations))
+                    )
+                    # Updated the annotations of the matching keyword with the merged annotations
+                    matching_keyword["annotation"] = merged_matching_keyword_annotations
+
+                    # Update the matching keyword
+                    existing_keywords[keyword_index] = matching_keyword
+                else:  # If the keyword does not exist,
+                    # Add new keyword to existing keyword with count of 1
+                    existing_keywords.append(
                         {"key": extracted_word, "count": 1, "annotation": annotations}
-                    ],
-                    "dataset_source": f"{annotated_filename}",
-                }
-            )
+                    )
+
+                # Update the existing record keywords with the new keywords list
+                to_encode_dict[record_index]["keywords"] = existing_keywords
+
+            else:  # If the record does not exist, append new record to the <to_encode_list>
+                to_encode_dict.append(
+                    {
+                        "PH_code": PH_code,
+                        "region": region,
+                        "province": province,
+                        "lat": lat,
+                        "long": long,
+                        "annotations": annotations,
+                        "annotations_count": {a: 1 for a in annotations},
+                        "keywords": [
+                            {
+                                "key": extracted_word,
+                                "count": 1,
+                                "annotation": annotations,
+                            }
+                        ],
+                        "dataset_source": f"{annotated_filename}",
+                    }
+                )
 
     new_points = point_collection.insert_many(to_encode_dict)
 
@@ -307,39 +316,9 @@ async def fetch_points():
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
 
-    # regions = [
-    #     "NCR",
-    #     "I",
-    #     "II",
-    #     "III",
-    #     "V",
-    #     "VI",
-    #     "VII",
-    #     "VIII",
-    #     "IX",
-    #     "X",
-    #     "XI",
-    #     "XII",
-    #     "XIII",
-    #     "BARMM",
-    #     "CAR",
-    #     "IVA",
-    #     "IVB",
-    # ]
-
-    # if region == "all":
-    #     points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
-    # elif region in regions:
-    #     points_data = point_collection.find(
-    #         {"region": region, "dataset_source": {"$in": valid_datasets}}
-    #     )
-    # else:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    #         detail="Failed to fetch points",
-    #     )
-
-    points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
+    points_data = point_collection.find(
+        {"annotations": {"$nin": ["X"]}, "dataset_source": {"$in": valid_datasets}}
+    )
 
     points = list_points(points_data)
 
@@ -399,32 +378,51 @@ async def fetch_points():
         for point_keyword in point["keywords"]:
             found = False
 
-            # Iterate over existing keywords
-            for existing_keyword in result[unique_key]["keywords"]:
-                # Check if keyword already exists
-                if point_keyword["key"] == existing_keyword["key"]:
-                    # If it exists, add the count values
-                    existing_keyword["count"] += point_keyword["count"]
-                    # Get the annotation of the existing keyword
-                    existing_keyword_annotation: list = existing_keyword["annotation"]
-                    # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
-                    merged_keyword_annotations = list(
-                        set(existing_keyword_annotation + point_keyword["annotation"])
-                    )
-                    # Update existing keyword annotations with the merged annotations
-                    existing_keyword["annotation"] = merged_keyword_annotations
-                    # If match is found, exit loop
-                    found = True
-                    break
-            if not found:  # If point_keyword does not exists, add to existing keywords
-                result[unique_key]["keywords"].append(point_keyword)
+            point_keyword["key"] = str(point_keyword["key"])
+
+            if point_keyword["key"] != "nan":
+
+                # Iterate over existing keywords
+                for existing_keyword in result[unique_key]["keywords"]:
+                    # Check if keyword already exists
+                    if point_keyword["key"] == existing_keyword["key"]:
+                        # If it exists, add the count values
+                        existing_keyword["count"] += point_keyword["count"]
+                        # Get the annotation of the existing keyword
+                        existing_keyword_annotation: list = existing_keyword[
+                            "annotation"
+                        ]
+                        # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
+                        merged_keyword_annotations = list(
+                            set(
+                                existing_keyword_annotation
+                                + point_keyword["annotation"]
+                            )
+                        )
+                        # Update existing keyword annotations with the merged annotations
+                        existing_keyword["annotation"] = merged_keyword_annotations
+                        # If match is found, exit loop
+                        found = True
+                        break
+                if (
+                    not found
+                ):  # If point_keyword does not exists, add to existing keywords
+                    result[unique_key]["keywords"].append(point_keyword)
 
         result[unique_key]["keywords"] = sorted(
             result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
         )
 
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=sorted(list(result.values()), key=lambda x: x["PH_code"]),
+    )
+    return list(result.values())
     # Return result as a list of dictionaries
-    return sorted(list(result.values()), key=lambda x: x["PH_code"])
+    return sorted(list(result.values()), key=lambda x: x["posts"])
+
+
+import math
 
 
 async def fetch_points_by_disease():
@@ -492,25 +490,36 @@ async def fetch_points_by_disease():
         for point_keyword in point["keywords"]:
             found = False
 
-            # Iterate over existing keywords
-            for existing_keyword in result[unique_key]["keywords"]:
-                # Check if keyword already exists
-                if point_keyword["key"] == existing_keyword["key"]:
-                    # If it exists, add the count values
-                    existing_keyword["count"] += point_keyword["count"]
-                    # Get the annotation of the existing keyword
-                    existing_keyword_annotation: list = existing_keyword["annotation"]
-                    # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
-                    merged_keyword_annotations = list(
-                        set(existing_keyword_annotation + point_keyword["annotation"])
-                    )
-                    # Update existing keyword annotations with the merged annotations
-                    existing_keyword["annotation"] = merged_keyword_annotations
-                    # If match is found, exit loop
-                    found = True
-                    break
-            if not found:  # If point_keyword does not exists, add to existing keywords
-                result[unique_key]["keywords"].append(point_keyword)
+            point_keyword["key"] = str(point_keyword["key"])
+
+            if point_keyword["key"] != "nan":
+
+                # Iterate over existing keywords
+                for existing_keyword in result[unique_key]["keywords"]:
+                    # Check if keyword already exists
+                    if point_keyword["key"] == existing_keyword["key"]:
+                        # If it exists, add the count values
+                        existing_keyword["count"] += point_keyword["count"]
+                        # Get the annotation of the existing keyword
+                        existing_keyword_annotation: list = existing_keyword[
+                            "annotation"
+                        ]
+                        # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
+                        merged_keyword_annotations = list(
+                            set(
+                                existing_keyword_annotation
+                                + point_keyword["annotation"]
+                            )
+                        )
+                        # Update existing keyword annotations with the merged annotations
+                        existing_keyword["annotation"] = merged_keyword_annotations
+                        # If match is found, exit loop
+                        found = True
+                        break
+                if (
+                    not found
+                ):  # If point_keyword does not exists, add to existing keywords
+                    result[unique_key]["keywords"].append(point_keyword)
 
         result[unique_key]["keywords"] = sorted(
             result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
