@@ -9,7 +9,7 @@ from controllers.analyticsController import (
 router = APIRouter()
 
 router.add_api_route(
-    "/frequent-words", methods=["GET"], endpoint=generate_frequent_words
+    "/frequent-words/", methods=["GET"], endpoint=generate_frequent_words
 )
 
 router.add_api_route("/percentage", methods=["GET"], endpoint=generate_percentage)

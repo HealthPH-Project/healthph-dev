@@ -27,5 +27,29 @@ def iso3166_2_to_region(ph_code):
         "PH-40": "IVA",
         "PH-41": "IVB",
     }
-    
+
     return codes[ph_code]
+
+
+def region_to_iso3166_2(region):
+    codes = {
+        "NCR": "PH-00",
+        "I": "PH-01",
+        "II": "PH-02",
+        "III": "PH-03",
+        "V": "PH-05",
+        "VI": "PH-06",
+        "VII": "PH-07",
+        "VIII": "PH-08",
+        "IX": "PH-09",
+        "X": "PH-10",
+        "XI": "PH-11",
+        "XII": "PH-12",
+        "XIII": "PH-13",
+        "BARMM": "PH-14",
+        "CAR": "PH-15",
+        "IVA": "PH-40",
+        "IVB": "PH-41",
+    }
+
+    return codes[region]

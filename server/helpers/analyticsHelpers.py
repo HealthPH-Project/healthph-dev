@@ -1,6 +1,9 @@
+from pathlib import Path
 import pandas as pd
 import re
 import nltk
+
+from helpers.miscHelpers import region_to_iso3166_2
 
 nltk.download("wordnet")
 from nltk.stem import WordNetLemmatizer
@@ -13,6 +16,7 @@ from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 from geopy.location import Location
 
+annotated_datasets_folder = Path("public/annotated_datasets")
 
 def get_stopwords():
     # Define stopwords
@@ -68,118 +72,69 @@ def clean_dataframe(df):
     return cleaned_df
 
 
-# Get the latitude and longitude given the address string
-def get_geopy_latlong(address: str):
-    if not address:
-        return "-999, -999"
+def filters_datasets_by_region(region: str, datasets: list):
+    all_posts = ""
+    
+    for dataset in datasets:
+        dataset_df = pd.read_csv(annotated_datasets_folder / dataset)
 
-    geolocator = Nominatim(user_agent="https")
-
-    try:
-        location: Location = geolocator.geocode(address)
-
-        return (location.latitude, location.longitude)
-    except:
-        return "-999, -999"
-
-
-# Get the address details given the latitude and longitude
-def get_geopy_reverse(latlong: str):
-    if latlong == "-999, -999":
-        return {}
-
-    geolocator = Nominatim(user_agent="https")
-
-    try:
-        reverse = RateLimiter(geolocator.reverse, min_delay_seconds=1)
-
-        location: Location = reverse(latlong, language="en", exactly_one=True)
-
-        return location.raw["address"]
-    except:
-        return {}
-
-
-# Get the PH-Code for region tagging
-def get_PH_code(latlong: str):
-    if latlong == "-999, -999":
-        return "N/A"
-    else:
-        address = get_geopy_reverse(latlong)
-
-        if "ISO3166-2-lvl3" not in address.keys():
-            return "N/A"
-
-        return address["ISO3166-2-lvl3"]
-
-
-# Check if latitude and longitude coordinates are within in Philippine boundaries
-def is_latlong_within_ph(latlong):
-    # Check if latitude is within PH bounds
-    if latlong[0] < 4.6666667 or latlong[0] > 21.16666667:
-        return "-999, -999"
-
-    # Check if longitude is within PH bounds
-    if latlong[1] < 116.666666667 or latlong[1] > 126.5666666666:
-        return "-999, -999"
-
-    return f"{latlong[0]}, {latlong[1]}"
-
-
-#
-def filter_location(province, region):
-    # Combine province and region for location
-    location_str = str(province) + ", " + str(region)
-
-    # Get latitude and longitude of location
-    latlong = get_geopy_latlong(location_str)
-
-    # Check if latitude and longitude is valid
-    if latlong == "-999, -999":
-        # If not, try getting latitude and longitude for region only
-        region_str = str(region)
-        latlong_region = get_geopy_latlong(region_str)
-
-        if latlong_region == "-999, -999":
-            return "-999, -999"
+        if region == "all":
+            dataset_posts = " ".join(post for post in dataset_df["posts"])
         else:
-            # Check if latitude and longitude is within the Philippines
-            return is_latlong_within_ph(latlong_region)
-    else:
-        # Check if latitude and longitude is within the Philippines
-        return is_latlong_within_ph(latlong)
+            ph_code = region_to_iso3166_2(region)
+            regional_posts = dataset_df[dataset_df["PH_code"] == ph_code]
+            dataset_posts = " ".join(post for post in regional_posts["posts"])
+
+        all_posts = " ".join([all_posts, dataset_posts])
+
+    all_posts = re.sub(r"[^a-zA-Z\s]", "", all_posts)
+
+    return all_posts
 
 
 def frequent_words(data):
-    print(data.post[1])
-    # Prepare the post data: concatenate all rows in the post column into a single string
-    post = " ".join(review for review in data.post).lower()
-    # Remove punctuation and numbers
-    post = re.sub(r"[^a-zA-Z\s]", "", post)
+    # # Prepare the post data: concatenate all rows in the post column into a single string
+    # post = " ".join(review for review in data.post).lower()
+    # # Remove punctuation and numbers
+    # post = re.sub(r"[^a-zA-Z\s]", "", post)
 
-    # Define stopwords
+    # # Define stopwords
+    # stopwords = get_stopwords()
+
+    # # Split the post into words and filter out stopwords
+    # words = [word for word in post.split() if word not in stopwords]
+
+    # # Count the frequency of each word
+    # word_counts = Counter(words)
+
+    # # Get the most common words and their counts
+    # most_common_words = word_counts.most_common(
+    #     10
+    # )  # Adjust the number to display more or fewer words
+
+    # # Convert the most common words to a DataFrame for visualization
+    # df_frequent_words = pd.DataFrame(most_common_words, columns=["Word", "Frequency"])
+
+    # return df_frequent_words
+    
     stopwords = get_stopwords()
 
-    # Split the post into words and filter out stopwords
-    words = [word for word in post.split() if word not in stopwords]
+    words = [word for word in data.split() if word not in stopwords]
 
-    # Count the frequency of each word
     word_counts = Counter(words)
 
-    # Get the most common words and their counts
-    most_common_words = word_counts.most_common(
-        10
-    )  # Adjust the number to display more or fewer words
+    most_common_words = word_counts.most_common(n=10)
 
-    # Convert the most common words to a DataFrame for visualization
-    df_frequent_words = pd.DataFrame(most_common_words, columns=["Word", "Frequency"])
+    frequent_words_df = pd.DataFrame(most_common_words, columns=["word", "frequency"])
 
-    return df_frequent_words
+    frequent_words_dict = frequent_words_df.to_dict(orient="records")
+
+    return frequent_words_dict
 
 
 def word_cloud(data, full_path: str):
-    # Combine all posts into a single string
-    post = " ".join(review for review in data.post)
+    # # Combine all posts into a single string
+    # post = " ".join(review for review in data.post)
 
     # Define stopwords
     stopwords = get_stopwords()
@@ -197,7 +152,7 @@ def word_cloud(data, full_path: str):
         height=400,
         max_font_size=50,
         margin=50,
-    ).generate(post)
+    ).generate(data)
 
     wordcloud.to_file(full_path)
 

@@ -14,8 +14,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
   PieChart,
   Pie,
 } from "recharts";
@@ -64,21 +62,15 @@ const Analytics = () => {
     user.user_type == "USER" ? user.accessible_regions[0] : "all"
   );
 
-  let {
-    data: frequent_words,
-    isLoading,
-    isFetching: isTopWordsFetching,
-  } = useGenerateFrequentWordsQuery(topWordsFilter);
+  let { data: frequent_words, isFetching: isTopWordsFetching } =
+    useGenerateFrequentWordsQuery(topWordsFilter);
 
   const [percentageFilter, setPercentageFilter] = useState(
     user.user_type == "USER" ? user.accessible_regions[0] : "all"
   );
 
-  let {
-    data: percentage,
-    isLoading: isPercentageLoading,
-    isFetching: isPercentageFetching,
-  } = useGeneratePercentageQuery(percentageFilter);
+  let { data: percentage, isFetching: isPercentageFetching } =
+    useGeneratePercentageQuery();
 
   const COLORS = ["#DBB324", "#007AFF", "#D82727", "#35CA3B"];
   const RADIAN = Math.PI / 180;
@@ -89,6 +81,10 @@ const Analytics = () => {
 
   const { data: wordcloud, isFetching: isWordCloudFetching } =
     useGenerateWordCloudQuery(wordCloudFilter);
+
+  const [wordCloudImage, setWordCloudImage] = useState(
+    import.meta.env.VITE_API_URL + "/wordcloud/all"
+  );
 
   const printRef = useRef();
 
@@ -104,6 +100,14 @@ const Analytics = () => {
     flag = isWordCloudFetching || isTopWordsFetching || isPercentageFetching;
     return !flag;
   };
+
+  useEffect(() => {
+    if (!isWordCloudFetching) {
+      setWordCloudImage(
+        import.meta.env.VITE_API_URL + "/wordcloud/" + wordCloudFilter
+      );
+    }
+  }, [isWordCloudFetching, wordcloud]);
 
   return (
     <>
@@ -147,12 +151,9 @@ const Analytics = () => {
                     data={{
                       frequent_words: frequent_words,
                       frequent_words_filter: topWordsFilter,
-                      percentage: percentage,
+                      percentage: percentage[percentageFilter],
                       percentage_filter: percentageFilter,
-                      wordcloud: isWordCloudFetching
-                        ? ""
-                        : import.meta.env.VITE_API_URL +
-                          wordcloud["wordcloud_url"],
+                      wordcloud: wordCloudImage,
                       wordcloud_filter: wordCloudFilter,
                     }}
                     dateTable={format(new Date(), "MMMM dd, yyyy")}
@@ -225,7 +226,7 @@ const Analytics = () => {
                         tickLine={false}
                       />
                       <YAxis
-                        dataKey="Word"
+                        dataKey="word"
                         type="category"
                         tickCount={6}
                         tickLine={false}
@@ -251,7 +252,7 @@ const Analytics = () => {
                                       className="h-[16px] w-[16px] rounded-[4px] me-[10px]"
                                       style={{ backgroundColor: color }}
                                     ></div>
-                                    <span className="prod-l3 text-gray-900">
+                                    <span className="prod-l3 text-gray-900 capitalize">
                                       {value}
                                     </span>
                                   </div>
@@ -262,7 +263,7 @@ const Analytics = () => {
                         }}
                       />
                       <Bar
-                        dataKey="Frequency"
+                        dataKey="frequency"
                         stackId="a"
                         fill="#007AFF"
                         maxBarSize={20}
@@ -313,7 +314,7 @@ const Analytics = () => {
                         }}
                       />
                       <Pie
-                        data={percentage}
+                        data={percentage[percentageFilter]}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
@@ -346,7 +347,7 @@ const Analytics = () => {
                         fill="#8884d8"
                         dataKey="count"
                       >
-                        {percentage.map((entry, index) => (
+                        {percentage[percentageFilter].map((entry, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={COLORS[index % COLORS.length]}
@@ -367,19 +368,9 @@ const Analytics = () => {
                 isLoading={isWordCloudFetching}
                 additionalClasses="col-span-1 md:col-span-2 min-h-[518px]"
               >
-                {/* {!isWordcloudLoading && (
-                    <img src={wordcloudImage} alt="wordcloud" />
-                  )} */}
                 {!isWordCloudFetching && (
                   <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
-                    <img
-                      src={
-                        import.meta.env.VITE_API_URL +
-                        wordcloud["wordcloud_url"]
-                      }
-                      alt="wordcloud"
-                    />
-                    {/* <p>asdas</p> */}
+                    <img src={wordCloudImage} alt="wordcloud" />
                   </div>
                 )}
               </Report>

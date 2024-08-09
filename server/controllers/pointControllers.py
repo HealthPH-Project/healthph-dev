@@ -419,9 +419,6 @@ async def fetch_points():
     )
 
 
-import math
-
-
 async def fetch_points_by_disease():
     start_date = get_ph_datetime() - timedelta(days=7)
 
