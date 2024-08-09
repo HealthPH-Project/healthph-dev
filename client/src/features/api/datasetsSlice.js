@@ -19,7 +19,7 @@ export const datasetsApi = baseAPI.injectEndpoints({
         url: `/datasets/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Datasets"],
+      invalidatesTags: ["Datasets", "Points", "PointsDisease"],
     }),
   }),
 });

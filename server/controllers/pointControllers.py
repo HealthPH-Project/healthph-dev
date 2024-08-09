@@ -10,8 +10,8 @@ from pathlib import Path
 from bson import ObjectId
 
 from config.database import dataset_collection, point_collection
-from helpers.miscHelpers import get_ph_datetime
-from helpers.pointHelpers import check_unique_location
+from helpers.miscHelpers import get_ph_datetime, iso3166_2_to_region
+from helpers.pointHelpers import check_unique_location, sort_regions
 from schema.pointSchema import list_points
 
 seed_folder = Path("assets/data/seed")
@@ -134,7 +134,7 @@ def create_points(annotated_filename):
     for a_d in annotated_dict:
         # Retrieve values from the each record from the annotated dataset
         PH_code = a_d["PH_code"]
-        region = a_d["region"]
+        region = iso3166_2_to_region(a_d["PH_code"])
         province = a_d["province"]
         lat = a_d["lat"]
         long = a_d["long"]
@@ -415,11 +415,8 @@ async def fetch_points():
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content=sorted(list(result.values()), key=lambda x: x["PH_code"]),
+        content=sort_regions(list(result.values())),
     )
-    return list(result.values())
-    # Return result as a list of dictionaries
-    return sorted(list(result.values()), key=lambda x: x["posts"])
 
 
 import math
@@ -525,7 +522,7 @@ async def fetch_points_by_disease():
             result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
         )
 
-    result = sorted(list(result.values()), key=lambda x: x["PH_code"])
+    result = sort_regions(list(result.values()))
 
     disease_count = Counter({"TB": 0, "PN": 0, "AURI": 0, "COVID": 0})
     total_count = 0

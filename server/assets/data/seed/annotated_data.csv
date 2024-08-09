@@ -13,14 +13,14 @@ III,Tarlac,PH-03,"Don't feel well, i have ubo","15.4937252, 120.4964091",15.4937
 III,Zambales,PH-03,"Don't feel well, i have covid","15.23, 120.12",15.23,120.12,PN,covid
 III,Bataan,PH-03,"Don't feel well, i have sipon","14.6436031, 120.4657622",14.6436031,120.4657622,"PN,COVID",sipon
 III,Bulacan,PH-03,"Don't feel well, i have ubo","15.0, 121.083333",15.0,121.083333,TB,ubo
-IVA,Laguna,PH-40,"Don't feel well, i have ubo","14.1696476, 121.3336526",14.1696476,121.3336526,COVID,ubo
-IVA,Laguna,PH-40,"Don't feel well, i have chills","14.1696476, 121.3336526",14.1696476,121.3336526,"PN,COVID",chills
-IVA,Quezon,PH-40,"Don't feel well, i have ubo","13.9, 122.0",13.9,122.0,TB,ubo
-IVB,Palawan,PH-41,"Don't feel well, i have chills","11.0798978, 120.93734215474105",11.0798978,120.93734215474105,"TB,AURI",chills
-IVB,Romblon,PH-41,"Don't feel well, i have tb","12.5, 122.2",12.5,122.2,"COVID,AURI",tb
-IVB,Romblon,PH-41,"Don't feel well, i have cough","12.5, 122.2",12.5,122.2,"AURI,TB",cough
-IVB,Romblon,PH-41,"Don't feel well, i have covid","12.5, 122.2",12.5,122.2,"TB,PN",covid
-IVB,Palawan,PH-41,"Don't feel well, i have sipon","11.0798978, 120.93734215474105",11.0798978,120.93734215474105,COVID,sipon
+IV-A,Laguna,PH-40,"Don't feel well, i have ubo","14.1696476, 121.3336526",14.1696476,121.3336526,COVID,ubo
+IV-A,Laguna,PH-40,"Don't feel well, i have chills","14.1696476, 121.3336526",14.1696476,121.3336526,"PN,COVID",chills
+IV-A,Quezon,PH-40,"Don't feel well, i have ubo","13.9, 122.0",13.9,122.0,TB,ubo
+IV-B,Palawan,PH-41,"Don't feel well, i have chills","11.0798978, 120.93734215474105",11.0798978,120.93734215474105,"TB,AURI",chills
+IV-B,Romblon,PH-41,"Don't feel well, i have tb","12.5, 122.2",12.5,122.2,"COVID,AURI",tb
+IV-B,Romblon,PH-41,"Don't feel well, i have cough","12.5, 122.2",12.5,122.2,"AURI,TB",cough
+IV-B,Romblon,PH-41,"Don't feel well, i have covid","12.5, 122.2",12.5,122.2,"TB,PN",covid
+IV-B,Palawan,PH-41,"Don't feel well, i have sipon","11.0798978, 120.93734215474105",11.0798978,120.93734215474105,COVID,sipon
 CAR,Ifugao,PH-14,"Don't feel well, i have chills","16.6496974, 121.222187",16.6496974,121.222187,TB,chills
 CAR,Apayao,PH-14,"Don't feel well, i have chills","18.08557685, 121.18792848783632",18.08557685,121.18792848783632,"COVID,PN",chills
 CAR,Mountain Province,PH-14,"Don't feel well, i have lagnat","16.6496974, 121.222187",16.6496974,121.222187,AURI,lagnat
