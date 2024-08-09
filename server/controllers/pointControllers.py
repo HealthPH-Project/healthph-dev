@@ -536,10 +536,13 @@ async def fetch_points_by_disease():
     disease_count["total"] = total_count
 
     # Return result as a list of dictionaries
-    return {
-        "count": disease_count,
-        "data": result,
-    }
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "count": disease_count,
+            "data": result,
+        },
+    )
 
 
 def delete_point(dataset_src):
