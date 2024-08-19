@@ -308,7 +308,7 @@ async def fetch_points():
     ]
     """
 
-    start_date = get_ph_datetime() - timedelta(days=7)
+    start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
         {"created_at": {"$gte": start_date}}, {"filename": 1}
@@ -420,7 +420,7 @@ async def fetch_points():
 
 
 async def fetch_points_by_disease():
-    start_date = get_ph_datetime() - timedelta(days=7)
+    start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
         {"created_at": {"$gte": start_date}}, {"filename": 1}
@@ -428,7 +428,9 @@ async def fetch_points_by_disease():
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
 
-    points_data = point_collection.find({"dataset_source": {"$in": valid_datasets}})
+    points_data = point_collection.find(
+        {"annotations": {"$nin": ["X"]}, "dataset_source": {"$in": valid_datasets}}
+    )
 
     points = list_points(points_data)
 

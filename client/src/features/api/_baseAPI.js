@@ -27,6 +27,7 @@ export const baseAPI = createApi({
     "Admin",
     "ActivityLogs",
     "ActivityLog",
+    "AnalyticsSuspected",
     "AnalyticsFrequent",
     "AnalyticsPercentage",
     "AnalyticsWordcloud",

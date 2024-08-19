@@ -8,7 +8,13 @@ export const datasetsApi = baseAPI.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Datasets"],
+      invalidatesTags: [
+        "Datasets",
+        "AnalyticsSuspected",
+        "AnalyticsFrequent",
+        "AnalyticsPercentage",
+        "AnalyticsWordcloud",
+      ],
     }),
     fetchDatasets: builder.query({
       query: () => "/datasets",
@@ -19,7 +25,15 @@ export const datasetsApi = baseAPI.injectEndpoints({
         url: `/datasets/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Datasets", "Points", "PointsDisease"],
+      invalidatesTags: [
+        "Datasets",
+        "Points",
+        "PointsDisease",
+        "AnalyticsSuspected",
+        "AnalyticsFrequent",
+        "AnalyticsPercentage",
+        "AnalyticsWordcloud",
+      ],
     }),
   }),
 });

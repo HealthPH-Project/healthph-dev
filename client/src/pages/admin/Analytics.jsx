@@ -20,6 +20,7 @@ import {
 import {
   useGenerateFrequentWordsQuery,
   useGeneratePercentageQuery,
+  useGenerateSuspectedSymptomsQuery,
   useGenerateWordCloudQuery,
 } from "../../features/api/analyticsSlice";
 import Report from "../../components/admin/Report";
@@ -57,6 +58,9 @@ const Analytics = () => {
     });
     return options;
   };
+
+  const { data: suspected_symptoms, isFetching: isSuspectedSymptomsFetcing } =
+    useGenerateSuspectedSymptomsQuery();
 
   const [topWordsFilter, setTopWordsFilter] = useState(
     user.user_type == "USER" ? user.accessible_regions[0] : "all"
@@ -97,7 +101,11 @@ const Analytics = () => {
 
   const displayPrintButton = () => {
     let flag = true;
-    flag = isWordCloudFetching || isTopWordsFetching || isPercentageFetching;
+    flag =
+      isSuspectedSymptomsFetcing ||
+      isTopWordsFetching ||
+      isWordCloudFetching ||
+      isPercentageFetching;
     return !flag;
   };
 
@@ -172,11 +180,47 @@ const Analytics = () => {
           </div>
           <div className="analytics-content">
             <div className="analytics-cards">
-              <AnalyticCardItem label="TOTAL SUSPECTED" isPrimary />
-              <AnalyticCardItem label="TUBERCOLOSIS" />
-              <AnalyticCardItem label="PNEUMONIA" />
-              <AnalyticCardItem label="COVID" />
-              <AnalyticCardItem label="AURI" />
+              <AnalyticCardItem
+                label="TOTAL SUSPECTED"
+                isPrimary
+                data={
+                  !isSuspectedSymptomsFetcing && suspected_symptoms
+                    ? suspected_symptoms["total"]
+                    : null
+                }
+              />
+              <AnalyticCardItem
+                label="TUBERCOLOSIS"
+                data={
+                  !isSuspectedSymptomsFetcing && suspected_symptoms
+                    ? suspected_symptoms["TB"]
+                    : null
+                }
+              />
+              <AnalyticCardItem
+                label="PNEUMONIA"
+                data={
+                  !isSuspectedSymptomsFetcing && suspected_symptoms
+                    ? suspected_symptoms["PN"]
+                    : null
+                }
+              />
+              <AnalyticCardItem
+                label="COVID"
+                data={
+                  !isSuspectedSymptomsFetcing && suspected_symptoms
+                    ? suspected_symptoms["COVID"]
+                    : null
+                }
+              />
+              <AnalyticCardItem
+                label="AURI"
+                data={
+                  !isSuspectedSymptomsFetcing && suspected_symptoms
+                    ? suspected_symptoms["AURI"]
+                    : null
+                }
+              />
             </div>
           </div>
         </section>
@@ -200,7 +244,7 @@ const Analytics = () => {
 
           <div className="analytics-content">
             <div className="analytics-reports">
-              {/* REPORT - TOP WORDS */}
+              {/* REPORT - TOP WORDS*/}
               <Report
                 heading="Top Words"
                 filter={topWordsFilter}
@@ -246,7 +290,12 @@ const Analytics = () => {
                                 return (
                                   <div
                                     className="flex items-center me-[16px]"
-                                    key={index}
+                                    id={`${index}-${value}-${Math.floor(
+                                      Math.random() * 100
+                                    )}`}
+                                    key={`${index}-${value}-${Math.floor(
+                                      Math.random() * 100
+                                    )}`}
                                   >
                                     <div
                                       className="h-[16px] w-[16px] rounded-[4px] me-[10px]"
@@ -383,13 +432,24 @@ const Analytics = () => {
 };
 
 const AnalyticCardItem = ({ label, data, subtext, isPrimary = false }) => {
+  const formatDataLength = (value, minDigit) => {
+    return value.length > minDigit
+      ? value.toString().padStart(minDigit, "0").slice(0, minDigit)
+      : value.toString().padStart(minDigit, "0");
+  };
+
   return (
     <div className="item">
       <div className={`wrapper ${isPrimary ? "primary" : ""}`}>
         <p className="label">{label}</p>
-        <p className="data">000</p>
+        <p className="data">
+          {data ? formatDataLength(data["count"], 3) : "000"}
+        </p>
         <p className="subtext">
-          Regions Located: <span>00</span>
+          Regions Located:{" "}
+          <span>
+            {data ? formatDataLength(data["regions_located"].length, 2) : "00"}
+          </span>
         </p>
       </div>
     </div>

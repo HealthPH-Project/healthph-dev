@@ -2,6 +2,14 @@ import { baseAPI } from "./_baseAPI";
 
 export const activityLogApi = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
+    generateSuspectedSymptoms: builder.query({
+      query: () => {
+        return {
+          url: "/suspected-symptom"
+        };
+      },
+      providesTags: ["AnalyticsSuspected"],
+    }),
     generateFrequentWords: builder.query({
       query: (filters) => {
         return {
@@ -27,12 +35,13 @@ export const activityLogApi = baseAPI.injectEndpoints({
           params: { filters: filters },
         };
       },
-      providesTags: ["AnalyticsPercentage"],
+      providesTags: ["AnalyticsWordcloud"],
     }),
   }),
 });
 
 export const {
+  useGenerateSuspectedSymptomsQuery,
   useGenerateFrequentWordsQuery,
   useGeneratePercentageQuery,
   useGenerateWordCloudQuery,

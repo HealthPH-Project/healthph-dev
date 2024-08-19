@@ -3,10 +3,15 @@ from controllers.analyticsController import (
     fetch_wordcloud,
     generate_frequent_words,
     generate_percentage,
+    generate_suspected_symptom,
     generate_wordcloud,
 )
 
 router = APIRouter()
+
+router.add_api_route(
+    "/suspected-symptom", methods=["GET"], endpoint=generate_suspected_symptom
+)
 
 router.add_api_route(
     "/frequent-words/", methods=["GET"], endpoint=generate_frequent_words
