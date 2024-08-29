@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { format } from "date-fns";
 
@@ -26,6 +26,7 @@ const ArticlePage = () => {
     datePublished,
     articlePreview,
     articleImage,
+    articleImagePosition,
     articleImageCaption,
     galleryFolder,
     galleryImages,
@@ -58,6 +59,8 @@ const ArticlePage = () => {
 
   const [modalData, setModalData] = useState({ src: "", caption: "" });
 
+  const location = useLocation();
+
   return (
     <div className="article-page-layout">
       <HomeNavbar background="solid" />
@@ -66,6 +69,7 @@ const ArticlePage = () => {
         style={{
           backgroundImage:
             "url('/assets/articles/preview/" + articleImage + "')",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <div className="article-hero-overlay"></div>
@@ -73,6 +77,7 @@ const ArticlePage = () => {
           <div className="flex justify-start items-center mb-[24px]">
             <Link
               to="/articles"
+              state={location.state}
               className="prod-btn-lg prod-btn-secondary flex items-center"
             >
               <Icon
@@ -87,8 +92,8 @@ const ArticlePage = () => {
           <div className="article-header">
             <p className="article-title">{articleTitle}</p>
             <p className="article-content my-[24px]">
-              {readDuration} •{" "}
-              {format(new Date(datePublished), "MMMM dd, yyyy")}
+              {/* {readDuration} •{" "}
+              {format(new Date(datePublished), "MMMM dd, yyyy")} */}
             </p>
             <p className="article-content">{articlePreview}</p>
           </div>

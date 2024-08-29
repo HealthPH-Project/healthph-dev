@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "../Icon";
 
-const ArticleItem = ({ article }) => {
+const ArticleItem = ({ article, articlePage }) => {
   const {
     articleTitle,
     articleSlug,
@@ -45,6 +45,7 @@ const ArticleItem = ({ article }) => {
         <p className="article-title">{articleTitle}</p>
         <p className="article-preview">{articlePreview}</p>
         <Link
+          state={articlePage}
           to={"/articles/" + articleSlug}
           className="prod-btn-lg prod-btn-secondary"
         >

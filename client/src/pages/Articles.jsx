@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Icon from "../components/Icon";
@@ -13,16 +13,25 @@ const Articles = () => {
     // ArticlesList.sort(
     //   (a, b) => new Date(b.datePublished) - new Date(a.datePublished)
     // )
-    ArticlesList.sort((a, b) => b.articleID - a.articleID)
+    ArticlesList.filter((a) => a.articleTitle != "").sort(
+      (a, b) => b.articleID - a.articleID
+    )
   );
+  const location = useLocation();
 
-  const [articlePage, setArticlePage] = useState(1);
+  const [articlePage, setArticlePage] = useState(location.state ?? 1);
 
   const numOfArticlesPerPage = 9;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    document
+      .getElementsByClassName("article-layout")[0]
+      .scrollTo({ top: 0, behavior: "instant" });
+  }, [articlePage]);
 
   const getArticles = () => {
     const startIndex = articlePage * numOfArticlesPerPage;
@@ -57,7 +66,13 @@ const Articles = () => {
             <div className="articles">
               {getArticles().map((a, i) => {
                 if (a.articleTitle != "") {
-                  return <ArticleItem article={a} key={i} />;
+                  return (
+                    <ArticleItem
+                      article={a}
+                      key={i}
+                      articlePage={articlePage}
+                    />
+                  );
                 }
               })}
             </div>
@@ -88,8 +103,9 @@ const Articles = () => {
                     if (
                       articlePage <
                       ArticlesList.length / numOfArticlesPerPage
-                    )
+                    ) {
                       setArticlePage((articlePage) => articlePage + 1);
+                    }
                   }}
                 >
                   <Icon
