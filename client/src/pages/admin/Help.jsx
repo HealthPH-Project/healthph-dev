@@ -118,7 +118,7 @@ const Help = () => {
           description: [
             {
               sectionDesc:
-                "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as Tuberculosis, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
+                "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as PTB, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
               sectionImage: <HelpImage image="admin-map" />,
             },
             {
@@ -232,7 +232,7 @@ const Help = () => {
           description: [
             {
               sectionDesc:
-                "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as Tuberculosis, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
+                "By navigating with the map, there are 4 types of colored circles called suspected symptoms. These 4 types of circles are plotted around the map of the Philippines and are categorized as PTB, Pneumonia, COVID, and AURI. In validating the date of these plotted suspected symptoms, there is a label indicating the recency of the data being displayed.",
               sectionImage: <HelpImage image="user-map" />,
             },
             {
@@ -351,7 +351,7 @@ const Help = () => {
                 search.length > 0 ? () => setSearch("") : undefined
               }
             />
-            <button
+            {/* <button
               type="button"
               className="prod-btn-base prod-btn-secondary flex items-center flex-shrink-0 ms-0 sm:ms-[16px] mt-[16px] sm:mt-0"
             >
@@ -363,7 +363,7 @@ const Help = () => {
                 fill="#8693A0"
                 className="ms-[8px]"
               />
-            </button>
+            </button> */}
           </div>
         </div>
 

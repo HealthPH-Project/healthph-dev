@@ -133,7 +133,7 @@ async def generate_percentage():
         covid_count = annotations_count["COVID"] if "COVID" in annotations_count else 0
 
         result = [
-            {"label": "Tuberculosis", "name": "Tuberculosis", "count": tb_count},
+            {"label": "PTB", "name": "PTB", "count": tb_count},
             {"label": "Pneumonia", "name": "Pneumonia", "count": pn_count},
             {
                 "label": "AURI",
@@ -156,8 +156,8 @@ async def generate_percentage():
 
     percentage_result["all"] = [
         {
-            "label": "Tuberculosis",
-            "name": "Tuberculosis",
+            "label": "PTB",
+            "name": "PTB",
             "count": all_counts["TB"],
         },
         {"label": "Pneumonia", "name": "Pneumonia", "count": all_counts["PN"]},

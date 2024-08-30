@@ -31,13 +31,48 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
   //   return `Row ${startIndex} - ${endIndex} of ${data.length}`;
   // };
 
-  const suspectedSymptoms = [
-    { id: "total", label: "TOTAL SUSPECTED", value: 1234, regions_located: 16 },
-    { id: "tb", label: "TUBERCULOSIS", value: 123, regions_located: 16 },
-    { id: "pn", label: "PNEUMONIA", value: 13, regions_located: 16 },
-    { id: "covid", label: "COVID", value: 3, regions_located: 16 },
-    { id: "auri", label: "AURI", value: 0, regions_located: 16 },
-  ];
+  const suspectedSymptomsData = data["suspected_symptoms"];
+  console.log(data);
+
+  const suspectedSymptoms = suspectedSymptomsData
+    ? [
+        {
+          id: "total",
+          label: "TOTAL SUSPECTED",
+          value: suspectedSymptomsData["total"]["count"],
+          regions_located:
+            suspectedSymptomsData["total"]["regions_located"].length,
+        },
+        {
+          id: "tb",
+          label: "PTB",
+          value: suspectedSymptomsData["TB"]["count"],
+          regions_located:
+            suspectedSymptomsData["TB"]["regions_located"].length,
+        },
+        {
+          id: "pn",
+          label: "PNEUMONIA",
+          value: suspectedSymptomsData["PN"]["count"],
+          regions_located:
+            suspectedSymptomsData["PN"]["regions_located"].length,
+        },
+        {
+          id: "covid",
+          label: "COVID",
+          value: suspectedSymptomsData["COVID"]["count"],
+          regions_located:
+            suspectedSymptomsData["COVID"]["regions_located"].length,
+        },
+        {
+          id: "auri",
+          label: "AURI",
+          value: suspectedSymptomsData["AURI"]["count"],
+          regions_located:
+            suspectedSymptomsData["AURI"]["regions_located"].length,
+        },
+      ]
+    : [];
 
   const frequent_words = data["frequent_words"];
 
@@ -118,10 +153,10 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                 <div className="report-wrapper">
                   {frequent_words && (
                     <BarChart
+                      data={frequent_words["frequent_words"]}
                       className=" pt-8"
                       width={360}
                       height={350}
-                      data={frequent_words["frequent_words"]}
                       margin={{
                         top: 12,
                         right: 14,
@@ -137,7 +172,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                         tickLine={false}
                       />
                       <YAxis
-                        dataKey="Word"
+                        dataKey="word"
                         type="category"
                         tickCount={6}
                         tickLine={false}
@@ -174,7 +209,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                         }}
                       />
                       <Bar
-                        dataKey="Frequency"
+                        dataKey="frequency"
                         stackId="a"
                         fill="#007AFF"
                         maxBarSize={16}

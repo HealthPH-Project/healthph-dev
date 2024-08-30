@@ -412,7 +412,7 @@ const AddUser = () => {
                 type="button"
                 className="prod-btn-base prod-btn-secondary me-[16px]"
                 onClick={() => {
-                  navigate("/dashboard/admins", { replace: true });
+                  navigate("/dashboard/user-management", { replace: true });
                 }}
                 disabled={isLoading}
               >

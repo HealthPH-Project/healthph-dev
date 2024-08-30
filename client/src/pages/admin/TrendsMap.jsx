@@ -264,6 +264,9 @@ const TrendsMap = () => {
     documentTitle: "HealthPH - Trends Map",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
+    onAfterPrint: () => {
+      document.getElementById("printWindow").remove();
+    },
   });
 
   const handlePrintTrendsMap = async () => {
@@ -385,7 +388,7 @@ const TrendsMap = () => {
                 id="disease-tuberculosis"
                 onClick={handleChangeDisease}
               >
-                <span className="label">Tuberculosis</span>
+                <span className="label">PTB</span>
                 {pointsDisease && (
                   <span className="count">
                     {formatDataLength(pointsDisease["count"]["TB"], 3)}

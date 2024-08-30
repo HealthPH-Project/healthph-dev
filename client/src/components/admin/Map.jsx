@@ -54,7 +54,7 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
   };
 
   const mapLegends = [
-    { id: "TB", label: "Tuberculosis", color: "#DBB324" },
+    { id: "TB", label: "PTB", color: "#DBB324" },
     { id: "PN", label: "Pneumonia", color: "#007AFF" },
     { id: "COVID", label: "COVID", color: "#D82727" },
     { id: "AURI", label: "AURI", color: "#35CA3B" },

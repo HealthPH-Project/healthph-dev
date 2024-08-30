@@ -157,6 +157,7 @@ const Analytics = () => {
                   <PrintAnalytics
                     ref={printRef}
                     data={{
+                      suspected_symptoms: suspected_symptoms,
                       frequent_words: frequent_words,
                       frequent_words_filter: topWordsFilter,
                       percentage: percentage[percentageFilter],
@@ -190,7 +191,7 @@ const Analytics = () => {
                 }
               />
               <AnalyticCardItem
-                label="TUBERCOLOSIS"
+                label="PTB"
                 data={
                   !isSuspectedSymptomsFetcing && suspected_symptoms
                     ? suspected_symptoms["TB"]
