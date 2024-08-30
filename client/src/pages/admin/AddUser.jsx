@@ -76,6 +76,7 @@ const AddUser = () => {
         ...formErrors,
         organization: "",
         region: "",
+        accessible_regions: "",
       }));
     } else {
       if (formData.organization == import.meta.env.VITE_ADMIN_ORG) {
