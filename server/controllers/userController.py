@@ -405,7 +405,7 @@ async def delete_user(id: str, user_id: Annotated[str, Depends(require_auth)]):
             detail="Error deleting account...",
         )
 
-    result = mail_delete_account(deleted_user["email"])
+    result = mail_delete_account(user_data["email"])
 
     if not result:
         print("error mail")

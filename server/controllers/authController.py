@@ -153,7 +153,7 @@ async def verify_otp_code(request: OTPCodeRequest):
     ) < datetime.now(timezone.utc):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid or expired OTP codeqq",
+            detail="Invalid or expired OTP code",
         )
 
     access_token_expires = timedelta(
@@ -198,7 +198,7 @@ async def resend_otp_code(email: str = Body(...)):
     if not user_data:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Failed to resend verification codeb",
+            detail="Failed to resend verification code",
         )
 
     user = UserInDB(**user_data)

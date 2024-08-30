@@ -68,7 +68,7 @@ async def generate_frequent_words(filters: str = "all"):
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}}, {"filename": 1}
+        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"}, {"filename": 1}
     )
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
@@ -187,7 +187,7 @@ async def generate_wordcloud(background_tasks: BackgroundTasks, filters: str = "
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}}, {"filename": 1}
+        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"}, {"filename": 1}
     )
 
     valid_datasets = [dataset["filename"] for dataset in datasets]

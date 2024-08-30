@@ -32,7 +32,6 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
   // };
 
   const suspectedSymptomsData = data["suspected_symptoms"];
-  console.log(data);
 
   const suspectedSymptoms = suspectedSymptomsData
     ? [

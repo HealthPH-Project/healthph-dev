@@ -87,6 +87,32 @@ const UploadDataset = () => {
       return;
     }
 
+    if (
+      !["region", "province", "posts"].every((e) =>
+        Object.keys(data[0]).includes(e)
+      )
+    ) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message="Missing required columns in CSV file"
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+      inputFile.current.value = "";
+      return;
+    }
+
     setFile(originalFile);
 
     setPreviewData({
