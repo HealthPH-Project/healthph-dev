@@ -111,9 +111,13 @@ const Analytics = () => {
 
   useEffect(() => {
     if (!isWordCloudFetching) {
-      setWordCloudImage(
-        import.meta.env.VITE_API_URL + "/wordcloud/" + wordCloudFilter
-      );
+      if (wordcloud == "No datasets.") {
+        setWordCloudImage("none");
+      } else {
+        setWordCloudImage(
+          import.meta.env.VITE_API_URL + "/wordcloud/" + wordCloudFilter
+        );
+      }
     }
   }, [isWordCloudFetching, wordcloud]);
 
@@ -420,7 +424,13 @@ const Analytics = () => {
               >
                 {!isWordCloudFetching && (
                   <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
-                    <img src={wordCloudImage} alt="wordcloud" />
+                    {wordCloudImage != "none" ? (
+                      <>
+                        <img src={wordCloudImage} alt="wordcloud" />
+                      </>
+                    ) : (
+                      <p>No data</p>
+                    )}
                   </div>
                 )}
               </Report>

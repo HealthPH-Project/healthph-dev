@@ -50,8 +50,6 @@ async def generate_suspected_symptom():
 
         if "X" not in region_annotations or len(region_annotations) != 0:
             suspected_symptoms["total"]["regions_located"].append(region["region"])
-            
-        
 
     return suspected_symptoms
     pass
@@ -68,7 +66,8 @@ async def generate_frequent_words(filters: str = "all"):
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"}, {"filename": 1}
+        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
+        {"filename": 1},
     )
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
@@ -187,7 +186,8 @@ async def generate_wordcloud(background_tasks: BackgroundTasks, filters: str = "
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
     datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"}, {"filename": 1}
+        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
+        {"filename": 1},
     )
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
@@ -201,20 +201,26 @@ async def generate_wordcloud(background_tasks: BackgroundTasks, filters: str = "
 
     full_path = wordcloud_folder / f"wordcloud-{filters}.png"
 
-    if os.path.exists(full_path):
-        background_tasks.add_task(word_cloud, all_posts, full_path)
+    if len(valid_datasets) > 0:
+        if os.path.exists(full_path):
+            background_tasks.add_task(word_cloud, all_posts, full_path)
 
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content=f"Wordcloud generated for region: {filters}",
-        )
-    else:
-        word_cloud(all_posts, full_path)
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content=f"Wordcloud generated for region: {filters}",
+            )
+        else:
+            word_cloud(all_posts, full_path)
 
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content=f"Wordcloud generated for region: {filters}",
-        )
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content=f"Wordcloud generated for region: {filters}",
+            )
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=f"No datasets.",
+    )
 
 
 """
@@ -231,4 +237,7 @@ async def fetch_wordcloud(filters: str = "all"):
 
     full_path = wordcloud_folder / filename
 
-    return FileResponse(full_path)
+    if os.path.exists(full_path):
+        return FileResponse(full_path)
+    else:
+        return "#"
