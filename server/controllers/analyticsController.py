@@ -240,4 +240,4 @@ async def fetch_wordcloud(filters: str = "all"):
     if os.path.exists(full_path):
         return FileResponse(full_path)
     else:
-        return "##"
+        return "#"
