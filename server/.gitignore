@@ -1,6 +1,11 @@
 .venv/
-*/__pycache__
+.env/
+.myenv/
+venv/
+env/
+myenv/
 .env
-public/datasets
-public/annotated_datasets
-public/images/wordcloud
+*/__pycache__
+public/datasets/*
+public/annotated_datasets/*
+public/images/wordcloud/*
