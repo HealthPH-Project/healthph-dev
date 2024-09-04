@@ -281,6 +281,43 @@ const TrendsMap = () => {
     setTimeout(handlePrint, 500);
   };
 
+  const getDiseaseCount = (disease) => {
+    if (!isPointsLoading) {
+      let counts = { TB: 0, PN: 0, AURI: 0, COVID: 0, total: 0 };
+
+      if (filters.region.length == Regions.regions.length) {
+        counts = pointsDisease["count"];
+      } else {
+        const regions = filters.region.map((v) => v.value);
+
+        const regionsCount = pointsDisease["data"].filter((p) =>
+          regions.includes(p.region)
+        );
+
+        let total = 0;
+
+        regionsCount.forEach((rc) => {
+          for (const key in rc["annotations_count"]) {
+            if (counts.hasOwnProperty(key)) {
+              counts[key] += rc["annotations_count"][key];
+            }
+          }
+
+          rc["keywords"].forEach(({ count }) => {
+            total += count;
+          });
+        });
+        counts["total"] = total;
+      }
+      return counts[disease];
+    }
+    return "";
+  };
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
+
   return (
     <>
       <div className="trends-wrapper">
@@ -377,7 +414,8 @@ const TrendsMap = () => {
                 <span className="label">All</span>
                 {pointsDisease && (
                   <span className="count">
-                    {formatDataLength(pointsDisease["count"]["total"], 3)}
+                    {/* {formatDataLength(pointsDisease["count"]["total"], 3)} */}
+                    {formatDataLength(getDiseaseCount("total"), 3)}
                   </span>
                 )}
               </div>
@@ -391,7 +429,8 @@ const TrendsMap = () => {
                 <span className="label">PTB</span>
                 {pointsDisease && (
                   <span className="count">
-                    {formatDataLength(pointsDisease["count"]["TB"], 3)}
+                    {/* {formatDataLength(pointsDisease["count"]["TB"], 3)} */}
+                    {formatDataLength(getDiseaseCount("TB"), 3)}
                   </span>
                 )}
               </div>
@@ -405,7 +444,8 @@ const TrendsMap = () => {
                 <span className="label">Pneumonia</span>
                 {pointsDisease && (
                   <span className="count">
-                    {formatDataLength(pointsDisease["count"]["PN"], 3)}
+                    {/* {formatDataLength(pointsDisease["count"]["PN"], 3)} */}
+                    {formatDataLength(getDiseaseCount("PN"), 3)}
                   </span>
                 )}
               </div>
@@ -419,7 +459,8 @@ const TrendsMap = () => {
                 <span className="label">COVID</span>
                 {pointsDisease && (
                   <span className="count">
-                    {formatDataLength(pointsDisease["count"]["COVID"], 3)}
+                    {/* {formatDataLength(pointsDisease["count"]["COVID"], 3)} */}
+                    {formatDataLength(getDiseaseCount("COVID"), 3)}
                   </span>
                 )}
               </div>
@@ -433,7 +474,8 @@ const TrendsMap = () => {
                 <span className="label">AURI</span>
                 {pointsDisease && (
                   <span className="count">
-                    {formatDataLength(pointsDisease["count"]["AURI"], 3)}
+                    {/* {formatDataLength(pointsDisease["count"]["AURI"], 3)} */}
+                    {formatDataLength(getDiseaseCount("AURI"), 3)}
                   </span>
                 )}
               </div>
