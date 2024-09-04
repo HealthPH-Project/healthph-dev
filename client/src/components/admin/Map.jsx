@@ -14,9 +14,9 @@ import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
 import { format } from "date-fns";
 
 const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
-  const zoomOptions = { max: 10, min: 7 };
+  const zoomOptions = { max: 10, min: 6, default: 7 };
 
-  const [zoom, setZoom] = useState(zoomOptions.min);
+  const [zoom, setZoom] = useState(zoomOptions.default);
 
   const [center, setCenter] = useState(mapCenter);
 
@@ -121,14 +121,22 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
           </div>
           <div className="zoom-controls">
             <div
-              className="control-wrapper rounded-t-[6px]"
-              onClick={() => setZoom((zoom) => zoom + 1)}
+              className={`control-wrapper rounded-t-[6px] ${
+                zoom == zoomOptions.max ? "disabled" : ""
+              }`}
+              onClick={() => {
+                if (zoom < zoomOptions.max) setZoom((zoom) => zoom + 1);
+              }}
             >
               <Icon iconName="Plus" height="20px" width="20px" fill="#465360" />
             </div>
             <div
-              className="control-wrapper rounded-b-[6px]"
-              onClick={() => setZoom((zoom) => zoom - 1)}
+              className={`control-wrapper rounded-b-[6px] ${
+                zoom == zoomOptions.min ? "disabled" : ""
+              }`}
+              onClick={() => {
+                if (zoom > zoomOptions.min) setZoom((zoom) => zoom - 1);
+              }}
             >
               <Icon
                 iconName="Minus"

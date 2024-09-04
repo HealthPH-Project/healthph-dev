@@ -6,6 +6,8 @@ env/
 myenv/
 .env
 */__pycache__
+*/*/__pycache__
+packages/
 public/datasets/*
 public/annotated_datasets/*
 public/images/wordcloud/*
