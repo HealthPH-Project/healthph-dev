@@ -314,10 +314,6 @@ const TrendsMap = () => {
     return "";
   };
 
-  useEffect(() => {
-    console.log(filters);
-  }, [filters]);
-
   return (
     <>
       <div className="trends-wrapper">
@@ -414,7 +410,6 @@ const TrendsMap = () => {
                 <span className="label">All</span>
                 {pointsDisease && (
                   <span className="count">
-                    {/* {formatDataLength(pointsDisease["count"]["total"], 3)} */}
                     {formatDataLength(getDiseaseCount("total"), 3)}
                   </span>
                 )}
@@ -429,7 +424,6 @@ const TrendsMap = () => {
                 <span className="label">PTB</span>
                 {pointsDisease && (
                   <span className="count">
-                    {/* {formatDataLength(pointsDisease["count"]["TB"], 3)} */}
                     {formatDataLength(getDiseaseCount("TB"), 3)}
                   </span>
                 )}
@@ -444,7 +438,6 @@ const TrendsMap = () => {
                 <span className="label">Pneumonia</span>
                 {pointsDisease && (
                   <span className="count">
-                    {/* {formatDataLength(pointsDisease["count"]["PN"], 3)} */}
                     {formatDataLength(getDiseaseCount("PN"), 3)}
                   </span>
                 )}
@@ -459,7 +452,6 @@ const TrendsMap = () => {
                 <span className="label">COVID</span>
                 {pointsDisease && (
                   <span className="count">
-                    {/* {formatDataLength(pointsDisease["count"]["COVID"], 3)} */}
                     {formatDataLength(getDiseaseCount("COVID"), 3)}
                   </span>
                 )}
@@ -474,7 +466,6 @@ const TrendsMap = () => {
                 <span className="label">AURI</span>
                 {pointsDisease && (
                   <span className="count">
-                    {/* {formatDataLength(pointsDisease["count"]["AURI"], 3)} */}
                     {formatDataLength(getDiseaseCount("AURI"), 3)}
                   </span>
                 )}

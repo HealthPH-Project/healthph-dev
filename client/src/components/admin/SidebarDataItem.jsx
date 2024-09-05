@@ -51,7 +51,7 @@ const SidebarDataItem = ({ headerLabel, data, currentDisease }) => {
 
   const diseaseCode = {
     tuberculosis: "TB",
-    pneumnia: "PN",
+    pneumonia: "PN",
     covid: "COVID",
     auri: "AURI",
   };
