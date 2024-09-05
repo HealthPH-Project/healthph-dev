@@ -272,6 +272,10 @@
     width: 44px;
   }
 
+  .trends-wrapper .control-wrapper.disabled {
+    @apply bg-gray-100 cursor-default;
+  }
+
   .trends-wrapper .leaflet-popup-content {
     font-family: Inter;
     @apply text-[14px] font-medium;
