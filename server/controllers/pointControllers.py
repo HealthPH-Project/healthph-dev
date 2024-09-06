@@ -27,6 +27,7 @@ route     POST api/points/seed-points
 
 async def seed_points():
     annotated_datasets = ["annotated_data.csv", "annotated_data_2.csv"]
+    # annotated_datasets = ["annotated_data_3.csv"]
 
     annotated_datasets_final = []
 
