@@ -27,6 +27,7 @@ import {
   useFetchPointsByDiseaseQuery,
   useFetchPointsQuery,
 } from "../../features/api/pointsSlice";
+import EmptyState from "../../components/admin/EmptyState";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
@@ -475,7 +476,9 @@ const TrendsMap = () => {
 
           {/* DATA / TRENDS */}
           <div className="sidebar-data">
-            {pointsDisease &&
+            {isPointsDiseaseLoading ? (
+              <></>
+            ) : pointsDisease["data"].length > 0 ? (
               pointsDisease["data"].map(
                 ({ region, keywords, annotations }, i) => {
                   const diseaseCode = {
@@ -502,7 +505,21 @@ const TrendsMap = () => {
                       />
                     );
                 }
-              )}
+              )
+            ) : (
+              <EmptyState
+                iconName="Upload"
+                heading="No datasets."
+                content="Upload datasets in order to see markers on the map."
+              >
+                <Link
+                  to="/dashboard/trends-map/upload-dataset"
+                  className="prod-btn-base prod-btn-primary flex justify-center items-center"
+                >
+                  <span>Upload Dataset</span>
+                </Link>
+              </EmptyState>
+            )}
 
             {/* {sidebarData.map(({ region, data }, i) => {
               if (filters.region.find((r) => r.label == region))
