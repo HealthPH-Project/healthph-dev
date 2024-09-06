@@ -367,6 +367,11 @@ async def delete_all_datasets():
         shutil.rmtree("public/datasets")
 
         os.makedirs(datasets_folder, exist_ok=True)
+        
+    if os.path.exists(annotated_datasets_folder):
+        shutil.rmtree("public/annotated_datasets")
+
+        os.makedirs(annotated_datasets_folder, exist_ok=True)
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,

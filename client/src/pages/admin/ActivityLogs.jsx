@@ -65,6 +65,9 @@ const ActivityLogs = () => {
     documentTitle: "HealthPH - Activity Logs",
     pageStyle:
       "@page { size: A4;  margin: 0mm; color: 'red' } @media print { body { -webkit-print-color-adjust: exact; } }",
+    onAfterPrint: () => {
+      document.getElementById("printWindow").remove();
+    },
   });
 
   return (

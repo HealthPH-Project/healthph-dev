@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Icon from "../../components/Icon";
 import CustomSelect from "../../components/CustomSelect";
 import { useEffect, useRef, useState } from "react";
@@ -27,9 +27,20 @@ import Report from "../../components/admin/Report";
 import { useReactToPrint } from "react-to-print";
 import PrintAnalytics from "../../components/admin/PrintAnalytics";
 import { useSelector } from "react-redux";
+import EmptyState from "../../components/admin/EmptyState";
+import { useFetchPointsQuery } from "../../features/api/pointsSlice";
+import { useFetchDatasetsQuery } from "../../features/api/datasetsSlice";
+import SkeletonAnalytics from "../../components/admin/SkeletonAnalytics";
 
 const Analytics = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const [isAnalyticsAvailable, setIsAnalyticsAvailable] = useState(false);
+
+  const { data: points, isFetching: isPointsFetching } = useFetchPointsQuery();
+
+  const { data: datasets, isFetching: isDatasetsFetching } =
+    useFetchDatasetsQuery();
 
   const [filters, setFilters] = useState({
     dateRange: 7,
@@ -121,7 +132,22 @@ const Analytics = () => {
     }
   }, [isWordCloudFetching, wordcloud]);
 
-  return (
+  return isPointsFetching || isDatasetsFetching ? (
+    <SkeletonAnalytics />
+  ) : points.length == 0 || datasets.length == 0 ? (
+    <EmptyState
+      iconName="Analytics"
+      heading="Analytics Unavailable"
+      content="No analytics data to show right now. Data will appear here as it becomes available."
+    >
+      <Link
+        to="/dashboard/trends-map/upload-dataset"
+        className="prod-btn-base prod-btn-primary flex justify-center items-center"
+      >
+        <span>Upload Dataset</span>
+      </Link>
+    </EmptyState>
+  ) : (
     <>
       <div className="admin-wrapper flex flex-col h-full">
         <div className="header">

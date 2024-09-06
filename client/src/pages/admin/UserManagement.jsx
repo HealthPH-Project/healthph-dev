@@ -40,6 +40,9 @@ const UserManagement = () => {
     documentTitle: "HealthPH - User Management",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+    onAfterPrint: () => {
+      document.getElementById("printWindow").remove();
+    },
   });
 
   const [tabs, setTabs] = useState([
