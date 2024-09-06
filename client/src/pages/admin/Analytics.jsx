@@ -16,6 +16,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
+  LabelList,
 } from "recharts";
 import {
   useGenerateFrequentWordsQuery,
@@ -282,7 +283,7 @@ const Analytics = () => {
                 setFilter={setTopWordsFilter}
                 isLoading={isTopWordsFetching}
               >
-                <ResponsiveContainer width="100%" maxHeight={400}>
+                <ResponsiveContainer width="100%" maxHeight={500}>
                   {frequent_words && (
                     <BarChart
                       data={frequent_words["frequent_words"]}
@@ -301,6 +302,7 @@ const Analytics = () => {
                         tickLine={false}
                       />
                       <YAxis
+                        hide={true}
                         dataKey="word"
                         type="category"
                         tickCount={6}
@@ -344,11 +346,26 @@ const Analytics = () => {
                       />
                       <Bar
                         dataKey="frequency"
-                        stackId="a"
                         fill="#007AFF"
-                        maxBarSize={20}
+                        maxBarSize={18}
                         radius={[0, 8, 8, 0]}
-                      />
+                      >
+                        <LabelList
+                          dataKey="word"
+                          content={({ x, y, value }) => {
+                            return (
+                              <text
+                                x={x}
+                                y={y - 5}
+                                className="recharts-text recharts-cartesian-axis-tick-value text-[16px]"
+                                fill="#666"
+                              >
+                                <tspan>{value}</tspan>
+                              </text>
+                            );
+                          }}
+                        />
+                      </Bar>
                     </BarChart>
                   )}
                 </ResponsiveContainer>
@@ -361,7 +378,7 @@ const Analytics = () => {
                 setFilter={setPercentageFilter}
                 isLoading={isPercentageFetching}
               >
-                <ResponsiveContainer width="100%" maxHeight={400}>
+                <ResponsiveContainer width="100%" maxHeight={500}>
                   {percentage && (
                     <PieChart>
                       <Legend

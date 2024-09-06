@@ -155,7 +155,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                       data={frequent_words["frequent_words"]}
                       className=" pt-8"
                       width={360}
-                      height={350}
+                      height={400}
                       margin={{
                         top: 12,
                         right: 14,
@@ -171,6 +171,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                         tickLine={false}
                       />
                       <YAxis
+                        hide={true}
                         dataKey="word"
                         type="category"
                         tickCount={6}
@@ -209,15 +210,29 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                       />
                       <Bar
                         dataKey="frequency"
-                        stackId="a"
                         fill="#007AFF"
                         maxBarSize={16}
                         radius={[0, 8, 8, 0]}
                       >
                         <LabelList
-                          dataKey="Frequency"
+                          dataKey="frequency"
                           position="right"
                           fontSize={12}
+                        />
+                        <LabelList
+                          dataKey="word"
+                          content={({ x, y, value }) => {
+                            return (
+                              <text
+                                x={x}
+                                y={y - 5}
+                                className="recharts-text recharts-cartesian-axis-tick-value text-[12px]"
+                                fill="#666"
+                              >
+                                <tspan>{value}</tspan>
+                              </text>
+                            );
+                          }}
                         />
                       </Bar>
                     </BarChart>
@@ -239,7 +254,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                   {percentage && (
                     <PieChart
                       width={360}
-                      height={350}
+                      height={400}
                       margin={{
                         top: 12,
                         right: 14,
@@ -290,6 +305,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                           outerRadius,
                           percent,
                           index,
+                          count,
                         }) => {
                           const radius =
                             innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -297,15 +313,26 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                           const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
                           return (
-                            <text
-                              x={x}
-                              y={y}
-                              fill="white"
-                              textAnchor={x > cx ? "start" : "end"}
-                              dominantBaseline="central"
-                            >
-                              {`${(percent * 100).toFixed(0)}%`}
-                            </text>
+                            <>
+                              <text
+                                x={x}
+                                y={y - 10}
+                                fill="white"
+                                textAnchor={x > cx ? "start" : "end"}
+                                dominantBaseline="central"
+                              >
+                                {`${(percent * 100).toFixed(0)}%`}
+                              </text>
+                              <text
+                                x={x}
+                                y={y + 10}
+                                fill="white"
+                                textAnchor={x > cx ? "start" : "end"}
+                                dominantBaseline="central"
+                              >
+                                {`(${count})`}
+                              </text>
+                            </>
                           );
                         }}
                         fill="#8884d8"
