@@ -17,3 +17,9 @@ geopy
 scikit-learn
 scikit-multilearn
 tqdm
+
+# Packages for annotation using Electra
+transformers
+torch==2.3.0
+numpy==1.26.4
+accelerate

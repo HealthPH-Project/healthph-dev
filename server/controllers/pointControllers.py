@@ -1,5 +1,6 @@
 from collections import Counter
 from datetime import timedelta
+from math import isnan, nan
 import os
 import json
 import shutil
@@ -123,7 +124,7 @@ def create_points(annotated_filename):
     annotated_file_path = annotated_datasets_folder / annotated_filename
 
     # Convert to csv file to Dataframe
-    annotated_df = pd.read_csv(annotated_file_path)
+    annotated_df = pd.read_csv(annotated_file_path, keep_default_na=False)
 
     # Convert Dataframe to dict
     annotated_dict: dict = annotated_df.to_dict("records")
@@ -133,6 +134,14 @@ def create_points(annotated_filename):
 
     # Iterate over the annotated dataset
     for a_d in annotated_dict:
+        if (
+            str(a_d["PH_code"]) == "NA"
+            or a_d["PH_code"] == nan
+            or a_d["filtered_location"] == "-999, -999"
+            or str(a_d["extracted_words"]) == ""
+        ):
+            continue
+
         # Retrieve values from the each record from the annotated dataset
         PH_code = a_d["PH_code"]
         region = iso3166_2_to_region(a_d["PH_code"])
@@ -160,8 +169,8 @@ def create_points(annotated_filename):
                 existing_record = to_encode_dict[record_index]
 
                 """
-                ANNOTATIONS
-                """
+                    ANNOTATIONS
+                    """
 
                 # Get the existing annotations from existing record
                 existing_annotations = existing_record["annotations"]
@@ -173,8 +182,8 @@ def create_points(annotated_filename):
                 to_encode_dict[record_index]["annotations"] = merged_annotations
 
                 """
-                ANNOTATIONS COUNT
-                """
+                    ANNOTATIONS COUNT
+                    """
 
                 # Get the existing annotations count from existing record
                 annotations_count = existing_record["annotations_count"]
@@ -189,8 +198,8 @@ def create_points(annotated_filename):
                 to_encode_dict[record_index]["annotations_count"] = annotations_count
 
                 """
-                KEYWORDS
-                """
+                    KEYWORDS
+                    """
 
                 # Get the existing list of keywords from existing record
                 existing_keywords: list = existing_record["keywords"]
@@ -213,15 +222,15 @@ def create_points(annotated_filename):
                     matching_keyword = existing_keywords[keyword_index]
 
                     """
-                    KEYWORD COUNT
-                    """
+                        KEYWORD COUNT
+                        """
 
                     # Add 1 to count
                     matching_keyword["count"] = matching_keyword["count"] + 1
 
                     """
-                    KEYWORD ANNOTATIONS
-                    """
+                        KEYWORD ANNOTATIONS
+                        """
 
                     # Get the annotations from the matching keyword
                     matching_keyword_annotations = matching_keyword["annotation"]
@@ -237,7 +246,11 @@ def create_points(annotated_filename):
                 else:  # If the keyword does not exist,
                     # Add new keyword to existing keyword with count of 1
                     existing_keywords.append(
-                        {"key": extracted_word, "count": 1, "annotation": annotations}
+                        {
+                            "key": extracted_word,
+                            "count": 1,
+                            "annotation": annotations,
+                        }
                     )
 
                 # Update the existing record keywords with the new keywords list

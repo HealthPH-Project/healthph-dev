@@ -1,10 +1,8 @@
 import re
-import numpy
 import os
 from pathlib import Path
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
-from sklearn.model_selection import train_test_split
 from wordcloud import STOPWORDS
 from tqdm import tqdm
 
@@ -12,8 +10,18 @@ from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 from geopy.location import Location
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from packages.skmultilearn.adapt import MLkNN
+# from sklearn.model_selection import train_test_split
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from packages.skmultilearn.adapt import MLkNN
+
+
+from transformers import (
+    ElectraTokenizer,
+    ElectraForSequenceClassification,
+    BatchEncoding,
+)
+from transformers.modeling_outputs import SequenceClassifierOutput
+import torch
 
 
 # Folder to store annotated_datasets
@@ -112,12 +120,12 @@ def get_geopy_reverse(latlong: str):
 # Get the PH-Code for region tagging
 def get_PH_code(latlong: str):
     if latlong == "-999, -999":
-        return "N/A"
+        return "NA"
     else:
         address = get_geopy_reverse(latlong)
 
         if "ISO3166-2-lvl3" not in address.keys():
-            return "N/A"
+            return "NA"
 
         return address["ISO3166-2-lvl3"]
 
@@ -188,18 +196,48 @@ def get_disease(annotation, disease_code: str):
 """
 
 
-def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
-    post_tfidf = vectorizer.transform([str(post)])
+# def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
+#     post_tfidf = vectorizer.transform([str(post)])
 
-    predicted_post_array = mlknn_c.predict(post_tfidf).toarray()
+#     predicted_post_array = mlknn_c.predict(post_tfidf).toarray()
 
-    predicted_post = predicted_post_array[0]
+#     predicted_post = predicted_post_array[0]
+
+#     annotate = []
+
+#     annotations = ["AURI", "PN", "TB", "COVID"]
+
+#     for i, a in enumerate(predicted_post):
+#         if a == 1:
+#             annotate.append(annotations[i])
+
+#     return ",".join(annotate) if len(annotate) > 0 else "X"
+
+
+def annotate_posts_by_electra(
+    tokenizer: ElectraTokenizer, model: ElectraForSequenceClassification, post
+):
+    inputs: BatchEncoding = tokenizer(
+        str(post), return_tensors="pt", truncation=True, padding=True, max_length=128
+    )
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    model.to(device)
+
+    with torch.no_grad():
+        outputs: SequenceClassifierOutput = model(**inputs)
+        logits = outputs.logits
+
+    probabilities = torch.sigmoid(logits).cpu().numpy()
+
+    predictions = (probabilities >= 0.5).astype(int)
 
     annotate = []
 
     annotations = ["AURI", "PN", "TB", "COVID"]
 
-    for i, a in enumerate(predicted_post):
+    for i, a in enumerate(predictions[0]):
         if a == 1:
             annotate.append(annotations[i])
 
@@ -207,47 +245,15 @@ def annotate_posts(vectorizer: TfidfVectorizer, mlknn_c: MLkNN, post):
 
 
 def annotation(raw_dataset_filename: str, result_filename: str):
-    """
-    MODEL TRAINING
-    """
-
-    print("Model Tranining STARTED")
-
-    # Dataset for model training
-    training_dataset_filename = "assets/data/augmented_dataset.csv"
-    training_dataset = pd.read_csv(training_dataset_filename)
-
-    # Training dataset dataframe columns: [annotate, posts]
-    training_dataset_df = pd.DataFrame(training_dataset, columns=["annotate", "posts"])
-
-    diseases = ["AURI", "PN", "TB", "COVID"]
-
-    for d in diseases:
-        training_dataset_df[d] = training_dataset_df.apply(
-            lambda x: get_disease(x["annotate"], d), axis=1
-        )
-
-    X = training_dataset_df["posts"]
-    y = numpy.asarray(training_dataset_df[training_dataset_df.columns[2:]])
-
-    vectorizer = TfidfVectorizer(max_features=3000, max_df=0.85)
-    vectorizer.fit(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.33, random_state=42
+    electra_model = ElectraForSequenceClassification.from_pretrained(
+        "./annotation_model/electra_model"
     )
 
-    X_train_tfidf = vectorizer.transform(X_train)
-    X_test_tfidf = vectorizer.transform(X_test)
+    electra_tokenizer = ElectraTokenizer.from_pretrained(
+        "./annotation_model/electra_save_tokenizer"
+    )
 
-    # Number of nearest neighbors
-    k_neighbors = 3
-
-    mlknn_classifier = MLkNN(k=k_neighbors)
-
-    mlknn_classifier.fit(X_train_tfidf, y_train)
-
-    print("Model Tranining FINISHED")
+    electra_model.eval()
 
     """
         ANNOTATION
@@ -263,28 +269,31 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     # Raw dataset dataframe columns: [region, province, posts]
     raw_dataset_df = pd.DataFrame(raw_dataset, columns=["region", "province", "posts"])
 
+    # Get latitude and longitude using Geopy based on province and region
     raw_dataset_df["filtered_location"] = raw_dataset_df.progress_apply(
         lambda x: filter_location(x["province"], x["region"]), axis=1
     )
 
+    # Get PH_Code / ISO3166-2-lvl3 code using Geopy based on retrieved latitude and longitude
     raw_dataset_df["PH_code"] = raw_dataset_df.progress_apply(
         lambda x: get_PH_code(x["filtered_location"]), axis=1
     )
-
+    
+    # Extract latitude from retrived filtered_location
     raw_dataset_df["lat"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[0], axis=1
     )
 
-    print("LAT finished")
-
+    # Extract longitude from retrived filtered_location
     raw_dataset_df["long"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[1], axis=1
     )
-    print("LONG finished")
-
-    raw_dataset_df["annotations"] = raw_dataset_df.apply(
-        lambda x: annotate_posts(vectorizer, mlknn_classifier, x["posts"]), axis=1
+    
+    # Predict annotation (AURI, PN, TB, COVID) based on post
+    raw_dataset_df["annotations"] = raw_dataset_df.progress_apply(
+        lambda x: annotate_posts_by_electra(electra_tokenizer, electra_model, x["posts"]), axis=1
     )
+    
     print("ANNOTATIONS finished")
 
     annotated_df = clean_dataframe(raw_dataset_df)
