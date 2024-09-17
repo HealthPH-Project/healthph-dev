@@ -77,7 +77,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
 
   const percentage = data["percentage"];
 
-  const COLORS = ["#DBB324", "#007AFF", "#D82727", "#35CA3B"];
+  const COLORS = ["#F5D76E", "#6A8EB5", "#F78C6B", "#78C6B2"];
   const RADIAN = Math.PI / 180;
 
   const wordcloud = data["wordcloud"];
@@ -210,7 +210,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                       />
                       <Bar
                         dataKey="frequency"
-                        fill="#007AFF"
+                        fill="#B5A8DE"
                         maxBarSize={16}
                         radius={[0, 8, 8, 0]}
                       >
@@ -320,6 +320,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                                 fill="white"
                                 textAnchor={x > cx ? "start" : "end"}
                                 dominantBaseline="central"
+                                className="font-semibold"
                               >
                                 {`${(percent * 100).toFixed(0)}%`}
                               </text>
@@ -329,6 +330,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                                 fill="white"
                                 textAnchor={x > cx ? "start" : "end"}
                                 dominantBaseline="central"
+                                className="font-semibold"
                               >
                                 {`(${count})`}
                               </text>

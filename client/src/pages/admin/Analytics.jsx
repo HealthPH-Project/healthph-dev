@@ -91,7 +91,7 @@ const Analytics = () => {
   let { data: percentage, isFetching: isPercentageFetching } =
     useGeneratePercentageQuery();
 
-  const COLORS = ["#DBB324", "#007AFF", "#D82727", "#35CA3B"];
+  const COLORS = ["#F5D76E", "#6A8EB5", "#F78C6B", "#78C6B2"];
   const RADIAN = Math.PI / 180;
 
   const [wordCloudFilter, setWordCloudFilter] = useState(
@@ -358,7 +358,7 @@ const Analytics = () => {
                       />
                       <Bar
                         dataKey="frequency"
-                        fill="#007AFF"
+                        fill="#B5A8DE"
                         maxBarSize={18}
                         radius={[0, 8, 8, 0]}
                       >

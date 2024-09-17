@@ -54,10 +54,10 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
   };
 
   const mapLegends = [
-    { id: "TB", label: "PTB", color: "#DBB324" },
-    { id: "PN", label: "Pneumonia", color: "#007AFF" },
-    { id: "COVID", label: "COVID", color: "#D82727" },
-    { id: "AURI", label: "AURI", color: "#35CA3B" },
+    { id: "TB", label: "PTB", color: "#F5D76E" },
+    { id: "PN", label: "Pneumonia", color: "#6A8EB5" },
+    { id: "COVID", label: "COVID", color: "#78C6B2" },
+    { id: "AURI", label: "AURI", color: "#F78C6B" },
   ];
 
   const getColor = (id) => {

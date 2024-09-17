@@ -144,6 +144,6 @@ def word_cloud(data, full_path: str):
 def wordcloud_color_func(
     word, font_size, position, orientation, random_state=None, **kwargs
 ):
-    colors = ["#171E26", "#007AFF", "#35CA3B", "#DBB324", "#D82727"]
+    colors = ["#171E26", "#F5D76E", "#6A8EB5", "#F78C6B", "#78C6B2"]
 
     return random.choice(colors)
