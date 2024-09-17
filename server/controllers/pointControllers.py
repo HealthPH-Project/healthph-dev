@@ -495,7 +495,7 @@ async def fetch_points_by_disease():
         """
         KEYWORDS 
         """
-
+        
         # Iterate over keywords of point
         for point_keyword in point["keywords"]:
             found = False
@@ -530,6 +530,14 @@ async def fetch_points_by_disease():
                     not found
                 ):  # If point_keyword does not exists, add to existing keywords
                     result[unique_key]["keywords"].append(point_keyword)
+                  
+        
+        total_keywords_count = 0
+        
+        for keyword in result[unique_key]['keywords']:
+            total_keywords_count += keyword['count']
+            
+        result[unique_key]['total_keywords_count'] = total_keywords_count
 
         result[unique_key]["keywords"] = sorted(
             result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True

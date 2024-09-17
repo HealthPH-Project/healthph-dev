@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 const Modal = ({
   onConfirm,
   onConfirmLabel,
@@ -18,7 +20,21 @@ const Modal = ({
       <div className="modal-container">
         <div className="modal-body">
           <p className="modal-heading">{heading}</p>
-          <p className="modal-content">{content}</p>
+          <p className="modal-content">
+            {content.split("\n").map((v, i) => {
+              const isLast = i == content.split("\n").length - 1;
+              return (
+                <Fragment key={i}>
+                  <span>{v}</span>
+                  {!isLast && (
+                    <>
+                      <br />
+                    </>
+                  )}
+                </Fragment>
+              );
+            })}
+          </p>
         </div>
         <div className="modal-actions">
           {onCancel && (

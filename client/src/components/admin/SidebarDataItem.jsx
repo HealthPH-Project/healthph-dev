@@ -83,7 +83,7 @@ const SidebarDataItem = ({ headerLabel, data, currentDisease }) => {
                   width="16px"
                   fill="#8693A0"
                 />
-                <div className="tooltip">Sample Tooltip</div>
+                <div className="tooltip">Symptom extracted from post</div>
               </div>
             </div>
             <div>
@@ -95,7 +95,7 @@ const SidebarDataItem = ({ headerLabel, data, currentDisease }) => {
                   width="16px"
                   fill="#8693A0"
                 />
-                <div className="tooltip">Sample Tooltip</div>
+                <div className="tooltip">Number of posts collected</div>
               </div>
             </div>
           </div>

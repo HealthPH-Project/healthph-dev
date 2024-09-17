@@ -265,6 +265,8 @@ const TrendsMap = () => {
 
   const [mapImage, setMapImage] = useState("");
 
+  const [showHighSusCount, setShowHighSusCount] = useState(false);
+
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     documentTitle: "HealthPH - Trends Map",
@@ -324,6 +326,34 @@ const TrendsMap = () => {
       return counts[disease];
     }
     return "";
+  };
+
+  const getHighestCount = () => {
+    if (pointsDisease) {
+      let regionsData = [...pointsDisease["data"]];
+      regionsData = regionsData.sort(
+        (a, b) => b.total_keywords_count - a.total_keywords_count
+      );
+
+      return (
+        "The following are the top three regions with the highest suspected symptom count:" +
+        "\n\n" +
+        "1. Region " +
+        regionsData[0].region +
+        ": " +
+        regionsData[0].total_keywords_count +
+        "\n" +
+        "2. Region " +
+        regionsData[1].region +
+        ": " +
+        regionsData[1].total_keywords_count +
+        "\n" +
+        "3. Region " +
+        regionsData[2].region +
+        ": " +
+        regionsData[2].total_keywords_count
+      );
+    }
   };
 
   return (
@@ -389,6 +419,19 @@ const TrendsMap = () => {
                 />
               </Link>
             )}
+            <button
+              className="prod-btn-base prod-btn-secondary w-full flex items-center justify-center mt-[20px]"
+              onClick={() => setShowHighSusCount(!showHighSusCount)}
+            >
+              <span>Show High Suspected Count</span>
+              <Icon
+                iconName="Eye"
+                height="20px"
+                width="20px"
+                fill="#8693A0"
+                className="ms-[8px]"
+              />
+            </button>
             <button
               className="prod-btn-base prod-btn-secondary w-full flex items-center justify-center mt-[20px]"
               onClick={handlePrintTrendsMap}
@@ -555,6 +598,19 @@ const TrendsMap = () => {
           points={points}
           isPointsLoading={isPointsLoading}
         />
+
+        {showHighSusCount && (
+          <Modal
+            additionalClasses="z-[12]"
+            onConfirm={() => {
+              setShowHighSusCount(false);
+            }}
+            onConfirmLabel="Close"
+            heading="Highest Suspected Count"
+            content={getHighestCount()}
+            color="primary"
+          />
+        )}
 
         {showDisclaimer && (
           <Modal
