@@ -32,9 +32,12 @@ import EmptyState from "../../components/admin/EmptyState";
 import { useFetchPointsQuery } from "../../features/api/pointsSlice";
 import { useFetchDatasetsQuery } from "../../features/api/datasetsSlice";
 import SkeletonAnalytics from "../../components/admin/SkeletonAnalytics";
+import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 
 const Analytics = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const [log_activity] = useCreateActivityLogMutation();
 
   const [isAnalyticsAvailable, setIsAnalyticsAvailable] = useState(false);
 
@@ -109,6 +112,15 @@ const Analytics = () => {
     documentTitle: "HealthPH - Analytics",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
+    onAfterPrint: () => {
+      document.getElementById("printWindow").remove();
+
+      log_activity({
+        user_id: user.id,
+        entry: "Generated Analytics report",
+        module: "Analytics",
+      });
+    },
   });
 
   const displayPrintButton = () => {
@@ -196,7 +208,7 @@ const Analytics = () => {
                       wordcloud: wordCloudImage,
                       wordcloud_filter: wordCloudFilter,
                     }}
-                    dateTable={format(new Date(), "MMMM dd, yyyy")}
+                    dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}
                   />
                 </>
               )}

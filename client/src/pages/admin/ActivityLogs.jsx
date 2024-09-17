@@ -3,15 +3,23 @@ import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { useEffect, useRef, useState } from "react";
 import Datatable from "../../components/admin/Datatable";
-import { useFetchActivityLogsQuery } from "../../features/api/activityLogsSlice";
+import {
+  useCreateActivityLogMutation,
+  useFetchActivityLogsQuery,
+} from "../../features/api/activityLogsSlice";
 import { format } from "date-fns";
 import SkeletonTable from "../../components/SkeletonTable";
 import EmptyState from "../../components/admin/EmptyState";
 import Highlighter from "react-highlight-words";
 import { useReactToPrint } from "react-to-print";
 import PrintComponent from "../../components/admin/PrintComponent";
+import { useSelector } from "react-redux";
 
 const ActivityLogs = () => {
+  const auth = useSelector((state) => state.auth);
+
+  const [log_activity] = useCreateActivityLogMutation();
+
   const [search, setSearch] = useState("");
 
   const {
@@ -67,6 +75,12 @@ const ActivityLogs = () => {
       "@page { size: A4;  margin: 0mm; color: 'red' } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
       document.getElementById("printWindow").remove();
+
+      log_activity({
+        user_id: auth.user.id,
+        entry: "Generated Activity Logs report",
+        module: "Activity Logs",
+      });
     },
   });
 
@@ -123,8 +137,8 @@ const ActivityLogs = () => {
                 tableName="Activity Logs"
                 data={rowData}
                 columns={["USER", "ENTRY", "MODULE", "LOGGED AT"]}
-                rowsPerPage={25}
-                dateTable={format(new Date(), "MMMM dd, yyyy")}
+                rowsPerPage={23}
+                dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}
                 displayFunc={(value) => {
                   let data = [value.user_name, value.entry, value.module];
                   data.push(

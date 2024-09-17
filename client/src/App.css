@@ -461,6 +461,7 @@
       .suspected-symptoms-container
       .suspected-symptom-item
       .label {
+      font-size: 12px;
       color: #687582;
       font-weight: 600;
     }
@@ -469,15 +470,17 @@
       .suspected-symptoms-container
       .suspected-symptom-item
       .value {
+      font-size: 14px;
       color: #171e26;
       font-weight: 500;
-      margin: 5px auto;
+      margin: 8px auto;
     }
 
     .print-container
       .suspected-symptoms-container
       .suspected-symptom-item
       .region {
+      font-size: 12px;
       color: #465360;
       font-weight: 500;
     }
@@ -540,7 +543,7 @@
     @apply relative bg-white p-[20px] rounded-[8px] w-full h-[500px];
   }
 
-  .skeleton-reports .item .icon-wrapper{
+  .skeleton-reports .item .icon-wrapper {
     @apply absolute top-0 left-0 w-full h-full flex items-center justify-center;
   }
 

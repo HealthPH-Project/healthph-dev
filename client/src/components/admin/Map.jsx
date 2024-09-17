@@ -87,7 +87,7 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
           </div>
           <div className="map-legend-wrapper">
             <div className="map-date">
-              Updated as of {format(new Date(), "MMMM dd, yyyy")}
+              Updated as of {format(new Date(), "MMMM dd, yyyy | hh:mm a")}
             </div>
             <div className="map-legends">
               {mapLegends.map(({ label, color }, i) => {

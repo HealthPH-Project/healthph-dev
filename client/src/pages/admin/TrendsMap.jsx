@@ -28,9 +28,14 @@ import {
   useFetchPointsQuery,
 } from "../../features/api/pointsSlice";
 import EmptyState from "../../components/admin/EmptyState";
+import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const auth = useSelector((state) => state.auth);
+
+  const [log_activity] = useCreateActivityLogMutation();
 
   const { isPWA } = useDeviceDetect();
 
@@ -267,6 +272,12 @@ const TrendsMap = () => {
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
     onAfterPrint: () => {
       document.getElementById("printWindow").remove();
+
+      log_activity({
+        user_id: auth.user.id,
+        entry: "Generated Trends Map report",
+        module: "Trends Map",
+      });
     },
   });
 
@@ -394,7 +405,7 @@ const TrendsMap = () => {
             <PrintTrendsMap
               ref={printRef}
               mapImage={mapImage}
-              dateTable={format(new Date(), "MMMM dd, yyyy")}
+              dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}
             />
           </div>
 
@@ -559,7 +570,13 @@ const TrendsMap = () => {
         )}
       </div>
 
-      <MapScreenshot filters={filters} ref={captureMapRef} />
+      <MapScreenshot
+        filters={filters}
+        ref={captureMapRef}
+        mapCenter={getCenter}
+        points={points}
+        isPointsLoading={isPointsLoading}
+      />
     </>
   );
 };

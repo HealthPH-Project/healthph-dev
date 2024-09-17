@@ -15,9 +15,12 @@ import {
   useFetchAdminsQuery,
   useFetchUsersQuery,
 } from "../../features/api/userSlice";
+import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.user);
+
+  const [log_activity] = useCreateActivityLogMutation();
 
   let {
     data: admins,
@@ -42,6 +45,12 @@ const UserManagement = () => {
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
       document.getElementById("printWindow").remove();
+
+      log_activity({
+        user_id: user.id,
+        entry: `Generated ${currentTableTab} report`,
+        module: "User Management",
+      });
     },
   });
 
@@ -177,7 +186,7 @@ const UserManagement = () => {
                         ]
                   }
                   rowsPerPage={25}
-                  dateTable={format(new Date(), "MMMM dd, yyyy")}
+                  dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}
                   displayFunc={(value) => {
                     let full_name = `${value.first_name} ${value.last_name}`;
 
