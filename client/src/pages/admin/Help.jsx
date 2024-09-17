@@ -351,6 +351,12 @@ const Help = () => {
                 search.length > 0 ? () => setSearch("") : undefined
               }
             />
+            <a
+              className="prod-btn-base prod-btn-secondary flex-shrink-0 mt-[16px] sm:mt-0 ms-0 sm:ms-[16px]"
+              href={`mailto:${import.meta.env.VITE_HEALTHPH_EMAIL}`}
+            >
+              Report Issue
+            </a>
             {/* <button
               type="button"
               className="prod-btn-base prod-btn-secondary flex items-center flex-shrink-0 ms-0 sm:ms-[16px] mt-[16px] sm:mt-0"

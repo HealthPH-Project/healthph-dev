@@ -633,6 +633,19 @@ const Settings = () => {
             Delete Account
           </button>
         </div>
+
+        <div className="settings-header">
+          <div>
+            <p>Report an Issue</p>
+            <span>Reach out to HealthPH for help.</span>
+          </div>
+          <a
+            className="prod-btn-base prod-btn-secondary"
+            href={`mailto:${import.meta.env.VITE_HEALTHPH_EMAIL}`}
+          >
+            Report Issue
+          </a>
+        </div>
       </div>
 
       {modalActive && (
