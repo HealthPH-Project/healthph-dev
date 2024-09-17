@@ -2,11 +2,10 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from bson import ObjectId
 import pymongo
+
 from config.database import activity_logs_collection, user_collection
 from models.activityLogs import ActivityLog
 from schema.activityLogSchema import list_activity_logs
-from datetime import datetime
-
 from helpers.miscHelpers import get_ph_datetime
 
 """
@@ -17,6 +16,7 @@ route     GET api/activity_logs
 
 
 async def fetch_activity_logs():
+    # Fetch activity logs from Activity Logs table joined with Users table
     data = activity_logs_collection.aggregate(
         [
             {
@@ -31,6 +31,7 @@ async def fetch_activity_logs():
         ]
     )
 
+    # Convert data to list of JSON objects
     activity_logs = list_activity_logs(data)
 
     return activity_logs
@@ -44,6 +45,7 @@ route     POST api/activity_logs
 
 
 async def create_activity_log(data: ActivityLog):
+    # Create a copy of request data
     to_encode = dict(data).copy()
 
     # Check if id is valid object ID
@@ -53,6 +55,7 @@ async def create_activity_log(data: ActivityLog):
             detail="Error creating activity log...",
         )
 
+    # Check if user exists in database
     user_data = user_collection.find_one({"_id": ObjectId(to_encode["user_id"])})
 
     if not user_data:
@@ -61,9 +64,7 @@ async def create_activity_log(data: ActivityLog):
             detail="Error creating activity log...",
         )
 
-    # to_encode.update(
-    #     {"user_id": ObjectId(to_encode["user_id"]), "created_at": datetime.now(), }
-    # )
+    # Update request data
     to_encode.update(
         {
             "user_name": f"{user_data['first_name']} {user_data['last_name']}",
@@ -71,7 +72,8 @@ async def create_activity_log(data: ActivityLog):
             "created_at": get_ph_datetime(),
         }
     )
-
+    
+    # Create new activity log
     new_activity_log = activity_logs_collection.insert_one(dict(to_encode))
 
     if not new_activity_log:
@@ -87,6 +89,7 @@ async def create_activity_log(data: ActivityLog):
 
 
 async def delete_all_activity_logs():
+    # Delete all activity logs
     deleted = activity_logs_collection.delete_many({})
 
     if not deleted:

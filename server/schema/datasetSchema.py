@@ -1,6 +1,6 @@
 import json
 
-
+# Create a dictionary of a single Dataset
 def individual_dataset(dataset) -> dict:
     return {
         "id": str(dataset["_id"]),
@@ -18,6 +18,6 @@ def individual_dataset(dataset) -> dict:
         ),
     }
 
-
+# Create a list of Dataset dictionaries
 def list_datasets(datasets) -> list:
     return [individual_dataset(log) for log in datasets]

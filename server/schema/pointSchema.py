@@ -1,3 +1,4 @@
+# Create a dictionary of a single Point
 def individual_point(point) -> dict:
     return {
         "id": str(point["_id"]),
@@ -13,5 +14,6 @@ def individual_point(point) -> dict:
     }
 
 
+# Create a list of Point dictionaries
 def list_points(points) -> list:
     return [individual_point(point) for point in points]

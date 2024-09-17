@@ -10,11 +10,6 @@ from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 from geopy.location import Location
 
-# from sklearn.model_selection import train_test_split
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# from packages.skmultilearn.adapt import MLkNN
-
-
 from transformers import (
     ElectraTokenizer,
     ElectraForSequenceClassification,

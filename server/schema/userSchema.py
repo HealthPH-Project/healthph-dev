@@ -1,3 +1,4 @@
+# Create a dictionary of a single User
 def individual_user(user) -> dict:
     return {
         "id": str(user["_id"]),
@@ -13,6 +14,6 @@ def individual_user(user) -> dict:
         "updated_at": str(user["updated_at"]) if "updated_at" in user.keys() else "",
     }
 
-
+# Create a list of User dictionaries
 def list_users(users) -> list:
     return [individual_user(user) for user in users]

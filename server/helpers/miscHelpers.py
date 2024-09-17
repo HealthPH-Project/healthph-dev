@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta, timezone
 
-
+# Retrieve current time in the Philippines
 def get_ph_datetime():
     ph_timezone = timezone(timedelta(hours=8))
 
     return datetime.now(ph_timezone).replace(tzinfo=None)
 
-
+# Convert ISO3166-2-lvl3 code to region text
 def iso3166_2_to_region(ph_code):
     codes = {
         "PH-00": "NCR",
@@ -30,7 +30,7 @@ def iso3166_2_to_region(ph_code):
 
     return codes[ph_code]
 
-
+# Convert region string to ISO3166-2-lvl3 code
 def region_to_iso3166_2(region):
     codes = {
         "NCR": "PH-00",

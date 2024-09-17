@@ -1,7 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from bson import ObjectId
-from datetime import datetime
 import re
 from pymongo import ReturnDocument
 from typing_extensions import Annotated
@@ -561,7 +560,9 @@ async def create_user(
         )
 
     to_encode = dict(user).copy()
+    # Set is_disabled status to False
     to_encode.update({"is_disabled": False})
+    # Generate hashed password
     to_encode.update({"password": generate_hashed_password(to_encode["password"])})
 
     new_user = user_collection.insert_one(dict(to_encode))
@@ -572,6 +573,7 @@ async def create_user(
             detail="Error creating admin...",
         )
 
+    # Send mail based on user_type
     if user.user_type == "USER":
         regions = {
             "NCR": "National Capital Region",

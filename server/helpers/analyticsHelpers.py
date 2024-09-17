@@ -8,16 +8,12 @@ from helpers.miscHelpers import region_to_iso3166_2
 nltk.download("wordnet")
 from nltk.stem import WordNetLemmatizer
 from wordcloud import WordCloud, STOPWORDS
-import matplotlib.pyplot as plt
 from collections import Counter
-from io import BytesIO
 import random
-from geopy.extra.rate_limiter import RateLimiter
-from geopy.geocoders import Nominatim
-from geopy.location import Location
 
 annotated_datasets_folder = Path("public/annotated_datasets")
 
+# Load stopwords
 def get_stopwords():
     # Define stopwords
     stopwords = set(STOPWORDS)
@@ -75,67 +71,53 @@ def clean_dataframe(df):
 def filters_datasets_by_region(region: str, datasets: list):
     all_posts = ""
     
+    # Iterate over each datasets filenames
     for dataset in datasets:
+        # Read dataset csv file
         dataset_df = pd.read_csv(annotated_datasets_folder / dataset)
 
+        # If selected region is "All Regions", then
         if region == "all":
+            # Join all posts into a single string
             dataset_posts = " ".join(post for post in dataset_df["posts"])
         else:
+            # Filter posts by region before joining into a single string
             ph_code = region_to_iso3166_2(region)
             regional_posts = dataset_df[dataset_df["PH_code"] == ph_code]
             dataset_posts = " ".join(post for post in regional_posts["posts"])
 
+        # Append every each joined strings
         all_posts = " ".join([all_posts, dataset_posts])
 
+    # Remove all characters that are not letters and whitespaces
     all_posts = re.sub(r"[^a-zA-Z\s]", "", all_posts)
 
     return all_posts
 
 
-def frequent_words(data):
-    # # Prepare the post data: concatenate all rows in the post column into a single string
-    # post = " ".join(review for review in data.post).lower()
-    # # Remove punctuation and numbers
-    # post = re.sub(r"[^a-zA-Z\s]", "", post)
-
-    # # Define stopwords
-    # stopwords = get_stopwords()
-
-    # # Split the post into words and filter out stopwords
-    # words = [word for word in post.split() if word not in stopwords]
-
-    # # Count the frequency of each word
-    # word_counts = Counter(words)
-
-    # # Get the most common words and their counts
-    # most_common_words = word_counts.most_common(
-    #     10
-    # )  # Adjust the number to display more or fewer words
-
-    # # Convert the most common words to a DataFrame for visualization
-    # df_frequent_words = pd.DataFrame(most_common_words, columns=["Word", "Frequency"])
-
-    # return df_frequent_words
-    
+def frequent_words(data):    
+    # Define stopwords
     stopwords = get_stopwords()
 
-    words = [word for word in data.split() if word not in stopwords]
+    # Split the data into words and filter out stopwords
+    words = [word for word in str.split(data, sep=" ") if word not in stopwords]
 
+    # Count the frequency of each word
     word_counts = Counter(words)
 
+    # Find the ten most common words
     most_common_words = word_counts.most_common(n=10)
 
+    # Create dataframe of the most common words 
     frequent_words_df = pd.DataFrame(most_common_words, columns=["word", "frequency"])
 
+    # Convert dataframe to dictionary
     frequent_words_dict = frequent_words_df.to_dict(orient="records")
 
     return frequent_words_dict
 
 
 def word_cloud(data, full_path: str):
-    # # Combine all posts into a single string
-    # post = " ".join(review for review in data.post)
-
     # Define stopwords
     stopwords = get_stopwords()
 
@@ -157,12 +139,6 @@ def word_cloud(data, full_path: str):
     wordcloud.to_file(full_path)
 
     return wordcloud
-
-    # return wordcloud
-    image_buffer = BytesIO()
-    wordcloud.to_image().save(image_buffer, format="PNG")
-    image_buffer.seek(0)
-    return image_buffer.getvalue()
 
 
 def wordcloud_color_func(

@@ -1,3 +1,4 @@
+# Create a dictionary of a single Activity Log
 def individual_activity_log(log) -> dict:
     return {
         "id": str(log["_id"]),
@@ -9,6 +10,6 @@ def individual_activity_log(log) -> dict:
         "created_at": str(log["created_at"]) if "created_at" in log.keys() else "",
     }
 
-
+# Create a list of Activity Log dictionaries
 def list_activity_logs(logs) -> list:
     return [individual_activity_log(log) for log in logs]

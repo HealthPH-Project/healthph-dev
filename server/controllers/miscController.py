@@ -41,6 +41,7 @@ async def contact_us(data: ContactUsRequest):
             detail=errors,
         )
 
+    # Send mail to HealthPH email address
     result = mail_contact_us(
         os.getenv("SMTP_SENDER_EMAIL"),
         {
@@ -65,5 +66,5 @@ async def contact_us(data: ContactUsRequest):
     if result:
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content={"message": "User created successfully"},
+            content={"message": "Message sent successfully"},
         )

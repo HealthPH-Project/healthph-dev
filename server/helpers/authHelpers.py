@@ -17,13 +17,13 @@ from dotenv import dotenv_values
 
 config_dotenv = dotenv_values()
 
-
+# Checks if input password and hashed password matches
 def verify_password(plain_password: str, hashed_password: str):
     return bcrypt.checkpw(
         plain_password.encode("utf-8"), hashed_password.encode("utf-8")
     )
 
-
+# For hashing password to be stored in database
 def generate_hashed_password(password: str):
     salt = bcrypt.gensalt(10)
     return (bcrypt.hashpw(password.encode("utf-8"), (salt))).decode("utf-8")
@@ -57,7 +57,7 @@ def create_reset_password_token(email: str):
         algorithm=os.getenv("ALGORITHM"),
     )
 
-
+# For 2-step verification
 def generate_otp_code():
     return OTPCode(
         otp_code=f"{secrets.randbelow(999999):06d}",

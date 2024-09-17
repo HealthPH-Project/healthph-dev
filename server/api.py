@@ -19,12 +19,15 @@ from routes.datasetsRoutes import router as datasetsRouter
 from routes.pointRoutes import router as pointRouter
 from routes.miscRoutes import router as miscRouter
 
+# Initialize FastAPI app
 app = FastAPI()
 
+# Initialize FastAPI app for api routes
 api_app = FastAPI()
 
 origins = os.getenv("CORS_ORIGINS").split(",")
 
+# Setup middlewares
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -55,11 +58,12 @@ api_app.include_router(router=miscRouter, tags=["Misc"])
 
 app.mount("/api", api_app, name="api")
 
+# Serve build files from client / frontend
 app.mount("/", StaticFiles(directory="../build", html=True), name="build")
 
 templates = Jinja2Templates(directory="../build")
 
-
+# Handle 404 error
 @app.exception_handler(404)
 async def catch_all(request: Request, exc: HTTPException):
     return templates.TemplateResponse("index.html", {"request": request})

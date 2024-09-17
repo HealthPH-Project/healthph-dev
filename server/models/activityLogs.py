@@ -9,12 +9,3 @@ class ActivityLog(BaseModel):
     module: str
     created_at: datetime = get_ph_datetime()
     
-
-
-"""
-entry: description of action
-
-Login, Add admin: <name of admin>, Verified User: <name of user>, Print: <what is printed>
-
-module: what page
-"""
