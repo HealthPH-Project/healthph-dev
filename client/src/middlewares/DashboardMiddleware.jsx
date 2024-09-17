@@ -5,6 +5,9 @@ const DashboardMiddleware = () => {
   const auth = useSelector((state) => state.auth);
   const location = useLocation();
 
+  // Checks if there is already a logged in user
+  // If true, show original page
+  // If false, redirect to Login page
   return auth.user ? (
     <Outlet />
   ) : (

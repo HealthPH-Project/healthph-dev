@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef } from "react";
-import TestList from "./test.json";
+// import TestList from "./test.json";
 import React, { useState, useCallback, useMemo } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -22,7 +22,7 @@ import html2canvas from "html2canvas";
 import MapScreenshot from "./components/admin/MapScreenshot";
 
 const Test = () => {
-  let x = TestList;
+  // let x = TestList;
   const [code, setCode] = useState("");
   const [splitCode, setSplitCode] = useState([]);
   const [currentCodeIndex, setCurrentCodeIndex] = useState(0);

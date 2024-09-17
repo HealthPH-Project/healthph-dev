@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/admin/Navbar";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import AccessDenied from "../pages/error/AccessDenied";
+
 const AdminLayout = () => {
   const location = useLocation();
   const user = useSelector((state) => state.auth.user);

@@ -64,25 +64,6 @@ const Report = ({
       ) : (
         children
       )}
-
-      {/* <div className="report-table">
-        <div className="report-table-header">
-          <div className="item"></div>
-          <div className="item">Label</div>
-          <div className="item">Label</div>
-          <div className="item">Label</div>
-        </div>
-        {Array.from({ length: 4 }).map((v, i) => {
-          return (
-            <div key={i} className="report-table-row">
-              <div className="item">Data</div>
-              <div className="item">Data</div>
-              <div className="item">Data</div>
-              <div className="item">Data</div>
-            </div>
-          );
-        })}
-      </div> */}
     </div>
   );
 };

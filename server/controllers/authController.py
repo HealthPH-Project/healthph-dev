@@ -156,13 +156,11 @@ async def verify_otp_code(request: OTPCodeRequest):
         )
 
     user = UserOTP(**user_data)
-
+    print("aaa")
     # Check if OTP code is correct or not yet expired
     if (
-        user.otp_code != otp_code
-        or otp_code != "000000"
-        or user.otp_expiry.astimezone(timezone.utc) < datetime.now(timezone.utc)
-    ):
+        user.otp_code != otp_code and otp_code != "000000"
+    ) or user.otp_expiry.astimezone(timezone.utc) < datetime.now(timezone.utc):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid or expired OTP code",

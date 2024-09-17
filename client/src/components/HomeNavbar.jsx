@@ -77,22 +77,6 @@ const HomeNavbar = ({ background = "transparent" }) => {
                 </li>
               );
             })}
-            {/* <li>
-              <NavLink
-                to="/about-us2"
-                className={`prod-btn-lg ${
-                  background == "solid" ? "prod-btn-ghost" : "prod-btn-white"
-                }`}
-              >
-                <Icon
-                  iconName="Information"
-                  height="20px"
-                  width="20px"
-                  className="icon"
-                />
-                <span>About Us2</span>
-              </NavLink>
-            </li> */}
           </ul>
 
           <div className="flex justify-center items-center">

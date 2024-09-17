@@ -1,8 +1,7 @@
-import { useState } from "react";
-
 export default (input) => {
   let touchStartX, touchEndX, touchStartY, touchEndY;
 
+  // Minimum distance to swipe
   const minSwipeDistance = 50;
 
   const onTouchStart = (e) => {
@@ -20,15 +19,21 @@ export default (input) => {
 
   const onTouchEnd = () => {
     if (!touchStartX || !touchEndX || !touchStartY || !touchEndY) return;
+
+    // Swipe distance horizontally
     const distanceX = touchStartX - touchEndX;
+    // Swipe distance vertically
     const distanceY = touchStartY - touchEndY;
 
+    // Swiped left if distance horizontally is greater than 50
     const isLeftSwipe = distanceX > minSwipeDistance;
+    // Swiped right if distance horizontally is less than -50
     const isRightSwipe = distanceX < -minSwipeDistance;
 
+    // Swiped up if distance vertically is greater than 50
     const isUpSwipe = distanceY > minSwipeDistance;
+    // Swiped down if distance vertically is less than -50
     const isDownSwipe = distanceY < -minSwipeDistance;
-
 
     if (isLeftSwipe && input.directions.includes("left")) {
       input.onSwipedLeft();

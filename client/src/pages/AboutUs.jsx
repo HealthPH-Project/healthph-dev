@@ -1,283 +1,111 @@
+import { useEffect } from "react";
 import HomeNavbar from "../components/HomeNavbar";
-import Icon from "../components/Icon";
-import IMG from "../assets/images/home-bg.png";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import Logo from "../assets/images/logo.png";
-
+import HomeFooter from "../components/HomeFooter";
 const AboutUs = () => {
-  const features = [
-    {
-      iconName: "Radar",
-      fill: true,
-      label: "Early Warning System",
-      content: "Identify suspected symptoms before they escalate in one app.",
-    },
-    {
-      iconName: "Stethoscope",
-      fill: true,
-      label: "Empowering Action",
-      content:
-        "Provide real-time insights to healthcare professionals for decision-making.",
-    },
-    {
-      iconName: "TowerLine",
-      fill: true,
-      label: "Bridging the Gap",
-      content:
-        "Help public health officials monitor all regions through social media data.",
-    },
-    {
-      iconName: "Megaphone",
-      fill: true,
-      label: "Building Awareness",
-      content:
-        "Educate the public on health trends and encourage preventive measures.",
-    },
-    {
-      iconName: "Eye",
-      fill: true,
-      label: "Promoting Transparency",
-      content:
-        "Offer data-driven insights for a clearer picture of public health in the Philippines.",
-    },
-    {
-      iconName: "Brain",
-      fill: false,
-      stroke: true,
-      label: "Continuous Learning",
-      content:
-        "Refine our system with evolving social media trends and emerging diseases.",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Juan Dela Cruz",
-      position: "Position, position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, asperiores aliquid. Incidunt totam quae iusto excepturi numquam facilis ipsum harum?",
-    },
-    {
-      name: "Maria Clara",
-      position: "Position",
-      text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum itaque porro consectetur cumque quas eius non quae eaque inventore fugiat, aut soluta a suscipit in.",
-    },
-    {
-      name: "John Doe",
-      position: "Position, position, position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti porro repellat laboriosam a consequuntur architecto perspiciatis. Repudiandae, eveniet?",
-    },
-    {
-      name: "Pablo Santos",
-      position: "Position, position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptas soluta dolor, natus dolorem aliquid.",
-    },
-    {
-      name: "Angela Garcia",
-      position: "Position, position, position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti porro repellat laboriosam a consequuntur architecto perspiciatis. Repudiandae, eveniet?",
-    },
-    {
-      name: "Juan Dela Cruz",
-      position: "Position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, asperiores aliquid. Incidunt totam quae iusto excepturi numquam facilis ipsum harum?",
-    },
-    {
-      name: "Pablo Santos",
-      position: "Position, position",
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam voluptas soluta dolor, natus dolorem aliquid.",
-    },
-    {
-      name: "Maria Clara",
-      position: "Position",
-      text: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum itaque porro consectetur cumque quas eius non quae eaque inventore fugiat, aut soluta a suscipit in.",
-    },
-  ];
-
-  const [testimonialPage, setTestimonialPage] = useState(1);
-
-  const getTestimonials = () => {
-    const startIndex = testimonialPage * 2;
-
-    return testimonials.slice(startIndex - 2, startIndex);
-  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <div className="about-layout">
-      <HomeNavbar />
+    <div className="article-layout about-us flex flex-col min-h-[100vh]">
+      <HomeNavbar background="solid" />
 
-      {/* HERO SECTION */}
-      <section className="mt-[56px] hero">
-        <div className="flex flex-col justify-center items-center px-[16px]">
-          <p className="heading">
-            Your Window into Public Health Trends in the Philippines
-          </p>
-          <p className="subheading">
-            HealthPH monitors social media to track suspected symptoms of
-            Pulmonary Tuberculosis, Pneumonia, COVID, Acute Upper Respiratory
-            Infection (AURI) across all 17 regions.
-          </p>
-        </div>
-        <div className="about-container">
-          <div className="my-[112px]">
-            <div className="features">
-              {features.map(({ iconName, fill, stroke, label, content }, i) => {
-                return (
-                  <div className="feature-item" key={i}>
-                    <div className="icon-wrapper">
-                      <Icon
-                        iconName={iconName}
-                        height="24px"
-                        width="24px"
-                        className="icon"
-                        fill={fill ? "#007AFF" : null}
-                        stroke={stroke ? "#007AFF" : null}
-                      />
-                    </div>
-                    <p className="label">{label}</p>
-                    <p className="content">{content}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ARTICLES */}
-      <section>
+      <section className="mt-[56px] flex-grow">
         <div className="about-container mb-[112px]">
           <div className="w-full max-w-[1144px]">
-            <p className="section-title">Articles</p>
-            <div className="articles">
-              {Array.from({ length: 6 }).map((v, i) => {
-                return (
-                  <div className="article-item" key={i}>
-                    <div className="article-image">
-                      <img src={IMG} alt="" />
-                    </div>
-                    <div className="article-body">
-                      <p className="date">Jan 31, 2024</p>
-                      <p className="article-title">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Sit non neque nesciunt veritatis nihil ab ea incidunt
-                        accusamus qui explicabo.
-                      </p>
-                      <p className="article-preview">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nihil illo dicta accusantium quasi quis laboriosam
-                        nesciunt veritatis possimus iste. Voluptatibus dolor
-                        pariatur eveniet quia culpa?
-                      </p>
-                      <Link
-                        to="/articles/qwerty"
-                        className="prod-btn-lg prod-btn-secondary"
-                      >
-                        <span>Read More</span>
-                        <Icon
-                          iconName="ArrowUpRight"
-                          height="24px"
-                          width="24px"
-                          stroke="#8693A0"
-                        />
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="w-full flex justify-end">
-              <Link
-                to="/articles"
-                className="prod-btn-lg prod-btn-secondary flex items-center justify-center h-[48px]"
-              >
-                <span className="me-[8px]">See All Articles</span>
-                <Icon
-                  iconName="ArrowRight"
-                  height="24px"
-                  width="24px"
-                  fill="#8693A0"
-                />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* RESEARCH TEAM */}
-      <section>
-        <div className="about-container">
-          <div className="w-full max-w-[1144px]">
-            <p className="section-title">Research Team</p>
-            <div className="testimonials">
-              {getTestimonials().map(({ name, position, text }, i) => {
-                return (
-                  <div className="testimonial-item" key={i}>
-                    <div className="testimonial-header">
-                      <div className="details">
-                        <p className="testimonial-name">{name}</p>
-                        <p className="testimonial-position">{position}</p>
-                      </div>
-                      <div className="testimonial-image">
-                        <img src={IMG} alt="" />
-                      </div>
-                    </div>
-                    <p className="testimonial-text">{text}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="w-full flex justify-end">
-              <button
-                className="prod-btn-lg prod-btn-secondary flex items-center justify-center me-[20px] h-[48px]"
-                disabled={!(testimonialPage > 1)}
-                onClick={() => {
-                  if (testimonialPage > 1) {
-                    setTestimonialPage(
-                      (testimonialPage) => testimonialPage - 1
-                    );
-                  }
-                }}
-              >
-                <Icon
-                  iconName="ArrowLeft"
-                  height="24px"
-                  width="24px"
-                  fill="#8693A0"
-                />
-              </button>
-              <button
-                className="prod-btn-lg prod-btn-secondary flex items-center justify-center h-[48px]"
-                disabled={!(testimonialPage < testimonials.length / 2)}
-                onClick={() => {
-                  if (testimonialPage < testimonials.length / 2)
-                    setTestimonialPage(
-                      (testimonialPage) => testimonialPage + 1
-                    );
-                }}
-              >
-                <Icon
-                  iconName="ArrowRight"
-                  height="24px"
-                  width="24px"
-                  fill="#8693A0"
-                />
-              </button>
+            <p className="section-title !text-gray-700">About the Project</p>
+            <div className="article-body text-gray-700">
+              <p className="text-justify">
+                <span>
+                  The{" "}
+                  <a
+                    href="https://www.pchrd.dost.gov.ph/about-pchrd/"
+                    className="underline underline-offset-2"
+                    target="_blank"
+                  >
+                    Department of Science and Technology — Philippine Council
+                    for Health Research and Development (DOST-PCHRD)
+                  </a>
+                  , through the Grants-in-Aid (GIA) Program, has recently
+                  approved{" "}
+                  <a
+                    href="https://national-u.edu.ph/"
+                    className="underline underline-offset-2"
+                    target="_blank"
+                  >
+                    National University
+                  </a>
+                  's research proposal to promote public health surveillance in
+                  the Philippines.{" "}
+                </span>
+                <br /> <br />
+                <span>
+                  In an era where digital footprints are ubiquitous, the fusion
+                  of social media and public health surveillance represents a
+                  groundbreaking advancement. The project, HealthPH: Intelligent
+                  Disease Surveillance using Social Media, is an innovative
+                  project aimed at revolutionizing disease surveillance and
+                  public health management in the Philippines through the
+                  intelligent use of social media. It spans 12 months from
+                  October 2023 to September 2024. The initiative is primarily
+                  applied research, focusing on the health sector and aligning
+                  with the United Nations Sustainable Development Goal 3: Good
+                  Health and Well-being.{" "}
+                </span>
+                <br /> <br />
+                <span>
+                  The HealthPH project, led by Dr. Mideth B. Abisado at National
+                  University Philippines , epitomizes this innovative approach.
+                  With the advent of COVID-19, the importance of early detection
+                  and real-time monitoring of infectious diseases has become
+                  paramount. The project's primary objective is to develop and
+                  deploy an advanced system that leverages social media data to
+                  detect and monitor symptoms towards probable disease
+                  outbreaks. HealthPH aims to provide timely and accurate
+                  information to health authorities, enabling them to respond
+                  swiftly and effectively to emerging public health threats.{" "}
+                </span>
+                <br /> <br />
+                <span>
+                  The project aims to detect trends in social media posts about
+                  emerging infectious diseases in the Philippines, particularly
+                  in low-resourced languages, Filipino and Cebuano. As of date,
+                  the HealthPH Toolkit is in its development stages. It aspires
+                  to assists health professionals, officials, and the public in
+                  making informed decisions. This innovative approach promises
+                  to mitigate the risk of outbreaks and reduce economic and
+                  social disruptions.{" "}
+                </span>
+                <br /> <br />
+                <span>
+                  The HealthPH project is poised to have significant social and
+                  economic impacts. By providing real-time insights into disease
+                  trends, the project can help health officials and policymakers
+                  make informed decisions, potentially preventing outbreaks and
+                  minimizing economic disruptions. The project also aims to
+                  enhance public health services and preparedness, ultimately
+                  contributing to better health outcomes for all Filipinos.{" "}
+                </span>
+                <br /> <br />
+                <span>
+                  National University's vision of dynamic Filipinism and
+                  nation-building is embodied in initiatives like this. By
+                  strengthening our collective capabilities in health and
+                  medicine, social computing, e-governance, and Artificial
+                  Intelligence, we further our commitment to shaping a future
+                  where technology and culture are intertwined and where the
+                  digital world speaks, understands, and celebrates our
+                  languages.{" "}
+                </span>
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="flex-col sm:flex-row items-start sm:items-center">
-        <div className="footer-logo h-[24px] mb-[16px] sm:mb-0">
-          <img src={Logo} alt="" />
-        </div>
-
-        <p className="prod-l2 text-gray-300">
-          &#169; 2024 HealthPH. All Rights reserved.
-        </p>
-      </footer>
+      <HomeFooter />
     </div>
   );
 };
+
 export default AboutUs;

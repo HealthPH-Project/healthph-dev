@@ -1,13 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Logo from "../assets/images/logo.png";
 import AuthLogo from "../assets/images/auth-logo.svg";
 import Icon from "../components/Icon";
+
 const AuthLayout = () => {
   return (
     <>
       <div className="auth-layout">
         <main>
-          {/* <Outlet /> */}
           <div className="auth-container">
             <Outlet />
           </div>

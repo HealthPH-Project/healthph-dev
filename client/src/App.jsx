@@ -13,6 +13,12 @@ import DashboardMiddleware from "./middlewares/DashboardMiddleware";
 import AuthMiddleware from "./middlewares/AuthMiddleware";
 
 import Home from "./pages/Home";
+import AboutUs from "./pages/AboutUs";
+import ResearchTeam from "./pages/ResearchTeam";
+import Articles from "./pages/Articles";
+import ArticlePage from "./pages/ArticlePage";
+import ContactUs from "./pages/ContactUs";
+
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -30,17 +36,11 @@ import EditPassword from "./pages/admin/EditPassword";
 
 import PageNotFound from "./pages/error/PageNotFound";
 import Test from "./Test";
+
 import HelmetTitle from "./components/HelmetTitle";
+
 import useDeviceDetect from "./hooks/useDeviceDetect";
-import AboutUs from "./pages/AboutUs";
-import Articles from "./pages/Articles";
-import ArticlePage from "./pages/ArticlePage";
-import AboutUs2 from "./pages/AboutUs2";
-import ResearchTeam from "./pages/ResearchTeam";
 import FullMap from "./pages/admin/FullMap";
-import AboutUs3 from "./pages/AboutUs3";
-import ArticlePage2 from "./pages/ArticlePage2";
-import ContactUs from "./pages/ContactUs";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -60,7 +60,7 @@ function App() {
   }, []);
 
   return isLoading ? (
-    <p>Loading...</p>
+    <p>...</p>
   ) : (
     <>
       <Routes>
@@ -85,26 +85,13 @@ function App() {
               !isPWA ? (
                 <>
                   <HelmetTitle title="HealthPH | About Us" />
-                  <AboutUs3 />
+                  <AboutUs />
                 </>
               ) : (
                 <Navigate to="/login" />
               )
             }
           ></Route>
-          {/* <Route
-            path="about-us2"
-            element={
-              !isPWA ? (
-                <>
-                  <HelmetTitle title="HealthPH | About Us" />
-                  <AboutUs2 />
-                </>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          ></Route> */}
           <Route
             path="articles"
             element={
@@ -125,19 +112,6 @@ function App() {
                 <>
                   <HelmetTitle title="HealthPH | Article Page" />
                   <ArticlePage />
-                </>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          ></Route>
-          <Route
-            path="articles2/:slug"
-            element={
-              !isPWA ? (
-                <>
-                  <HelmetTitle title="HealthPH | Article Page" />
-                  <ArticlePage2 />
                 </>
               ) : (
                 <Navigate to="/login" />
