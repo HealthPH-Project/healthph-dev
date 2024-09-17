@@ -244,7 +244,7 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
               <div>
                 <div className="content-header">
                   <div className="flex items-center">
-                    <p>Percentage</p>
+                    <p>Suspected Conditions Percentage</p>
                     <span className="ms-[8px]">
                       {displayRegion(data["percentage_filter"])}
                     </span>

@@ -180,7 +180,9 @@ const Analytics = () => {
         <div ref={printRef}></div>
         <section className="analytics-section">
           <div className="header flex-col md:flex-row  items-start md:items-center">
-            <div className="heading mb-[20px] md:mb-0">Suspected Symptoms</div>
+            <div className="heading mb-[20px] md:mb-0">
+              Suspected Conditions
+            </div>
             <div className="w-full sm:w-auto flex flex-col xs:flex-row justify-start lg:justify-center items-start xs:items-center">
               {displayPrintButton() && (
                 <>
@@ -385,7 +387,7 @@ const Analytics = () => {
 
               {/* REPORT - PERCENTAGE */}
               <Report
-                heading="Percentage"
+                heading="Suspected Conditions Percentage"
                 filter={percentageFilter}
                 setFilter={setPercentageFilter}
                 isLoading={isPercentageFetching}
@@ -405,7 +407,7 @@ const Analytics = () => {
                                 const { color, value } = entry;
                                 return (
                                   <div
-                                    className="flex items-center me-[16px]"
+                                    className="flex items-center me-[16px] mb-[8px]"
                                     key={index}
                                   >
                                     <div
