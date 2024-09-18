@@ -183,7 +183,7 @@ def analyze_data_in_chunks(data, increment, nlp):
     return metrics_df
 
 
-def test_bigram():
+async def test_bigram():
     # stopwordss = set(stopwords.words("english"))
     nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
