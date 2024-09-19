@@ -100,8 +100,8 @@ def frequent_words(data):
     stopwords = get_stopwords()
 
     # Split the data into words and filter out stopwords
-    words = [word for word in str.split(data, sep=" ") if word not in stopwords]
-
+    words = [word for word in str.split(data, sep=" ") if word not in stopwords and word != ""]
+    
     # Count the frequency of each word
     word_counts = Counter(words)
 

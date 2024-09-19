@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Icon from "../Icon";
+import capitalizeSymptom from "../../hooks/useCapitalizeSymptom";
 
 const ContentBodyItem = ({ disease_name, date, count, keyword }) => {
   const getDiseaseName = () => {
@@ -18,7 +19,9 @@ const ContentBodyItem = ({ disease_name, date, count, keyword }) => {
   return (
     <div className="content-body-item">
       <div>
-        <p className="prod-p3 font-medium text-gray-700 mb-[5px]">{keyword}</p>
+        <p className="prod-p3 font-medium text-gray-700">
+          {capitalizeSymptom(keyword)}
+        </p>
         {/* <p className="prod-p3 font-medium text-gray-300">{keyword}</p> */}
       </div>
       <div>

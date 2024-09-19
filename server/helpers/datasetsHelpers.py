@@ -75,8 +75,8 @@ def clean_text(text):
 
 def clean_dataframe(df):
     cleaned_df = df.copy()
-    cleaned_df["posts"] = cleaned_df["posts"].apply(clean_text)
-    cleaned_df = cleaned_df.dropna(subset=["posts"])
+    cleaned_df["cleaned_posts"] = cleaned_df["posts"].apply(clean_text)
+    cleaned_df = cleaned_df.dropna(subset=["cleaned_posts"])
     return cleaned_df
 
 
@@ -123,6 +123,29 @@ def get_PH_code(latlong: str):
             return "NA"
 
         return address["ISO3166-2-lvl3"]
+    
+cache_ph_code = {}
+
+# Get the PH-Code for region tagging
+def get_PH_code_with_cache(latlong: str):
+    global cache_ph_code
+    
+    unique_key = latlong
+    
+    if unique_key in cache_ph_code:
+        return cache_ph_code[unique_key]
+    
+    if latlong == "-999, -999":
+        return "NA"
+    else:
+        address = get_geopy_reverse(latlong)
+
+        if "ISO3166-2-lvl3" not in address.keys():
+            return "NA"
+        
+        cache_ph_code[unique_key] = address["ISO3166-2-lvl3"]
+
+        return address["ISO3166-2-lvl3"]
 
 
 # Check if latitude and longitude coordinates are within in Philippine boundaries
@@ -139,7 +162,10 @@ def is_latlong_within_ph(latlong):
 
 
 # Get latitude abd longitude given the province and region
-def filter_location(province, region):
+def filter_location(province, region: str):
+    if "region" not in region.lower():
+        region = f"Region {region}"
+    
     # Combine province and region for location
     location_str = str(province) + ", " + str(region)
 
@@ -160,6 +186,52 @@ def filter_location(province, region):
     else:
         # Check if latitude and longitude is within the Philippines
         return is_latlong_within_ph(latlong)
+    
+
+cache_longlat = {}
+    
+# Get latitude abd longitude given the province and region while cross-checking in cache
+def filter_location_with_cache(province, region: str):
+    global cache_longlat
+    
+    unique_key = (province, region)
+    
+    if unique_key in cache_longlat:
+        return cache_longlat[unique_key]
+
+    if "region" not in region.lower():
+        region = f"Region {region}"
+    
+    # Combine province and region for location
+    location_str = str(province) + ", " + str(region)
+
+    # Get latitude and longitude of location
+    latlong = get_geopy_latlong(location_str)
+
+    # Check if latitude and longitude is valid
+    if latlong == "-999, -999":
+        # If not, try getting latitude and longitude for region only
+        region_str = str(region)
+        latlong_region = get_geopy_latlong(region_str)
+
+        if latlong_region == "-999, -999":
+            return "-999, -999"
+        else:
+            # Check if latitude and longitude is within the Philippines
+            result =  is_latlong_within_ph(latlong_region)
+        
+            if result != "-999, -999":
+                cache_longlat[unique_key] = result
+                
+            return result
+    else:
+        # Check if latitude and longitude is within the Philippines
+        result =  is_latlong_within_ph(latlong)
+        
+        if result != "-999, -999":
+            cache_longlat[unique_key] = result
+            
+        return result
 
 
 """
@@ -264,14 +336,24 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     # Raw dataset dataframe columns: [region, province, posts]
     raw_dataset_df = pd.DataFrame(raw_dataset, columns=["region", "province", "posts"])
 
-    # Get latitude and longitude using Geopy based on province and region
+    # # Get latitude and longitude using Geopy based on province and region
+    # raw_dataset_df["filtered_location"] = raw_dataset_df.progress_apply(
+    #     lambda x: filter_location(x["province"], x["region"]), axis=1
+    # )
+    
+    # Get latitude and longitude using Geopy based on province and region with cache
     raw_dataset_df["filtered_location"] = raw_dataset_df.progress_apply(
-        lambda x: filter_location(x["province"], x["region"]), axis=1
+        lambda x: filter_location_with_cache(x["province"], x["region"]), axis=1
     )
 
+    # # Get PH_Code / ISO3166-2-lvl3 code using Geopy based on retrieved latitude and longitude
+    # raw_dataset_df["PH_code"] = raw_dataset_df.progress_apply(
+    #     lambda x: get_PH_code(x["filtered_location"]), axis=1
+    # )
+    
     # Get PH_Code / ISO3166-2-lvl3 code using Geopy based on retrieved latitude and longitude
     raw_dataset_df["PH_code"] = raw_dataset_df.progress_apply(
-        lambda x: get_PH_code(x["filtered_location"]), axis=1
+        lambda x: get_PH_code_with_cache(x["filtered_location"]), axis=1
     )
     
     # Extract latitude from retrived filtered_location

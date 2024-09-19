@@ -33,6 +33,7 @@ import { useFetchPointsQuery } from "../../features/api/pointsSlice";
 import { useFetchDatasetsQuery } from "../../features/api/datasetsSlice";
 import SkeletonAnalytics from "../../components/admin/SkeletonAnalytics";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+import capitalizeSymptom from "../../hooks/useCapitalizeSymptom";
 
 const Analytics = () => {
   const user = useSelector((state) => state.auth.user);
@@ -374,7 +375,7 @@ const Analytics = () => {
                                 className="recharts-text recharts-cartesian-axis-tick-value text-[16px]"
                                 fill="#666"
                               >
-                                <tspan>{value}</tspan>
+                                <tspan>{capitalizeSymptom(value)}</tspan>
                               </text>
                             );
                           }}

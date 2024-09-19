@@ -12,6 +12,7 @@ import { SemiCircle, SemiCircleMarker } from "react-leaflet-semicircle";
 import Regions from "../../assets/data/regions.json";
 import RegionsCoordinates from "../../assets/data/regions_coordinates.json";
 import { format } from "date-fns";
+import capitalizeSymptom from "../../hooks/useCapitalizeSymptom";
 
 const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
   const zoomOptions = { max: 10, min: 6, default: 7 };
@@ -207,7 +208,11 @@ const Map = ({ filters, data, mapCenter, points, isPointsLoading }) => {
                                       >
                                         <Popup>
                                           {texts.map(({ key }, i) => {
-                                            return <p key={i}>{key}</p>;
+                                            return (
+                                              <p key={i}>
+                                                {capitalizeSymptom(key)}
+                                              </p>
+                                            );
                                           })}
                                         </Popup>
                                       </SemiCircleMarker>
