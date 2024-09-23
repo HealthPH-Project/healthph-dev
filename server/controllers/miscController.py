@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import re
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
@@ -176,12 +177,14 @@ def analyze_data_in_chunks(data, increment, nlp):
                 )
 
             plt.title("Bigram Network Graph for Last Chunk")
-            plt.savefig("bigram.png")
+            plt.savefig("./public/images/bigram/test-bigram.png")
 
     # Create a DataFrame to display metrics
     metrics_df = pd.DataFrame(metrics)
     return metrics_df
 
+# Bigram folder
+bigram_folder = Path("public/images/bigram")
 
 async def test_bigram():
     # stopwordss = set(stopwords.words("english"))
@@ -192,6 +195,9 @@ async def test_bigram():
 
     # Define increment
     increment = 3000
+    
+    # Create uploads destination folder if it not exists
+    os.makedirs(bigram_folder, exist_ok=True)
 
     # Run the analysis with the existing data in the dataframe
     metrics_df = analyze_data_in_chunks(test_df["posts"], increment, nlp)
