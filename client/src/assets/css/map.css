@@ -220,7 +220,7 @@
 
   .trends-wrapper .map-header {
     @apply absolute top-0 z-10 w-full select-none;
-    @apply flex justify-between items-start p-[20px];
+    @apply flex justify-between items-start p-[20px] gap-[20px];
   }
 
   .trends-wrapper .attribution-controls {
@@ -229,8 +229,8 @@
   }
 
   .trends-wrapper .map-date {
-    @apply prod-l3 text-right text-gray-500;
-    @apply rounded-[4px] border border-gray-500 bg-gray-50 px-[8px] mb-[16px];
+    @apply prod-l3 text-right text-gray-500 flex-shrink p-[4px];
+    @apply rounded-[4px] border border-gray-500 bg-gray-50 px-[8px] mb-[16px] text-center xs:text-right;
     width: fit-content;
   }
 
