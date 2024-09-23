@@ -211,7 +211,7 @@ const Help = () => {
         {
           sectionDesc:
             "Once every user have successfully signed in to HealthPH, the user is directed to the Analytics Page that are consist of summary of data, visualization charts, and many more. The user can filter the data by region and print them in PDF form.",
-          sectionImage: <HelpImage iamge="user-analytics" />,
+          sectionImage: <HelpImage image="user-analytics" />,
         },
       ],
     },
