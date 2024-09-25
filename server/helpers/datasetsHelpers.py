@@ -17,6 +17,7 @@ from transformers import (
 )
 from transformers.modeling_outputs import SequenceClassifierOutput
 import torch
+from fuzzywuzzy import process
 
 
 # Folder to store annotated_datasets
@@ -123,18 +124,20 @@ def get_PH_code(latlong: str):
             return "NA"
 
         return address["ISO3166-2-lvl3"]
-    
+
+
 cache_ph_code = {}
+
 
 # Get the PH-Code for region tagging
 def get_PH_code_with_cache(latlong: str):
     global cache_ph_code
-    
+
     unique_key = latlong
-    
+
     if unique_key in cache_ph_code:
         return cache_ph_code[unique_key]
-    
+
     if latlong == "-999, -999":
         return "NA"
     else:
@@ -142,7 +145,7 @@ def get_PH_code_with_cache(latlong: str):
 
         if "ISO3166-2-lvl3" not in address.keys():
             return "NA"
-        
+
         cache_ph_code[unique_key] = address["ISO3166-2-lvl3"]
 
         return address["ISO3166-2-lvl3"]
@@ -165,7 +168,7 @@ def is_latlong_within_ph(latlong):
 def filter_location(province, region: str):
     if "region" not in region.lower():
         region = f"Region {region}"
-    
+
     # Combine province and region for location
     location_str = str(province) + ", " + str(region)
 
@@ -186,22 +189,23 @@ def filter_location(province, region: str):
     else:
         # Check if latitude and longitude is within the Philippines
         return is_latlong_within_ph(latlong)
-    
+
 
 cache_longlat = {}
-    
+
+
 # Get latitude abd longitude given the province and region while cross-checking in cache
 def filter_location_with_cache(province, region: str):
     global cache_longlat
-    
+
     unique_key = (province, region)
-    
+
     if unique_key in cache_longlat:
         return cache_longlat[unique_key]
 
     if "region" not in region.lower():
         region = f"Region {region}"
-    
+
     # Combine province and region for location
     location_str = str(province) + ", " + str(region)
 
@@ -218,19 +222,19 @@ def filter_location_with_cache(province, region: str):
             return "-999, -999"
         else:
             # Check if latitude and longitude is within the Philippines
-            result =  is_latlong_within_ph(latlong_region)
-        
+            result = is_latlong_within_ph(latlong_region)
+
             if result != "-999, -999":
                 cache_longlat[unique_key] = result
-                
+
             return result
     else:
         # Check if latitude and longitude is within the Philippines
-        result =  is_latlong_within_ph(latlong)
-        
+        result = is_latlong_within_ph(latlong)
+
         if result != "-999, -999":
             cache_longlat[unique_key] = result
-            
+
         return result
 
 
@@ -311,6 +315,27 @@ def annotate_posts_by_electra(
     return ",".join(annotate) if len(annotate) > 0 else "X"
 
 
+def exact_match_scorer(s1, s2):
+    if re.search(rf"(?<!\S){s2}(?!\S)", s1):
+        return 100
+    else:
+        return 0
+
+
+def extract_symptom_by_fuzzywuzzy(post: str, symptom_list: list, threshold: int):
+    post = post.lower()
+    post = re.sub(r"[^a-z\s]", "", post)
+    post = post.strip()
+
+    input_string = post
+
+    best_match = process.extractBests(
+        input_string, symptom_list, scorer=exact_match_scorer, score_cutoff=threshold
+    )
+
+    return best_match[-1][0] if len(best_match) > 0 else ""
+
+
 def annotation(raw_dataset_filename: str, result_filename: str):
     electra_model = ElectraForSequenceClassification.from_pretrained(
         "./annotation_model/electra_model"
@@ -340,7 +365,7 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     # raw_dataset_df["filtered_location"] = raw_dataset_df.progress_apply(
     #     lambda x: filter_location(x["province"], x["region"]), axis=1
     # )
-    
+
     # Get latitude and longitude using Geopy based on province and region with cache
     raw_dataset_df["filtered_location"] = raw_dataset_df.progress_apply(
         lambda x: filter_location_with_cache(x["province"], x["region"]), axis=1
@@ -350,12 +375,12 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     # raw_dataset_df["PH_code"] = raw_dataset_df.progress_apply(
     #     lambda x: get_PH_code(x["filtered_location"]), axis=1
     # )
-    
+
     # Get PH_Code / ISO3166-2-lvl3 code using Geopy based on retrieved latitude and longitude
     raw_dataset_df["PH_code"] = raw_dataset_df.progress_apply(
         lambda x: get_PH_code_with_cache(x["filtered_location"]), axis=1
     )
-    
+
     # Extract latitude from retrived filtered_location
     raw_dataset_df["lat"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[0], axis=1
@@ -365,108 +390,28 @@ def annotation(raw_dataset_filename: str, result_filename: str):
     raw_dataset_df["long"] = raw_dataset_df.apply(
         lambda x: str.split(x["filtered_location"], sep=", ")[1], axis=1
     )
-    
+
     # Predict annotation (AURI, PN, TB, COVID) based on post
     raw_dataset_df["annotations"] = raw_dataset_df.progress_apply(
-        lambda x: annotate_posts_by_electra(electra_tokenizer, electra_model, x["posts"]), axis=1
+        lambda x: annotate_posts_by_electra(
+            electra_tokenizer, electra_model, x["posts"]
+        ),
+        axis=1,
     )
-    
+
     print("ANNOTATIONS finished")
 
     annotated_df = clean_dataframe(raw_dataset_df)
 
-    symptom_set = set(
-        [
-            "cough",
-            "fever",
-            "ubo",
-            "sipon",
-            "cough",
-            "cough for more than three weeks",
-            "tuberculosis",
-            "tb",
-            "hemoptysis",
-            "coughing up with blood",
-            "cough with blood",
-            "blood in phlegm",
-            "chest pain when coughing",
-            "dyspnea",
-            "difficulty of breathing",
-            "shortness of breath",
-            "weight loss",
-            "cachexia",
-            "fever",
-            "low grade fever",
-            "afternoon fever",
-            "night sweat",
-            "weakness",
-            "anorexia",
-            "loss of appetite",
-            "tiredness",
-            "fatigue",
-            "anemia",
-            "low iron in the blood",
-            "ubo",
-            "mahigit tatlong linggong ubo",
-            "matagal ng may ubo",
-            "hindi nawawala ang ubo",
-            "pag-ubo na may kasamang dugo",
-            "umuubo ng may dugo",
-            "may dugo sa plema",
-            "masakit sa dibdib kapag umuubo",
-            "masakit ang dibdib",
-            "nahihirapan huminga",
-            "hinahabol ang paghinga",
-            "pagbaba ng timbang",
-            "pamamayat",
-            "namamayat",
-            "pumapayat",
-            "lagnat",
-            "sinat",
-            "lagnat sa hapon o sa gabi",
-            "pagpapawis sa gabi",
-            "nagpapawis sa gabi",
-            "panghihina",
-            "nanghihina",
-            "walang ganang kumain",
-            "hindi magana sa pagkain",
-            "pagkahapo",
-            "pagod na pagod",
-            "pamumutla",
-            "mababa ang dugo",
-            "hubak",
-            "kapin sa tulo ka semana nga ubo",
-            "tb",
-            "tb",
-            "naghubak na naay kauban na dugo",
-            "nagsuka na naay dugo",
-            "plima may dugo",
-            "naay dugo sa kughal or plima",
-            "nag sakit ang dughan ug mo hubak",
-            "sakit ang dughan",
-            "nag lisud ug hinga",
-            "halos dili ka ginhawa",
-            "ning mubo ang timbang",
-            "pagkaniwang",
-            "hilanat",
-            "nay gamay na hilanat",
-            "gi hilantan sa kulop",
-            "danggas",
-            "pagkaluya",
-            "nagkahuyang",
-            "walay gana mo kaon",
-            "kapoyun",
-            "gikapoy",
-            "duason",
-            "gamay ug pula sa dugo",
-            "nagluya",
-            "giduas",
-            "hamubo ug dugo",
-        ]
-    )  # Define your existing set of words
+    symptom_list_df = pd.DataFrame(
+        pd.read_csv("./assets/data/symptoms_dictionary.csv"), columns=["symptom"]
+    )
 
-    annotated_df["extracted_words"] = annotated_df["posts"].apply(
-        lambda x: " ".join([word for word in x.split() if word in symptom_set])
+    symptom_list = symptom_list_df["symptom"].tolist()
+    
+    # Extract symptom word from posts using fuzzywuzzy
+    annotated_df["extracted_words"] = annotated_df.progress_apply(
+        lambda x: extract_symptom_by_fuzzywuzzy(x["posts"], symptom_list, 99), axis=1
     )
 
     # Create annotated datasets destination folder if it not exists

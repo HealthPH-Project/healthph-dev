@@ -27,3 +27,7 @@ networkx
 matplotlib
 memory_profiler==0.61.0
 spacy
+
+# Packages for extracting symptoms
+fuzzywuzzy
+python-Levenshtein
