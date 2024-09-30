@@ -16,7 +16,7 @@ const PrintTrendsMap = forwardRef(({ mapImage, dateTable }, ref) => {
 
   return (
     <div className="print-component">
-      <div className="print-container" ref={ref}>
+      <div className="print-container" ref={ref} id="print-container-map">
         <div className="page">
           <div className="page-header mb-[36px]">
             <p>Trends Map</p>

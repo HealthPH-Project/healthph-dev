@@ -268,7 +268,12 @@ const TrendsMap = () => {
   const [showHighSusCount, setShowHighSusCount] = useState(false);
 
   const handlePrint = useReactToPrint({
+    // onBeforePrint: () => {
+    //   setText(document.getElementById("print-container-map").width);
+    //   console.log(document.getElementById("print-container-map"));
+    // },
     content: () => printRef.current,
+    // content: () => document.getElementById("print-container-map"),
     documentTitle: "HealthPH - Trends Map",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
@@ -286,37 +291,46 @@ const TrendsMap = () => {
   const [text, setText] = useState("A");
 
   const handlePrintTrendsMap = async () => {
-    console.log("A");
-    // handleOpenSidebar();
-    const original_viewport = document
-      .getElementById("viewport")
-      .getAttribute("content");
+    // setTimeout(handlePrint, 500);
+    // console.log("A");
+    // // handleOpenSidebar();
+    // const original_viewport = document
+    //   .getElementById("viewport")
+    //   .getAttribute("content");
 
-    if (screen.width < 1024) {
-      document.getElementById("viewport").setAttribute("content", "width=800");
-    }
+    // if (screen.width < 1024) {
+    //   document.getElementById("viewport").setAttribute("content", "width=800");
+    // }
 
-    html2canvas(captureMapRef.current, {
-      useCORS: true,
-      willReadFrequently: true,
-    })
-      .then((canvas) => {
-        // canvas.getContext("2d", { willReadFrequently: true });
-        var dataURL = canvas.toDataURL("image/png");
-        // console.log(canvas.toDataURL("image/png"));
-        setText(canvas.toDataURL("image/png"));
-      })
-      .then(() => {
-        document
-          .getElementById("viewport")
-          .setAttribute("content", original_viewport);
-      });
-    // const canvas = await html2canvas(captureMapRef.current, {
+    // html2canvas(captureMapRef.current, {
     //   useCORS: true,
     //   willReadFrequently: true,
-    // });
-    // canvas.getContext("2d", { willReadFrequently: true });
-    // var dataURL = canvas.toDataURL("image/png");
+    // })
+    //   .then((canvas) => {
+    //     // canvas.getContext("2d", { willReadFrequently: true });
+    //     // var dataURL = canvas.toDataURL("image/png");
+    //     // // console.log(canvas.toDataURL("image/png"));
+    //     // setText(canvas.toDataURL("image/png"));
+    //     canvas.toBlob((blob) => {
+    //       const url = URL.createObjectURL(blob);
+    //       // console.log(url);
+    //       setText(url);
+    //       // setMapImage(url);
+    //       // setTimeout(handlePrint, 500);
+    //     }, "image/png");
+    //     // setText(canvas);
+    //   })
+    //   .then(() => {
+    //     document
+    //       .getElementById("viewport")
+    //       .setAttribute("content", original_viewport);
+    //   });
+    const canvas = await html2canvas(captureMapRef.current, {
+      useCORS: true,
+      willReadFrequently: true,
+    });
+    canvas.getContext("2d", { willReadFrequently: true });
+    var dataURL = canvas.toDataURL("image/png");
 
     // setText(dataURL);
     // if (screen.width < 1024) {
@@ -324,8 +338,8 @@ const TrendsMap = () => {
     //     .getElementById("viewport")
     //     .setAttribute("content", "width=device-width, initial-scale=1.0");
     // }
-    // setMapImage(dataURL);
-    // setTimeout(handlePrint, 500);
+    setMapImage(dataURL);
+    setTimeout(handlePrint, 500);
   };
 
   const getDiseaseCount = (disease) => {
@@ -478,7 +492,7 @@ const TrendsMap = () => {
                 className="ms-[8px]"
               />
             </button>
-            <p>{text}</p>
+            {/* <p>{text}</p> */}
             <PrintTrendsMap
               ref={printRef}
               mapImage={mapImage}
