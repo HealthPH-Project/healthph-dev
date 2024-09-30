@@ -1,14 +1,13 @@
 [
     {
-        "relation": [
-            "delegate_permission/common.handle_all_urls"
-        ],
-        "target": {
-            "namespace": "android_app",
-            "package_name": "org.healthph_project.twa",
-            "sha256_cert_fingerprints": [
-                "49:CB:CB:AF:7E:60:63:8B:CF:9C:54:1F:70:3C:C0:71:8B:6D:21:58:BD:C6:EF:7F:89:96:82:4F:AA:D4:70:5A"
-            ]
-        }
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "org.healthph_project.twa",
+        "sha256_cert_fingerprints": [
+          "7D:41:0C:59:66:FB:F9:1D:D4:0E:BE:3B:77:A8:1E:B6:9A:36:22:D8:C3:2D:00:A8:74:BE:B3:9F:BA:38:D8:C9"
+        ]
+      }
     }
-]
+  ]
+  
