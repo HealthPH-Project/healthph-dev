@@ -403,10 +403,17 @@ const AddUser = () => {
           <div className="settings-header">
             <div className="max-w-[360px]">
               <p>Add User</p>
-              <span>
-                Create an admin or user by providing their account information
-                to manage HealthPH.
-              </span>
+              {user.user_type == "ADMIN" ? (
+                <span>
+                  Create a user by providing their account information to use
+                  HealthPH.
+                </span>
+              ) : (
+                <span>
+                  Create an admin by providing their account information to
+                  manage HealthPH.
+                </span>
+              )}
             </div>
             <div className="flex items-center">
               <button
@@ -440,7 +447,12 @@ const AddUser = () => {
           >
             <CustomSelect
               options={
-                user.user_type == "ADMIN"
+                user.user_type == "SUPERADMIN"
+                  ? [
+                      { label: "ADMIN", value: "ADMIN" },
+                      { label: "SUPERADMIN", value: "SUPERADMIN" },
+                    ]
+                  : user.user_type == "ADMIN"
                   ? [{ label: "USER", value: "USER" }]
                   : [
                       { label: "USER", value: "USER" },
@@ -455,6 +467,7 @@ const AddUser = () => {
               handleChange={handleChangeUserType}
               additionalClasses="w-full mt-[8px]"
               state={formErrors.user_type != "" ? "error" : ""}
+              editable={user.user_type == "SUPERADMIN"}
             />
           </FieldGroup>
 

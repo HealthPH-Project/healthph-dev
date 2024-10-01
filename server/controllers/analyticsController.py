@@ -3,16 +3,23 @@ from datetime import timedelta
 import json
 import os
 from pathlib import Path
-from fastapi import BackgroundTasks, status
+from fastapi import BackgroundTasks, status, Depends
 from fastapi.responses import FileResponse, JSONResponse
 from helpers.analyticsHelpers import (
     filters_datasets_by_region,
     frequent_words,
     word_cloud,
 )
-from controllers.pointControllers import fetch_points, fetch_points_by_disease
+from typing_extensions import Annotated
+from controllers.pointControllers import (
+    fetch_points,
+    fetch_points_by_disease,
+    fetch_points_by_disease_by_user,
+)
 from helpers.miscHelpers import get_ph_datetime
-from config.database import dataset_collection
+from config.database import dataset_collection, user_collection
+from middleware.requireAuth import require_auth
+from bson import ObjectId
 
 
 from dotenv import load_dotenv
@@ -27,9 +34,9 @@ route     GET api/suspected-symptoms
 """
 
 
-async def generate_suspected_symptom():
+async def generate_suspected_symptom(user_id: Annotated[str, Depends(require_auth)]):
     # Fetch points by disease
-    points = await fetch_points_by_disease()
+    points = await fetch_points_by_disease_by_user(user_id)
 
     # Convert to JSON object
     points = json.loads(points.body.decode(encoding="utf-8"))
@@ -62,15 +69,43 @@ route     GET api/frequent-words
 """
 
 
-async def generate_frequent_words(filters: str = "all"):
+async def generate_frequent_words(
+    user_id: Annotated[str, Depends(require_auth)],
+    filters: str = "all",
+):
     # Get date nd time _ days before current Philippine date and time
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
-    # Fetch annotated datasets within the start date
-    datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
-        {"filename": 1},
-    )
+    # Get user data
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    # Check user_type
+    # If SUPERADMIN, fetch all ANNOTATED datasets
+    if user_data["user_type"] == "SUPERADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
+            {"filename": 1},
+        )
+    # If ADMIN, fetch all ANNOTATED datasets uploaded by ADMIN
+    elif user_data["user_type"] == "ADMIN":
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "dataset_type": "ANNOTATED",
+                "user_id": str(user_data["_id"]),
+            },
+            {"filename": 1},
+        )
+    # If USER, fetch all ANNOTATED datasets uploaded by ADMIN who added USER
+    else:
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "dataset_type": "ANNOTATED",
+                "user_id": user_data["user_who_added"],
+            },
+            {"filename": 1},
+        )
 
     # Get filename of each of the datasets
     valid_datasets = [dataset["filename"] for dataset in datasets]
@@ -94,9 +129,9 @@ route     GET api/percentage
 """
 
 
-async def generate_percentage():
+async def generate_percentage(user_id: Annotated[str, Depends(require_auth)]):
     # Fetch points
-    points = await fetch_points()
+    points = await fetch_points(user_id)
 
     # Convert to JSON object
     points = json.loads(points.body.decode(encoding="utf-8"))
@@ -159,7 +194,7 @@ async def generate_percentage():
                 "count": (covid_count),
             },
         ]
-        
+
         # Get the total counts for each disease
         all_counts["TB"] += tb_count
         all_counts["PN"] += pn_count
@@ -197,15 +232,44 @@ route     GET api/wordcloud/filters=
 """
 
 
-async def generate_wordcloud(background_tasks: BackgroundTasks, filters: str = "all"):
+async def generate_wordcloud(
+    user_id: Annotated[str, Depends(require_auth)],
+    background_tasks: BackgroundTasks,
+    filters: str = "all",
+):
     # Get date nd time _ days before current Philippine date and time
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
-    # Fetch annotated datasets within the start date
-    datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
-        {"filename": 1},
-    )
+    # Get user data
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    # Check user_type
+    # If SUPERADMIN, fetch all ANNOTATED datasets
+    if user_data["user_type"] == "SUPERADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}, "dataset_type": "ANNOTATED"},
+            {"filename": 1},
+        )
+    # If ADMIN, fetch all ANNOTATED datasets uploaded by ADMIN
+    elif user_data["user_type"] == "ADMIN":
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "dataset_type": "ANNOTATED",
+                "user_id": str(user_data["_id"]),
+            },
+            {"filename": 1},
+        )
+    # If USER, fetch all ANNOTATED datasets uploaded by ADMIN who added USER
+    else:
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "dataset_type": "ANNOTATED",
+                "user_id": user_data["user_who_added"],
+            },
+            {"filename": 1},
+        )
 
     # Get filename of each of the datasets
     valid_datasets = [dataset["filename"] for dataset in datasets]
@@ -218,29 +282,32 @@ async def generate_wordcloud(background_tasks: BackgroundTasks, filters: str = "
 
     # Create wordcloud folder if it does not exists
     os.makedirs(wordcloud_folder, exist_ok=True)
-    
+
     # Set full path of word cloud image
     full_path = wordcloud_folder / f"wordcloud-{filters}.png"
-    
+
     # Check if there are valid datasets
     if len(valid_datasets) > 0:
+        wordcloud_data = word_cloud(all_posts)
+
+        return JSONResponse(status_code=status.HTTP_200_OK, content=wordcloud_data)
         # Check if word cloud already exists.
         # If it exists, run the word cloud generator in background
         # If not, run and wait for word cloud generator
-        if os.path.exists(full_path):
-            background_tasks.add_task(word_cloud, all_posts, full_path)
+        # if os.path.exists(full_path):
+        #     background_tasks.add_task(word_cloud, all_posts, full_path)
 
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content=f"Wordcloud generated for region: {filters}",
-            )
-        else:
-            word_cloud(all_posts, full_path)
+        #     return JSONResponse(
+        #         status_code=status.HTTP_200_OK,
+        #         content=f"Wordcloud generated for region: {filters}",
+        #     )
+        # else:
+        #     word_cloud(all_posts, full_path)
 
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content=f"Wordcloud generated for region: {filters}",
-            )
+        #     return JSONResponse(
+        #         status_code=status.HTTP_200_OK,
+        #         content=f"Wordcloud generated for region: {filters}",
+        #     )
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,

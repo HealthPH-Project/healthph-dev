@@ -4,13 +4,16 @@ from math import isnan, nan
 import os
 import json
 import shutil
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 from pathlib import Path
 from bson import ObjectId
+from typing_extensions import Annotated
 
-from config.database import dataset_collection, point_collection
+from middleware.requireAuth import require_auth
+
+from config.database import dataset_collection, point_collection, user_collection
 from helpers.miscHelpers import get_ph_datetime, iso3166_2_to_region
 from helpers.pointHelpers import check_unique_location, sort_regions
 from schema.pointSchema import list_points
@@ -295,7 +298,7 @@ route     POST api/points/fetch-points
 """
 
 
-async def fetch_points():
+async def fetch_points(user_id: Annotated[str, Depends(require_auth)]):
     """
     OUTPUT
 
@@ -324,9 +327,30 @@ async def fetch_points():
 
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
-    datasets = dataset_collection.find(
-        {"created_at": {"$gte": start_date}}, {"filename": 1}
-    )
+    # Get user data
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    # Check user_type
+    # If SUPERADMIN, fetch all datasets
+    if user_data["user_type"] == "SUPERADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}}, {"filename": 1}
+        )
+    # If ADMIN, fetch all datasets uploaded by ADMIN
+    elif user_data["user_type"] == "ADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}, "user_id": str(user_data["_id"])},
+            {"filename": 1},
+        )
+    # If USER, fetch all datasets uploaded by ADMIN who added USER
+    else:
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "user_id": user_data["user_who_added"],
+            },
+            {"filename": 1},
+        )
 
     valid_datasets = [dataset["filename"] for dataset in datasets]
 
@@ -433,6 +457,13 @@ async def fetch_points():
     )
 
 
+"""
+@desc     Fetch points by disease
+route     POST api/points/fetch-points
+@access   Private
+"""
+
+
 async def fetch_points_by_disease():
     start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
 
@@ -495,7 +526,7 @@ async def fetch_points_by_disease():
         """
         KEYWORDS 
         """
-        
+
         # Iterate over keywords of point
         for point_keyword in point["keywords"]:
             found = False
@@ -530,14 +561,175 @@ async def fetch_points_by_disease():
                     not found
                 ):  # If point_keyword does not exists, add to existing keywords
                     result[unique_key]["keywords"].append(point_keyword)
-                  
-        
+
         total_keywords_count = 0
-        
-        for keyword in result[unique_key]['keywords']:
-            total_keywords_count += keyword['count']
-            
-        result[unique_key]['total_keywords_count'] = total_keywords_count
+
+        for keyword in result[unique_key]["keywords"]:
+            total_keywords_count += keyword["count"]
+
+        result[unique_key]["total_keywords_count"] = total_keywords_count
+
+        result[unique_key]["keywords"] = sorted(
+            result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True
+        )
+
+    result = sort_regions(list(result.values()))
+
+    disease_count = Counter({"TB": 0, "PN": 0, "AURI": 0, "COVID": 0})
+    total_count = 0
+
+    for r in result:
+        disease_count.update(r["annotations_count"])
+
+        for keyword in r["keywords"]:
+            total_count += keyword["count"]
+
+    disease_count["total"] = total_count
+
+    # Return result as a list of dictionaries
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "count": disease_count,
+            "data": result,
+        },
+    )
+
+
+"""
+@desc     Fetch points by disease by user
+route     POST api/points/fetch-points/user
+@access   Private
+"""
+
+
+async def fetch_points_by_disease_by_user(
+    user_id: Annotated[str, Depends(require_auth)]
+):
+    start_date = get_ph_datetime() - timedelta(days=int(os.getenv("TIMEDELTA_DAYS")))
+
+    # Get user data
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    # Check user_type
+    # If SUPERADMIN, fetch all datasets
+    if user_data["user_type"] == "SUPERADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}}, {"filename": 1}
+        )
+    # If ADMIN, fetch all datasets uploaded by ADMIN
+    elif user_data["user_type"] == "ADMIN":
+        datasets = dataset_collection.find(
+            {"created_at": {"$gte": start_date}, "user_id": str(user_data["_id"])},
+            {"filename": 1},
+        )
+    # If USER, fetch all datasets uploaded by ADMIN who added USER
+    else:
+        datasets = dataset_collection.find(
+            {
+                "created_at": {"$gte": start_date},
+                "user_id": user_data["user_who_added"],
+            },
+            {"filename": 1},
+        )
+
+    valid_datasets = [dataset["filename"] for dataset in datasets]
+
+    points_data = point_collection.find(
+        {"annotations": {"$nin": ["X"]}, "dataset_source": {"$in": valid_datasets}}
+    )
+
+    points = list_points(points_data)
+
+    # Initialize empty dictionary to store combined data
+    result = {}
+
+    for point in points:
+        # Create a unique key based on [PH_code, region]
+        unique_key = (point["PH_code"], point["region"])
+
+        # Check if unique_key exists in result
+        # If it does not exists create new key-value pair with the unique_key
+        if unique_key not in result:
+            result[unique_key] = {
+                "PH_code": point["PH_code"],
+                "region": point["region"],
+                "annotations": point["annotations"],
+                "annotations_count": point["annotations_count"],
+                "keywords": [],
+            }
+        else:  # If it already exists,
+            # Get existing record from result
+            existing_record = result[unique_key]
+
+            """
+            ANNOTATIONS
+            """
+
+            # Get existing annotations from existing record
+            existing_annotations: list = existing_record["annotations"]
+            # Merged the existing annotations and new annotations, preventing duplicates
+            merged_annotations = list(set(existing_annotations + point["annotations"]))
+            # Update the existing record annotations with the new merged annotations
+            result[unique_key]["annotations"] = merged_annotations
+
+            """
+            ANNOTATIONS COUNT
+            """
+
+            # Initialize Counter to combine counts
+            new_annotations_count = Counter()
+            # Update the counter with the existing annotations count and new annotations count
+            new_annotations_count.update(existing_record["annotations_count"])
+            new_annotations_count.update(point["annotations_count"])
+            # Update the existing record annotations_count with the new annotations count
+            result[unique_key]["annotations_count"] = dict(new_annotations_count)
+
+        """
+        KEYWORDS 
+        """
+
+        # Iterate over keywords of point
+        for point_keyword in point["keywords"]:
+            found = False
+
+            point_keyword["key"] = str(point_keyword["key"])
+
+            if point_keyword["key"] != "nan":
+
+                # Iterate over existing keywords
+                for existing_keyword in result[unique_key]["keywords"]:
+                    # Check if keyword already exists
+                    if point_keyword["key"] == existing_keyword["key"]:
+                        # If it exists, add the count values
+                        existing_keyword["count"] += point_keyword["count"]
+                        # Get the annotation of the existing keyword
+                        existing_keyword_annotation: list = existing_keyword[
+                            "annotation"
+                        ]
+                        # Merge the existing keyword annotation and new keyword annotations, preventing duplicates
+                        merged_keyword_annotations = list(
+                            set(
+                                existing_keyword_annotation
+                                + point_keyword["annotation"]
+                            )
+                        )
+                        # Update existing keyword annotations with the merged annotations
+                        existing_keyword["annotation"] = merged_keyword_annotations
+                        # If match is found, exit loop
+                        found = True
+                        break
+                if (
+                    not found
+                ):  # If point_keyword does not exists, add to existing keywords
+                    result[unique_key]["keywords"].append(point_keyword)
+
+        total_keywords_count = 0
+
+        for keyword in result[unique_key]["keywords"]:
+            total_keywords_count += keyword["count"]
+
+        result[unique_key]["total_keywords_count"] = total_keywords_count
 
         result[unique_key]["keywords"] = sorted(
             result[unique_key]["keywords"], key=lambda x: x["count"], reverse=True

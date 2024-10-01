@@ -13,6 +13,7 @@ import random
 
 annotated_datasets_folder = Path("public/annotated_datasets")
 
+
 # Load stopwords
 def get_stopwords():
     # Define stopwords
@@ -70,7 +71,7 @@ def clean_dataframe(df):
 
 def filters_datasets_by_region(region: str, datasets: list):
     all_posts = ""
-    
+
     # Iterate over each datasets filenames
     for dataset in datasets:
         # Read dataset csv file
@@ -95,20 +96,24 @@ def filters_datasets_by_region(region: str, datasets: list):
     return all_posts
 
 
-def frequent_words(data):    
+def frequent_words(data):
     # Define stopwords
     stopwords = get_stopwords()
 
     # Split the data into words and filter out stopwords
-    words = [word for word in str.split(data, sep=" ") if word not in stopwords and word != ""]
-    
+    words = [
+        word
+        for word in str.split(data, sep=" ")
+        if word not in stopwords and word != ""
+    ]
+
     # Count the frequency of each word
     word_counts = Counter(words)
 
     # Find the ten most common words
     most_common_words = word_counts.most_common(n=10)
 
-    # Create dataframe of the most common words 
+    # Create dataframe of the most common words
     frequent_words_df = pd.DataFrame(most_common_words, columns=["word", "frequency"])
 
     # Convert dataframe to dictionary
@@ -117,7 +122,23 @@ def frequent_words(data):
     return frequent_words_dict
 
 
-def word_cloud(data, full_path: str):
+def word_cloud(data):
+    # Define stopwords
+    stopwords = get_stopwords()
+
+    wordcloud = WordCloud(stopwords=stopwords, max_words=30).generate(data)
+
+    word_frequencies = wordcloud.words_
+
+    wordcloud_data = [
+        {"text": word, "value": frequency}
+        for word, frequency in word_frequencies.items()
+    ]
+
+    return wordcloud_data
+
+
+def word_cloud_image(data, full_path: str):
     # Define stopwords
     stopwords = get_stopwords()
 

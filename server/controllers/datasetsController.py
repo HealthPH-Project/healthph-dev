@@ -85,7 +85,7 @@ def annotate_dataset(
         )
 
     print("DATASET ANNOTATED SUCCESSFULLY")
-    
+
     create_points(result_filename)
     pass
 
@@ -289,6 +289,53 @@ async def fetch_datasets():
 
 
 """
+@desc     Fetch all datasets uploaded by a specific user
+route     GET api/datasets/user/{user_id}
+@access   Private
+"""
+
+
+async def fetch_datasets_by_user(user_id: str):
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    if user_data["user_type"] == "SUPERADMIN":
+        data = dataset_collection.aggregate(
+            [
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user_data",
+                    }
+                },
+                {"$sort": {"created_at": pymongo.DESCENDING}},
+            ]
+        )
+    elif user_data["user_type"] == "ADMIN":
+        data = dataset_collection.aggregate(
+            [
+                {"$match": {"user_id": user_id}},
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user_data",
+                    }
+                },
+                {"$sort": {"created_at": pymongo.DESCENDING}},
+            ]
+        )
+    else:
+        return []
+
+    datasets = list_datasets(data)
+
+    return datasets
+
+
+"""
 @desc     Delete a single dataset
 route     DELETE api/datasets/{id}
 @access   Private
@@ -337,7 +384,7 @@ async def delete_dataset(background_tasks: BackgroundTasks, id: str):
         os.remove(full_path)
 
     background_tasks.add_task(delete_point, dataset_data["filename"])
-    
+
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={
@@ -367,7 +414,7 @@ async def delete_all_datasets():
         shutil.rmtree("public/datasets")
 
         os.makedirs(datasets_folder, exist_ok=True)
-        
+
     if os.path.exists(annotated_datasets_folder):
         shutil.rmtree("public/annotated_datasets")
 

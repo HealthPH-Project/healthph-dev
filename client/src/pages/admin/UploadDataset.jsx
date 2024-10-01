@@ -12,6 +12,7 @@ import CSVReader from "react-csv-reader";
 import SkeletonBody from "../../components/SkeletonBody";
 import {
   useDeleteDatasetMutation,
+  useFetchDatasetsByUserQuery,
   useFetchDatasetsQuery,
   useUploadFileMutation,
 } from "../../features/api/datasetsSlice";
@@ -227,6 +228,16 @@ const UploadDataset = () => {
     isFetching,
   } = useFetchDatasetsQuery();
 
+  const {
+    data: datasetsByUser,
+    isLoading: isDatasetsByUserLoading,
+    isFetching: isDatasetsByUserFetching,
+  } = useFetchDatasetsByUserQuery(user.id);
+
+  useEffect(() => {
+    console.log(datasetsByUser);
+  }, [isDatasetsByUserLoading]);
+
   const [deleteDataset] = useDeleteDatasetMutation();
 
   const [log_activiy] = useCreateActivityLogMutation();
@@ -350,6 +361,7 @@ const UploadDataset = () => {
   return (
     <>
       <div className="admin-wrapper flex flex-col h-full">
+        {/* HEADER */}
         <div className="header items-start md:items-center flex-col md:flex-row">
           <div className="breadcrumbs-wrapper">
             <div className="breadcrumb-item">
@@ -378,6 +390,7 @@ const UploadDataset = () => {
             </div>
           </div>
         </div>
+
         <div className="pb-[20px]">
           <form method="post">
             <div className="settings-header">
@@ -424,7 +437,9 @@ const UploadDataset = () => {
               </div>
             </div>
           </form>
-          {isFetching ? (
+
+          {/* {isFetching ? ( */}
+          {isDatasetsByUserFetching ? (
             <div className="overflow-y-hidden min-w-full h-[642px]">
               <SkeletonBody columns={9} />
             </div>
@@ -439,13 +454,13 @@ const UploadDataset = () => {
                   { label: "Date Uploaded" },
                   { label: "Actions" },
                 ]}
-                datatableData={datasets}
+                datatableData={datasetsByUser}
                 setDatatableData={setRows}
                 rowsPerPage={10}
                 withActions={true}
                 actionsWidth="260px"
               >
-                {datasets.length > 0 ? (
+                {datasetsByUser.length > 0 ? (
                   rows.map(
                     (
                       {

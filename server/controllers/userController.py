@@ -459,6 +459,7 @@ async def create_user(
     is_admin: Annotated[AdminResult, Depends(require_admin)],
 ):
     errors = []
+
     # Check if user is an admin or superadmin
     if not is_admin.result:
         errors.append({"field": "snackbar", "error": "Not authorized to add a user."})
@@ -564,6 +565,8 @@ async def create_user(
     to_encode.update({"is_disabled": False})
     # Generate hashed password
     to_encode.update({"password": generate_hashed_password(to_encode["password"])})
+    # Set id of admin who adds the user
+    to_encode.update({"user_who_added": is_admin.id})
 
     new_user = user_collection.insert_one(dict(to_encode))
 

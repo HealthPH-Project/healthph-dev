@@ -25,7 +25,7 @@ import {
   useGenerateWordCloudQuery,
 } from "../../features/api/analyticsSlice";
 import Report from "../../components/admin/Report";
-import { useReactToPrint } from "react-to-print";
+import { ReactToPrint, useReactToPrint } from "react-to-print";
 import PrintAnalytics from "../../components/admin/PrintAnalytics";
 import { useSelector } from "react-redux";
 import EmptyState from "../../components/admin/EmptyState";
@@ -34,6 +34,10 @@ import { useFetchDatasetsQuery } from "../../features/api/datasetsSlice";
 import SkeletonAnalytics from "../../components/admin/SkeletonAnalytics";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
 import capitalizeSymptom from "../../hooks/useCapitalizeSymptom";
+import ReactWordCloud from "react-wordcloud";
+import { saveSvgAsPng, svgAsPngUri } from "save-svg-as-png";
+
+import { renderToStaticMarkup } from "react-dom/server";
 
 const Analytics = () => {
   const user = useSelector((state) => state.auth.user);
@@ -102,13 +106,34 @@ const Analytics = () => {
   const { data: wordcloud, isFetching: isWordCloudFetching } =
     useGenerateWordCloudQuery(wordCloudFilter);
 
+  const wordcloudOptions = {
+    colors: ["#171E26", "#F5D76E", "#6A8EB5", "#F78C6B", "#78C6B2"],
+    rotations: 0,
+    deterministic: true,
+    padding: 20,
+    fontSizes: [20, 50],
+    scale: "linear",
+  };
+
   const [wordCloudImage, setWordCloudImage] = useState(
     import.meta.env.VITE_API_URL + "/wordcloud/all"
   );
 
+  const [dynamicWordCloudImage, setDynamicWordCloudImage] = useState("");
+
   const printRef = useRef();
 
-  const handlePrint = useReactToPrint({
+  const handlePrint = () => {
+    const wordcloudToPrint = document.querySelector("#wordcloud-print svg");
+
+    svgAsPngUri(wordcloudToPrint).then((uri) => {
+      setDynamicWordCloudImage(uri);
+    });
+
+    setTimeout(handlePrintAnalytics, 1000);
+  };
+
+  const handlePrintAnalytics = useReactToPrint({
     content: () => printRef.current,
     documentTitle: "HealthPH - Analytics",
     pageStyle:
@@ -210,6 +235,8 @@ const Analytics = () => {
                       percentage_filter: percentageFilter,
                       wordcloud: wordCloudImage,
                       wordcloud_filter: wordCloudFilter,
+                      wordcloud_data: wordcloud,
+                      dynamicWordCloudImage: dynamicWordCloudImage,
                     }}
                     dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}
                   />
@@ -478,20 +505,36 @@ const Analytics = () => {
                 filter={wordCloudFilter}
                 setFilter={setWordCloudFilter}
                 isLoading={isWordCloudFetching}
-                additionalClasses="col-span-1 md:col-span-2 min-h-[518px]"
+                additionalClasses="col-span-1 md:col-span-2 min-h-[400px]"
               >
                 {!isWordCloudFetching && (
                   <div className="rounded-[8px] overflow-hidden border bg-[#F8F9FA] border-gray-50 flex justify-center items-center">
-                    {wordCloudImage != "none" ? (
-                      <>
-                        <img src={wordCloudImage} alt="wordcloud" />
-                      </>
-                    ) : (
-                      <p>No data</p>
-                    )}
+                    <ReactWordCloud
+                      className="dynamic-wordcloud"
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                      }}
+                      words={wordcloud}
+                      options={wordcloudOptions}
+                    />
                   </div>
                 )}
               </Report>
+
+              <div className="fixed top-0 left-full w-[700px] h-[300px] bg-white z-[50]">
+                <ReactWordCloud
+                  id="wordcloud-print"
+                  className="wordcloud-print"
+                  style={{
+                    border: "1px solid black",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                  words={wordcloud}
+                  options={wordcloudOptions}
+                />
+              </div>
             </div>
           </div>
         </section>

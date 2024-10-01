@@ -82,6 +82,10 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
 
   const wordcloud = data["wordcloud"];
 
+  const wordcloud_data = data["wordcloud_data"];
+
+  const dynamicWordCloudImage = data["dynamicWordCloudImage"];
+
   const displayRegion = (v) => {
     const regions = {
       all: "All Regions",
@@ -362,8 +366,8 @@ const PrintAnalytics = forwardRef(({ data, dateTable }, ref) => {
                 </span>
               </div>
             </div>
-            <div className="wordcloud-wrapper">
-              <img src={wordcloud} alt="wordcloud" />
+            <div className="wordcloud-wrapper h-[300px] w-full flex justify-center items-center">
+              <img src={dynamicWordCloudImage} alt="wordcloud" />
             </div>
           </div>
           <div className="page-footer mt-[36px]">

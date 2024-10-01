@@ -20,6 +20,10 @@ export const datasetsApi = baseAPI.injectEndpoints({
       query: () => "/datasets",
       providesTags: ["Datasets"],
     }),
+    fetchDatasetsByUser: builder.query({
+      query: (id) => `/datasets/user/${id}`,
+      providesTags: ["Datasets"],
+    }),
     deleteDataset: builder.mutation({
       query: (id) => ({
         url: `/datasets/${id}`,
@@ -41,5 +45,6 @@ export const datasetsApi = baseAPI.injectEndpoints({
 export const {
   useUploadFileMutation,
   useFetchDatasetsQuery,
+  useFetchDatasetsByUserQuery,
   useDeleteDatasetMutation,
 } = datasetsApi;

@@ -24,6 +24,7 @@ import MapScreenshot from "../../components/admin/MapScreenshot";
 import html2canvas from "html2canvas";
 import { useReactToPrint } from "react-to-print";
 import {
+  useFetchPointsByDiseaseByUserQuery,
   useFetchPointsByDiseaseQuery,
   useFetchPointsQuery,
 } from "../../features/api/pointsSlice";
@@ -56,6 +57,12 @@ const TrendsMap = () => {
     isLoading: isPointsDiseaseLoading,
     error: isPointsDiseaseError,
   } = useFetchPointsByDiseaseQuery();
+
+  const {
+    data: pointsDiseaseUser,
+    isLoading: isPointsDiseaseUserLoading,
+    error: isPointsDiseaseUserError,
+  } = useFetchPointsByDiseaseByUserQuery();
 
   const swipeHandlers = useSwipe({
     directions: ["up", "down"],
@@ -382,23 +389,14 @@ const TrendsMap = () => {
         (a, b) => b.total_keywords_count - a.total_keywords_count
       );
 
+      const list = regionsData.map((v, i) => {
+        return `${i + 1}. Region ${v.region} : ${v.total_keywords_count} \n`;
+      });
+
       return (
         "The following are the top three regions with the highest suspected symptom count:" +
         "\n\n" +
-        "1. Region " +
-        regionsData[0].region +
-        ": " +
-        regionsData[0].total_keywords_count +
-        "\n" +
-        "2. Region " +
-        regionsData[1].region +
-        ": " +
-        regionsData[1].total_keywords_count +
-        "\n" +
-        "3. Region " +
-        regionsData[2].region +
-        ": " +
-        regionsData[2].total_keywords_count
+        list.join("")
       );
     }
   };
@@ -578,10 +576,10 @@ const TrendsMap = () => {
 
           {/* DATA / TRENDS */}
           <div className="sidebar-data">
-            {isPointsDiseaseLoading ? (
+            {isPointsDiseaseUserLoading ? (
               <></>
-            ) : pointsDisease["data"].length > 0 ? (
-              pointsDisease["data"].map(
+            ) : pointsDiseaseUser["data"].length > 0 ? (
+              pointsDiseaseUser["data"].map(
                 ({ region, keywords, annotations }, i) => {
                   const diseaseCode = {
                     tuberculosis: "TB",

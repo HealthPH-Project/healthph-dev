@@ -7,10 +7,18 @@ export const pointsApi = baseAPI.injectEndpoints({
       providesTags: ["Points"],
     }),
     fetchPointsByDisease: builder.query({
-        query: () => "/points/disease",
-        providesTags: ["PointsDisease"]
-    })
+      query: () => "/points/disease",
+      providesTags: ["PointsDisease"],
+    }),
+    fetchPointsByDiseaseByUser: builder.query({
+      query: () => "/points/disease/user",
+      providesTags: ["PointsDisease"],
+    }),
   }),
 });
 
-export const { useFetchPointsQuery, useFetchPointsByDiseaseQuery } = pointsApi;
+export const {
+  useFetchPointsQuery,
+  useFetchPointsByDiseaseQuery,
+  useFetchPointsByDiseaseByUserQuery,
+} = pointsApi;
