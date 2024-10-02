@@ -424,10 +424,20 @@ route     GET api/users/
 """
 
 
-async def fetch_users():
-    users = list_users(
-        user_collection.find({"user_type": "USER"}).sort([("created_at", -1)])
-    )
+async def fetch_users(user_id: Annotated[str, Depends(require_auth)]):
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+    
+    users = []
+    
+    if user_data['user_type'] == "ADMIN":
+        users = list_users(
+            user_collection.find({"user_type": "USER", "user_who_added" : user_id}).sort([("created_at", -1)])
+        )
+    elif user_data['user_type'] == "SUPERADMIN":
+        users = list_users(
+            user_collection.find({"user_type": "USER"}).sort([("created_at", -1)])
+        )
+        
     return users
 
 

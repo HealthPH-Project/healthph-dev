@@ -1,12 +1,14 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 from fastapi.responses import JSONResponse
 from bson import ObjectId
 import pymongo
+from typing_extensions import Annotated
 
 from config.database import activity_logs_collection, user_collection
 from models.activityLogs import ActivityLog
 from schema.activityLogSchema import list_activity_logs
 from helpers.miscHelpers import get_ph_datetime
+from middleware.requireAuth import require_auth
 
 """
 @desc     Fetch all activity logs
@@ -15,21 +17,42 @@ route     GET api/activity_logs
 """
 
 
-async def fetch_activity_logs():
-    # Fetch activity logs from Activity Logs table joined with Users table
-    data = activity_logs_collection.aggregate(
-        [
-            {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "user_id",
-                    "foreignField": "_id",
-                    "as": "user_data",
-                }
-            },
-            {"$sort": {"created_at": pymongo.DESCENDING}},
-        ]
-    )
+async def fetch_activity_logs(user_id: Annotated[str, Depends(require_auth)]):
+    user_data = user_collection.find_one({"_id": ObjectId(user_id)})
+
+    activity_logs = []
+
+    if user_data["user_type"] == "ADMIN":
+        # Fetch activity logs from Activity Logs table joined with Users table
+        data = activity_logs_collection.aggregate(
+            [
+                {"$match": {"user_id": user_id}},
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user_data",
+                    }
+                },
+                {"$sort": {"created_at": pymongo.DESCENDING}},
+            ]
+        )
+    elif user_data["user_type"] == "SUPERADMIN":
+        # Fetch activity logs from Activity Logs table joined with Users table
+        data = activity_logs_collection.aggregate(
+            [
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "user_id",
+                        "foreignField": "_id",
+                        "as": "user_data",
+                    }
+                },
+                {"$sort": {"created_at": pymongo.DESCENDING}},
+            ]
+        )
 
     # Convert data to list of JSON objects
     activity_logs = list_activity_logs(data)
@@ -72,7 +95,7 @@ async def create_activity_log(data: ActivityLog):
             "created_at": get_ph_datetime(),
         }
     )
-    
+
     # Create new activity log
     new_activity_log = activity_logs_collection.insert_one(dict(to_encode))
 
