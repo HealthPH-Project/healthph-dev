@@ -36,7 +36,7 @@ const HomeNavbar = ({ background = "transparent" }) => {
       iconName: "Information",
       label: "About The Project",
     },
-    { path: "/articles", iconName: "Document", label: "Articles" },
+    { path: "/articles", iconName: "Document", label: "Articlessss" },
     { path: "/research-team", iconName: "UserThree", label: "Research Team" },
     { path: "/contact-us", iconName: "Mail", label: "Contact Us" },
   ];
