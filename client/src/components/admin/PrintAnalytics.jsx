@@ -120,7 +120,11 @@ const PrintAnalytics = forwardRef(
 
     return (
       <div className={`print-component ${showPrint ? " mobile" : ""}`}>
-        <div className="print-container" ref={ref}>
+        <div
+          className="print-container"
+          ref={ref}
+          style={showPrint ? { height: "297mm" } : {}}
+        >
           <div className="page">
             <div className="page-header mb-[36px]">
               <p>Analytics</p>

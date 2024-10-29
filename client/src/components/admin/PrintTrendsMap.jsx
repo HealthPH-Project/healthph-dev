@@ -19,7 +19,12 @@ const PrintTrendsMap = forwardRef(
 
     return (
       <div className={`print-component ${showPrint ? " mobile" : ""}`}>
-        <div className="print-container" ref={ref} id="print-container-map">
+        <div
+          className="print-container"
+          ref={ref}
+          id="print-container-map"
+          style={showPrint ? { height: "297mm" } : {}}
+        >
           <div className="page">
             <div className="page-header mb-[36px]">
               <p>Trends Map</p>

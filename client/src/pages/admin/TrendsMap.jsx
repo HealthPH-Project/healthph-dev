@@ -282,7 +282,11 @@ const TrendsMap = () => {
 
   const navigate = useNavigate();
 
+  const [isPrinting, setIsPrinting] = useState(false);
+
   const handlePrint = async () => {
+    setIsPrinting(true);
+
     const canvas = await html2canvas(captureMapRef.current, {
       useCORS: true,
       willReadFrequently: true,
@@ -306,6 +310,7 @@ const TrendsMap = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
     onAfterPrint: () => {
+      setIsPrinting(false);
       document.getElementById("printWindow").remove();
 
       log_activity({
@@ -324,6 +329,8 @@ const TrendsMap = () => {
         quality: 1,
         pixelRatio: 1,
       });
+
+      setIsPrinting(false);
 
       navigate("/print", {
         state: {
@@ -492,17 +499,24 @@ const TrendsMap = () => {
             <button
               className="prod-btn-base prod-btn-secondary w-full flex items-center justify-center mt-[20px]"
               onClick={handlePrint}
+              disabled={isPrinting}
             >
-              <span>Print Trends Map</span>
-              <Icon
-                iconName="Printer"
-                height="20px"
-                width="20px"
-                fill="#8693A0"
-                className="ms-[8px]"
-              />
+              {isPrinting ? (
+                <span>Printing...</span>
+              ) : (
+                <>
+                  <span>Print Trends Map</span>
+
+                  <Icon
+                    iconName="Printer"
+                    height="20px"
+                    width="20px"
+                    fill="#8693A0"
+                    className="ms-[8px]"
+                  />
+                </>
+              )}
             </button>
-            {/* <p>{text}</p> */}
             <PrintTrendsMap
               showPrint={showPrint}
               ref={printRef}

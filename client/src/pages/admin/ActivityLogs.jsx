@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +14,10 @@ import Highlighter from "react-highlight-words";
 import { useReactToPrint } from "react-to-print";
 import PrintComponent from "../../components/admin/PrintComponent";
 import { useSelector } from "react-redux";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
+import { toPng } from "html-to-image";
+import Snackbar from "../../components/Snackbar";
+import { toast } from "react-toastify";
 
 const ActivityLogs = () => {
   const auth = useSelector((state) => state.auth);
@@ -68,12 +72,31 @@ const ActivityLogs = () => {
 
   const printRef = useRef();
 
-  const handlePrint = useReactToPrint({
+  const { deviceType } = useDeviceDetect();
+
+  const [showPrint, setShowPrint] = useState(false);
+
+  const navigate = useNavigate();
+
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const handlePrint = () => {
+    setIsPrinting(true);
+    if (["mobile", "tablet"].includes(deviceType)) {
+      setShowPrint(true);
+      setTimeout(handleExportActivityLogs, 1000);
+    } else {
+      setTimeout(handlePrintActivityLogs, 1000);
+    }
+  };
+
+  const handlePrintActivityLogs = useReactToPrint({
     content: () => printRef.current,
     documentTitle: "HealthPH - Activity Logs",
     pageStyle:
-      "@page { size: A4;  margin: 0mm; color: 'red' } @media print { body { -webkit-print-color-adjust: exact; } }",
+      "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
+      setIsPrinting(false);
       document.getElementById("printWindow").remove();
 
       log_activity({
@@ -83,6 +106,62 @@ const ActivityLogs = () => {
       });
     },
   });
+
+  const handleExportActivityLogs = async () => {
+    try {
+      const pages = document.querySelectorAll(".print-container .page");
+
+      let imageList = [];
+
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+
+        const imageData = await toPng(page, {
+          canvasWidth: page.offsetWidth * 2,
+          canvasHeight: page.offsetHeight * 2,
+          quality: 1,
+          pixelRatio: 1,
+        });
+
+        imageList.push(imageData);
+      }
+
+      setIsPrinting(false);
+
+      navigate("/print", {
+        state: {
+          data: {
+            documentTitle: "HealthPH - Activity Logs",
+            imageType: "list",
+            imageData: imageList,
+            log_activity: {
+              user_id: auth.user.id,
+              entry: "Generated Activity Logs report",
+              module: "Activity Logs",
+            },
+          },
+        },
+      });
+    } catch (error) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={"Failed to generate report. Please try again."}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+    }
+  };
 
   return (
     <>
@@ -120,18 +199,26 @@ const ActivityLogs = () => {
               <button
                 className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-[16px]"
                 onClick={handlePrint}
+                disabled={isPrinting}
               >
-                <span>Print</span>
+                {isPrinting ? (
+                  <span>Printing...</span>
+                ) : (
+                  <>
+                    <span>Print</span>
 
-                <Icon
-                  iconName="Printer"
-                  height="20px"
-                  width="20px"
-                  fill="#8693A0"
-                  className="ms-[8px]"
-                />
+                    <Icon
+                      iconName="Printer"
+                      height="20px"
+                      width="20px"
+                      fill="#8693A0"
+                      className="ms-[8px]"
+                    />
+                  </>
+                )}
               </button>
               <PrintComponent
+                showPrint={showPrint}
                 ref={printRef}
                 pageName="Activity Logs"
                 tableName="Activity Logs"

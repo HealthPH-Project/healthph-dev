@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useReactToPrint } from "react-to-print";
 
@@ -16,6 +16,10 @@ import {
   useFetchUsersQuery,
 } from "../../features/api/userSlice";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
+import Snackbar from "../../components/Snackbar";
+import { toast } from "react-toastify";
+import { toPng } from "html-to-image";
 
 const UserManagement = () => {
   const user = useSelector((state) => state.auth.user);
@@ -38,12 +42,32 @@ const UserManagement = () => {
 
   const printRef = useRef();
 
-  const handlePrint = useReactToPrint({
+  const { deviceType } = useDeviceDetect();
+
+  const [showPrint, setShowPrint] = useState(false);
+
+  const navigate = useNavigate();
+
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const handlePrint = () => {
+    setIsPrinting(true);
+
+    if (["mobile", "tablet"].includes(deviceType)) {
+      setShowPrint(true);
+      setTimeout(handleExportUserManagement, 1000);
+    } else {
+      setTimeout(handlePrintUserManagement, 1000);
+    }
+  };
+
+  const handlePrintUserManagement = useReactToPrint({
     content: () => printRef.current,
     documentTitle: "HealthPH - User Management",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
+      setIsPrinting(false);
       document.getElementById("printWindow").remove();
 
       log_activity({
@@ -53,6 +77,62 @@ const UserManagement = () => {
       });
     },
   });
+
+  const handleExportUserManagement = async () => {
+    try {
+      const pages = document.querySelectorAll(".print-container .page");
+
+      let imageList = [];
+
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+
+        const imageData = await toPng(page, {
+          canvasWidth: page.offsetWidth * 2,
+          canvasHeight: page.offsetHeight * 2,
+          quality: 1,
+          pixelRatio: 1,
+        });
+
+        imageList.push(imageData);
+      }
+
+      setIsPrinting(false);
+
+      navigate("/print", {
+        state: {
+          data: {
+            documentTitle: "HealthPH - User Management",
+            imageType: "list",
+            imageData: imageList,
+            log_activity: {
+              user_id: user.id,
+              entry: `Generated ${currentTableTab} report`,
+              module: "User Management",
+            },
+          },
+        },
+      });
+    } catch (error) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={"Failed to generate report. Please try again."}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+    }
+  };
 
   const [tabs, setTabs] = useState([
     { label: "Admins", count: 0 },
@@ -152,20 +232,28 @@ const UserManagement = () => {
                 <button
                   className="prod-btn-base prod-btn-secondary flex justify-center items-center ms-0 sm:ms-[16px]"
                   onClick={handlePrint}
+                  disabled={isPrinting}
                 >
-                  <span>Print</span>
+                  {isPrinting ? (
+                    <span>Printing...</span>
+                  ) : (
+                    <>
+                      <span>Print</span>
 
-                  <Icon
-                    iconName="Printer"
-                    height="20px"
-                    width="20px"
-                    fill="#8693A0"
-                    className="ms-[8px]"
-                  />
+                      <Icon
+                        iconName="Printer"
+                        height="20px"
+                        width="20px"
+                        fill="#8693A0"
+                        className="ms-[8px]"
+                      />
+                    </>
+                  )}
                 </button>
 
                 {/* PRINT COMPONENT */}
                 <PrintComponent
+                  showPrint={showPrint}
                   ref={printRef}
                   pageName="User Management"
                   tableName={currentTableTab}

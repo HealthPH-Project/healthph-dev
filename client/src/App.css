@@ -420,7 +420,6 @@
 
   .print-component.mobile .print-container {
     @apply px-[32px];
-    height: 297mm;
     width: 210mm;
     overflow: hidden;
   }
@@ -676,11 +675,32 @@
   }
 
   main.print-page h1 {
-    @apply m-[16px]
+    @apply m-[16px];
+  }
+
+  @media print {
+    .print-image {
+      width: 100vw;
+    }
+
+    .print-image.list {
+      @apply px-[32px];
+    }
+
+    .print-image img {
+      width: 100%;
+    }
   }
 
   main.print-page .print-image {
     width: 90%;
+    max-width: 400px;
+  }
+
+  main.print-page .print-image img {
+    width: 100%;
+    object-position: center;
+    object-fit: cover;
     max-width: 400px;
   }
 

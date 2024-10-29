@@ -26,8 +26,8 @@ const Print = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
-      //   document.getElementById("printWindow").remove();
-      //   log_activity({ ...location.state?.data?.log_activity });
+      document.getElementById("printWindow").remove();
+      log_activity({ ...location.state?.data?.log_activity });
       navigate(-1);
     },
   });
@@ -35,8 +35,19 @@ const Print = () => {
   return (
     <main className="print-page">
       <h1>Printing...</h1>
-      <div className="print-image" ref={printRef}>
-        <img src={location.state?.data?.imageData} alt="print-preview" />
+      <div
+        className={`print-image ${location.state?.data?.imageType}`}
+        ref={printRef}
+      >
+        {location.state?.data?.imageType != "list" ? (
+          <img src={location.state?.data?.imageData} alt="print-preview" />
+        ) : (
+          <>
+            {location.state?.data?.imageData.map((v, i) => {
+              return <img src={v} key={i} alt="print-preview" />;
+            })}
+          </>
+        )}
       </div>
     </main>
   );

@@ -3,7 +3,16 @@ import { useSelector } from "react-redux";
 
 const PrintComponent = forwardRef(
   (
-    { pageName, tableName, data, columns, rowsPerPage, dateTable, displayFunc },
+    {
+      showPrint = false,
+      pageName,
+      tableName,
+      data,
+      columns,
+      rowsPerPage,
+      dateTable,
+      displayFunc,
+    },
     ref
   ) => {
     const user = useSelector((state) => state.auth.user);
@@ -45,11 +54,11 @@ const PrintComponent = forwardRef(
     };
 
     return pageData.length > 0 ? (
-      <div className="print-component">
+      <div className={`print-component ${showPrint ? " mobile" : ""}`}>
         <div className="print-container" ref={ref}>
           {pageData.map((v, i) => {
             return (
-              <div className="page" key={i}>
+              <div className="page" key={i} style={{ height: "297mm" }}>
                 <div className="page-header mb-[36px]">
                   <p>{pageName}</p>
                   <p>HealthPH</p>

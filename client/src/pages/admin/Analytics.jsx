@@ -132,7 +132,11 @@ const Analytics = () => {
 
   const navigate = useNavigate();
 
+  const [isPrinting, setIsPrinting] = useState(false);
+
   const handlePrint = () => {
+    setIsPrinting(true);
+
     const wordcloudToPrint = document.querySelector("#wordcloud-print svg");
 
     svgAsPngUri(wordcloudToPrint).then((uri) => {
@@ -153,6 +157,7 @@ const Analytics = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
+      setIsPrinting(false);
       document.getElementById("printWindow").remove();
 
       log_activity({
@@ -272,15 +277,23 @@ const Analytics = () => {
                   <button
                     className="prod-btn-base prod-btn-secondary flex justify-center items-center mb-[16px] xs:mb-0"
                     onClick={handlePrint}
+                    disabled={isPrinting}
                   >
-                    <span>Print</span>
-                    <Icon
-                      iconName="Printer"
-                      height="20px"
-                      width="20px"
-                      fill="#8693A0"
-                      className="ms-[8px]"
-                    />
+                    {isPrinting ? (
+                      <span>Printing...</span>
+                    ) : (
+                      <>
+                        <span>Print</span>
+
+                        <Icon
+                          iconName="Printer"
+                          height="20px"
+                          width="20px"
+                          fill="#8693A0"
+                          className="ms-[8px]"
+                        />
+                      </>
+                    )}
                   </button>
                   <PrintAnalytics
                     showPrint={showPrint}
