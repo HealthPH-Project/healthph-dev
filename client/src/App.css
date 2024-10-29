@@ -14,8 +14,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Firefox */
+@media (prefers-color-scheme: dark) {
+  :root {
+      color-scheme: light;
+  }
+}
+
+/* Chrome */
+@media (forced-colors: active) {
+  :root {
+      color-scheme: light;
+  }
+}
+
 :root {
   --primary: "text-primary";
+  color-scheme: only light;
 }
 
 @layer base {
