@@ -26,10 +26,11 @@ const Print = () => {
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } }",
     onAfterPrint: () => {
-      document.getElementById("printWindow").remove();
+      //   document.getElementById("printWindow").remove();
       log_activity({ ...location.state?.data?.log_activity });
       navigate(-1);
     },
+    preserveAfterPrint: false,
   });
 
   return (
