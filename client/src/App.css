@@ -17,14 +17,14 @@
 /* Firefox */
 @media (prefers-color-scheme: dark) {
   :root {
-      color-scheme: light;
+    color-scheme: light;
   }
 }
 
 /* Chrome */
 @media (forced-colors: active) {
   :root {
-      color-scheme: light;
+    color-scheme: light;
   }
 }
 
@@ -42,6 +42,10 @@
   input[type="password"]::-ms-reveal,
   input[type="password"]::-ms-clear {
     display: none;
+  }
+
+  img {
+    @apply inline-block;
   }
 }
 
@@ -401,13 +405,32 @@
     display: none;
   }
 
-  .print-container {
+  .print-component.mobile {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 100%;
+  }
+
+  .print-component:not(.mobile) .print-container {
     @apply px-[32px];
     height: 100vh;
     width: 100vw;
   }
 
+  .print-component.mobile .print-container {
+    @apply px-[32px];
+    height: 297mm;
+    width: 210mm;
+    overflow: hidden;
+  }
+
   @media print {
+    .print-container {
+      @apply px-[32px];
+      height: 100vh;
+      width: 100vw;
+    }
     .page {
       @apply py-[32px] flex flex-col h-full w-full;
     }
@@ -520,6 +543,145 @@
     .print-container .wordcloud-wrapper img {
       border-radius: 8px;
     }
+  }
+
+  .print-component.mobile .page {
+    @apply py-[32px] flex flex-col h-full w-full bg-white;
+  }
+
+  .print-component.mobile .page-header,
+  .print-component.mobile .page-footer {
+    @apply flex justify-between items-center flex-shrink-0;
+    @apply text-gray-700 prod-l5 font-semibold;
+  }
+
+  .print-component.mobile .page-content {
+    @apply flex-grow;
+  }
+
+  .print-component.mobile .content-header {
+    @apply flex justify-between items-center;
+    @apply px-[14px] py-[12px] bg-[#F4F5F8] border border-gray-400;
+  }
+
+  .print-component.mobile .content-header p {
+    @apply prod-l5 font-semibold;
+
+    font-family: "Inter";
+  }
+
+  .print-component.mobile .content-header span {
+    @apply prod-l5 font-medium px-[6px] py-[2px] bg-gray-100 text-gray-900  rounded-[99px];
+  }
+
+  .print-component.mobile .row-header,
+  .print-component.mobile .row {
+    display: grid;
+    grid-template-columns: repeat(var(--page-columns), 1fr);
+  }
+
+  .print-component.mobile .row-item {
+    @apply px-[8px] py-[10px] border border-gray-200;
+    max-height: 40px;
+    color: #171e26;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 12px;
+    letter-spacing: 0.4px;
+  }
+
+  .print-component.mobile .row-header .row-item {
+    font-weight: 600;
+  }
+
+  .print-component.mobile .page-footer {
+    page-break-after: always;
+  }
+
+  .print-component.mobile .print-container .suspected-symptoms-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .print-component.mobile
+    .print-container
+    .suspected-symptoms-container
+    .suspected-symptom-item {
+    border: 1px solid #bcc5ce;
+    padding: 10px 8px;
+    font-size: 8px;
+    line-height: 12px;
+  }
+
+  .print-component.mobile
+    .print-container
+    .suspected-symptoms-container
+    .suspected-symptom-item
+    .label {
+    font-size: 12px;
+    color: #687582;
+    font-weight: 600;
+  }
+
+  .print-component.mobile
+    .print-container
+    .suspected-symptoms-container
+    .suspected-symptom-item
+    .value {
+    font-size: 14px;
+    color: #171e26;
+    font-weight: 500;
+    margin: 8px auto;
+  }
+
+  .print-component.mobile
+    .print-container
+    .suspected-symptoms-container
+    .suspected-symptom-item
+    .region {
+    font-size: 12px;
+    color: #465360;
+    font-weight: 500;
+  }
+
+  .print-component.mobile
+    .print-container
+    .suspected-symptoms-container
+    .suspected-symptom-item
+    .region
+    span {
+    font-weight: 600;
+  }
+
+  .print-component.mobile .print-container .report-wrapper {
+    border: 1px solid #bcc5ce;
+  }
+
+  .print-component.mobile .print-container .wordcloud-wrapper {
+    border: 1px solid #bcc5ce;
+    padding: 12px 14px;
+  }
+
+  .print-component.mobile .print-container .wordcloud-wrapper img {
+    border-radius: 8px;
+  }
+
+  main.print-page {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  main.print-page h1 {
+    @apply m-[16px]
+  }
+
+  main.print-page .print-image {
+    width: 90%;
+    max-width: 400px;
   }
 
   /* SKELETON */

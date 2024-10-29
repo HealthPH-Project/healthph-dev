@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { format, subDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { updateInitialLogin } from "../../features/auth/authSlice";
 import useSwipe from "../../hooks/useSwipe";
@@ -30,6 +30,10 @@ import {
 } from "../../features/api/pointsSlice";
 import EmptyState from "../../components/admin/EmptyState";
 import { useCreateActivityLogMutation } from "../../features/api/activityLogsSlice";
+
+import { toPng } from "html-to-image";
+import { toast } from "react-toastify";
+import Snackbar from "../../components/Snackbar";
 
 const TrendsMap = () => {
   const user = useSelector((state) => state.auth.user);
@@ -272,15 +276,32 @@ const TrendsMap = () => {
 
   const [mapImage, setMapImage] = useState("");
 
-  const [showHighSusCount, setShowHighSusCount] = useState(false);
+  const { deviceType } = useDeviceDetect();
 
-  const handlePrint = useReactToPrint({
-    // onBeforePrint: () => {
-    //   setText(document.getElementById("print-container-map").width);
-    //   console.log(document.getElementById("print-container-map"));
-    // },
+  const [showPrint, setShowPrint] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handlePrint = async () => {
+    const canvas = await html2canvas(captureMapRef.current, {
+      useCORS: true,
+      willReadFrequently: true,
+    });
+    canvas.getContext("2d", { willReadFrequently: true });
+    var dataURL = canvas.toDataURL("image/png");
+
+    setMapImage(dataURL);
+
+    if (["mobile", "tablet"].includes(deviceType)) {
+      setShowPrint(true);
+      setTimeout(handleExportTrendsMap, 1000);
+    } else {
+      setTimeout(handlePrintTrendsMap, 1000);
+    }
+  };
+
+  const handlePrintTrendsMap = useReactToPrint({
     content: () => printRef.current,
-    // content: () => document.getElementById("print-container-map"),
     documentTitle: "HealthPH - Trends Map",
     pageStyle:
       "@page { size: A4;  margin: 0mm; } @media print { body { -webkit-print-color-adjust: exact; } img { border: none;} }",
@@ -295,59 +316,50 @@ const TrendsMap = () => {
     },
   });
 
-  const [text, setText] = useState("A");
+  const handleExportTrendsMap = async () => {
+    try {
+      const imageData = await toPng(printRef.current, {
+        canvasWidth: printRef.current.offsetWidth * 2,
+        canvasHeight: printRef.current.offsetHeight * 2,
+        quality: 1,
+        pixelRatio: 1,
+      });
 
-  const handlePrintTrendsMap = async () => {
-    // setTimeout(handlePrint, 500);
-    // console.log("A");
-    // // handleOpenSidebar();
-    // const original_viewport = document
-    //   .getElementById("viewport")
-    //   .getAttribute("content");
-
-    // if (screen.width < 1024) {
-    //   document.getElementById("viewport").setAttribute("content", "width=800");
-    // }
-
-    // html2canvas(captureMapRef.current, {
-    //   useCORS: true,
-    //   willReadFrequently: true,
-    // })
-    //   .then((canvas) => {
-    //     // canvas.getContext("2d", { willReadFrequently: true });
-    //     // var dataURL = canvas.toDataURL("image/png");
-    //     // // console.log(canvas.toDataURL("image/png"));
-    //     // setText(canvas.toDataURL("image/png"));
-    //     canvas.toBlob((blob) => {
-    //       const url = URL.createObjectURL(blob);
-    //       // console.log(url);
-    //       setText(url);
-    //       // setMapImage(url);
-    //       // setTimeout(handlePrint, 500);
-    //     }, "image/png");
-    //     // setText(canvas);
-    //   })
-    //   .then(() => {
-    //     document
-    //       .getElementById("viewport")
-    //       .setAttribute("content", original_viewport);
-    //   });
-    const canvas = await html2canvas(captureMapRef.current, {
-      useCORS: true,
-      willReadFrequently: true,
-    });
-    canvas.getContext("2d", { willReadFrequently: true });
-    var dataURL = canvas.toDataURL("image/png");
-
-    // setText(dataURL);
-    // if (screen.width < 1024) {
-    //   document
-    //     .getElementById("viewport")
-    //     .setAttribute("content", "width=device-width, initial-scale=1.0");
-    // }
-    setMapImage(dataURL);
-    setTimeout(handlePrint, 500);
+      navigate("/print", {
+        state: {
+          data: {
+            documentTitle: "HealthPH - Trends Map",
+            imageData: imageData,
+            log_activity: {
+              user_id: user.id,
+              entry: "Generated Trends Map report - test",
+              module: "Trends Map",
+            },
+          },
+        },
+      });
+    } catch (error) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={"Failed to generate report. Please try again."}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+    }
   };
+
+  const [showHighSusCount, setShowHighSusCount] = useState(false);
 
   const getDiseaseCount = (disease) => {
     if (!isPointsLoading) {
@@ -479,7 +491,7 @@ const TrendsMap = () => {
             </button>
             <button
               className="prod-btn-base prod-btn-secondary w-full flex items-center justify-center mt-[20px]"
-              onClick={handlePrintTrendsMap}
+              onClick={handlePrint}
             >
               <span>Print Trends Map</span>
               <Icon
@@ -492,6 +504,7 @@ const TrendsMap = () => {
             </button>
             {/* <p>{text}</p> */}
             <PrintTrendsMap
+              showPrint={showPrint}
               ref={printRef}
               mapImage={mapImage}
               dateTable={format(new Date(), "MMMM dd, yyyy | hh:mm a")}

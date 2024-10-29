@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
 import CustomSelect from "../../components/CustomSelect";
 import { useEffect, useRef, useState } from "react";
@@ -37,7 +37,10 @@ import capitalizeSymptom from "../../hooks/useCapitalizeSymptom";
 import ReactWordCloud from "react-wordcloud";
 import { saveSvgAsPng, svgAsPngUri } from "save-svg-as-png";
 
-import { renderToStaticMarkup } from "react-dom/server";
+import { toPng } from "html-to-image";
+import { toast } from "react-toastify";
+import Snackbar from "../../components/Snackbar";
+import useDeviceDetect from "../../hooks/useDeviceDetect";
 
 const Analytics = () => {
   const user = useSelector((state) => state.auth.user);
@@ -123,6 +126,12 @@ const Analytics = () => {
 
   const printRef = useRef();
 
+  const { deviceType } = useDeviceDetect();
+
+  const [showPrint, setShowPrint] = useState(false);
+
+  const navigate = useNavigate();
+
   const handlePrint = () => {
     const wordcloudToPrint = document.querySelector("#wordcloud-print svg");
 
@@ -130,7 +139,12 @@ const Analytics = () => {
       setDynamicWordCloudImage(uri);
     });
 
-    setTimeout(handlePrintAnalytics, 1000);
+    if (["mobile", "tablet"].includes(deviceType)) {
+      setShowPrint(true);
+      setTimeout(handleExportAnalytics, 1000);
+    } else {
+      setTimeout(handlePrintAnalytics, 1000);
+    }
   };
 
   const handlePrintAnalytics = useReactToPrint({
@@ -148,6 +162,49 @@ const Analytics = () => {
       });
     },
   });
+
+  const handleExportAnalytics = async () => {
+    try {
+      const imageData = await toPng(printRef.current, {
+        canvasWidth: printRef.current.offsetWidth * 2,
+        canvasHeight: printRef.current.offsetHeight * 2,
+        quality: 1,
+        pixelRatio: 1,
+      });
+
+      navigate("/print", {
+        state: {
+          data: {
+            documentTitle: "HealthPH - Analytics",
+            imageData: imageData,
+            log_activity: {
+              user_id: user.id,
+              entry: "Generated Analytics report - test",
+              module: "Analytics",
+            },
+          },
+        },
+      });
+    } catch (error) {
+      toast(
+        <Snackbar
+          iconName="Error"
+          size="snackbar-sm"
+          color="destructive"
+          message={"Failed to generate report. Please try again."}
+        />,
+        {
+          closeButton: ({ closeToast }) => (
+            <Icon
+              iconName="Close"
+              className="close-icon close-icon-sm close-destructive"
+              onClick={closeToast}
+            />
+          ),
+        }
+      );
+    }
+  };
 
   const displayPrintButton = () => {
     let flag = true;
@@ -226,6 +283,7 @@ const Analytics = () => {
                     />
                   </button>
                   <PrintAnalytics
+                    showPrint={showPrint}
                     ref={printRef}
                     data={{
                       suspected_symptoms: suspected_symptoms,

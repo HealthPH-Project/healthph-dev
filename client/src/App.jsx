@@ -41,6 +41,7 @@ import HelmetTitle from "./components/HelmetTitle";
 
 import useDeviceDetect from "./hooks/useDeviceDetect";
 import FullMap from "./pages/admin/FullMap";
+import Print from "./pages/Print";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -184,6 +185,7 @@ function App() {
           </Route>
         </Route>
         <Route element={<DashboardMiddleware />}>
+          <Route path="/print" element={<Print />} />
           <Route path="/dashboard" element={<AdminLayout />}>
             <Route
               index
