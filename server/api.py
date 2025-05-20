@@ -25,7 +25,12 @@ app = FastAPI()
 # Initialize FastAPI app for api routes
 api_app = FastAPI()
 
-origins = os.getenv("CORS_ORIGINS").split(",")
+# origins = os.getenv("CORS_ORIGINS").split(",")
+
+cors_origins = os.getenv("CORS_ORIGINS", "")
+origins = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+print("Allowed origins:", origins)
+
 
 # Setup middlewares
 app.add_middleware(
